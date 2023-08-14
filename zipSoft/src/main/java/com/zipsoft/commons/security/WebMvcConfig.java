@@ -18,8 +18,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	@Bean
 	public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
 		MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        //ObjectMapper mapper = converter.getObjectMapper();
-        //converter.setObjectMapper(mapper);
+        ObjectMapper mapper = converter.getObjectMapper();
+        converter.setObjectMapper(mapper);
         return converter;
 	}
 	
