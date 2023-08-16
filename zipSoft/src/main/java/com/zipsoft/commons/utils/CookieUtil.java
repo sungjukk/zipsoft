@@ -10,17 +10,12 @@ import jakarta.servlet.http.HttpServletRequest;
 @Service
 public class CookieUtil {
 	
-	@Value("${spring.profiles.active}")
-	private String active;
-	
 	public Cookie setCookie(String key, String value, int maxAge) {
 		Cookie c = new Cookie(key, value);
 		
 		if (Constants.REFRESH_TOKEN.equals(key)) {
 			c.setHttpOnly(true);
-			if (!"default".equals(active) && !"local".equals(active)) {
-				c.setSecure(true);
-			}
+			c.setSecure(true);			
 		}
 		
 		c.setPath("/");

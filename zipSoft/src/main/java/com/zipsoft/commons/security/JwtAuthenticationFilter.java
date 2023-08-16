@@ -48,6 +48,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		boolean isAuth = false;
 		long userId = 0;
 		
+		System.out.println(req.getRequestURI());
+		
 		String jwt = this.getJwtFromRequest(req);
 		
 		if (jwt != null) {
@@ -57,8 +59,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				isAuth = true; 
 				userId = tokenProvider.getUserNoFromJWT(jwt);
 			} else if ("ExpiredToken".equals(result)) {
-				userId = this.refreshTokenCheck(req, res);
-				isAuth = userId != 0;
+				if ("/login/republishToken".equals(req.getRequestURI())) {
+					userId = this.refreshTokenCheck(req, res);
+					isAuth = userId != 0;
+				} else {
+					this.setErrorResponse(HttpStatus.UNAUTHORIZED, res, "expired");
+				}
 			}
 
 			
