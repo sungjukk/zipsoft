@@ -21,6 +21,6 @@ spring:
       
 app:
   jwt:
-    jwtSecret: rkGU45258GGhiolLO2465TFY5345kGU45258GGhiolLO2465TFY5345
+    jwtSecret: rkGU45258GGhiolLO2465TFY5345kGU45258GGhiolLO2465TFY5345WETsdfg1234vxsd32QWRSDGGSDGSwetSDFWETW123124856XGBFSDGS
     jwtExpirationInMs: 30
     jwtRefreshExpriationInMs: 120

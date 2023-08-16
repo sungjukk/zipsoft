@@ -1,17 +1,26 @@
 package com.zipsoft.commons.utils;
 
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 
+@Service
 public class CookieUtil {
+	
+	@Value("${spring.profiles.active}")
+	private String active;
 	
 	public Cookie setCookie(String key, String value, int maxAge) {
 		Cookie c = new Cookie(key, value);
 		
 		if (Constants.REFRESH_TOKEN.equals(key)) {
 			c.setHttpOnly(true);
-			c.setSecure(true);
+			if (!"default".equals(active) && !"local".equals(active)) {
+				c.setSecure(true);
+			}
 		}
 		
 		c.setPath("/");

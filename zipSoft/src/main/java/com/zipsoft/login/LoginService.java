@@ -1,9 +1,14 @@
 package com.zipsoft.login;
 
-import com.zipsoft.login.dto.LoginDto;
+import org.springframework.security.core.Authentication;
 
-public interface LoginService {
+import com.zipsoft.login.dto.LoginDto;
+import com.zipsoft.login.dto.User;
+
+public interface LoginService  {
 	
-	LoginDto findUserId(LoginDto dto);
+	User findByUserId(LoginDto dto);
+	
+	Authentication authenticate(String id, String password)  throws Exception;
 	
 }

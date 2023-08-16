@@ -30,4 +30,8 @@ public class ApiResponse<T> {
 		return new ApiResponse<T>(new ApiHeader(status, status.name()), new ApiBody(null, null));
 	}
 	
+	public static <T> ApiResponse fail(HttpStatus status, String msg) {
+		return new ApiResponse<T>(new ApiHeader(status, msg), new ApiBody(null, null));
+	}
+	
 }

@@ -4,12 +4,26 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zipsoft.login.LoginMapper">
 	
-	<select id="findUserId" parameterType="loginDto" resultType="loginDto">
+	<select id="findByUserId" parameterType="loginDto" resultType="user">
 		SELECT ID
 		       ,USER_ID
+		       ,PASSWORD
+		       ,EMAIL
+		       ,NAME
+		       ,REG_DATE
 		  FROM USER
 		 WHERE USER_ID = #{userId}
-		
+	</select>
+	
+	<select id="findById" parameterType="long" resultType="user">
+		SELECT ID
+		       ,USER_ID
+		       ,PASSWORD
+		       ,EMAIL
+		       ,NAME
+		       ,REG_DATE
+		  FROM USER
+		 WHERE id = #{id}
 	</select>
 	
 </mapper>
