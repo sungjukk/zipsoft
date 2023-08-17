@@ -27,9 +27,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         
         UserPrincipal user = (UserPrincipal) userDetailService.loadUserByUsername(loginId);
         
-        if (isNotMatches(password, user.getPassword())) {
+        /*if (isNotMatches(password, user.getPassword())) {
         	throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
-        }
+        }*/
         
 		return new UsernamePasswordAuthenticationToken(user, password);
 	}

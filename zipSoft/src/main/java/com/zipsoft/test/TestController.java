@@ -1,12 +1,16 @@
 package com.zipsoft.test;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.zipsoft.commons.security.UserPrincipal;
 import com.zipsoft.commons.utils.RedisUtil;
 
 @RestController
@@ -35,7 +39,8 @@ public class TestController {
 	}
 	
 	@GetMapping("/dfdf")
-	public String test() {
+	public String test(@AuthenticationPrincipal UserPrincipal user) {
+		
 		System.out.println("Asdadadsa");
 		return "SUCC";
 	}

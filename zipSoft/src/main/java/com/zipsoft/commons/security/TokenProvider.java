@@ -109,7 +109,7 @@ public class TokenProvider implements InitializingBean {
         Claims claims = Jwts.parserBuilder()
         		            .setSigningKey(key)
         		            .build()
-        		            .parseClaimsJwt(token)
+        		            .parseClaimsJws(token)
         		            .getBody();
 
         return Long.valueOf(claims.getSubject());
