@@ -22,6 +22,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -70,7 +72,7 @@ public class TokenProvider implements InitializingBean {
     	
 	}
 	
-	public String generateRefreshToken(UserPrincipal user) {
+	public String generateRefreshToken(UserPrincipal user, HttpServletResponse res) {
     	Date expiryDate = new Date(new Date().getTime() + (jwtRefreshExpriationInMs * 1000 * 60));
     	
     	String jwt = Jwts.builder()
@@ -82,7 +84,8 @@ public class TokenProvider implements InitializingBean {
 				         .compact();
     	
     	redisUtil.setData(Constants.REFRESH_TOKEN + "_" + user.getUserId(), jwt);
-    	cookieUtil.setCookie(Constants.REFRESH_TOKEN, jwt, jwtRefreshExpriationInMs * 60);
+    	Cookie c = cookieUtil.setCookie(Constants.REFRESH_TOKEN, jwt, jwtRefreshExpriationInMs * 60);
+    	res.addCookie(c);
     	
     	return jwt;
     	

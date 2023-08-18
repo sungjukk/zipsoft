@@ -14,8 +14,8 @@ public class CookieUtil {
 		Cookie c = new Cookie(key, value);
 		
 		if (Constants.REFRESH_TOKEN.equals(key)) {
-			c.setHttpOnly(true);
-			c.setSecure(true);			
+			c.setHttpOnly(true);		
+			c.setSecure(true);
 		}
 		
 		c.setPath("/");

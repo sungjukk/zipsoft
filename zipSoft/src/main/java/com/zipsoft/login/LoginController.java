@@ -18,6 +18,7 @@ import com.zipsoft.commons.utils.CookieUtil;
 import com.zipsoft.login.dto.LoginDto;
 import com.zipsoft.model.TokenVo;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,7 +35,7 @@ public class LoginController {
 	private final CookieUtil cookieUtil;
 	
 	@PostMapping
-	public ApiResponse login(@RequestBody LoginDto dto) {
+	public ApiResponse login(HttpServletResponse res, @RequestBody LoginDto dto) {
 		
 		Authentication auth;
 		try {
@@ -43,7 +44,7 @@ public class LoginController {
 			
 			TokenVo tokenVo = TokenVo.builder()
 									 .accessToken(tokenProvider.generateToken(user))
-									 .refreshToken(tokenProvider.generateRefreshToken(user))
+									 .refreshToken(tokenProvider.generateRefreshToken(user, res))
 									 .grantType(Constants.TOKEN_GRANT)
 									 .build();
 			

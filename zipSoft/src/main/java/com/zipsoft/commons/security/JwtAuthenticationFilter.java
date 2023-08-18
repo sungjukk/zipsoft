@@ -48,9 +48,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		boolean isAuth = false;
 		long userId = 0;
 		
-		System.out.println(req.getRequestURI());
-		
 		String jwt = this.getJwtFromRequest(req);
+		Cookie c = cookieUtil.getCookie(req, Constants.REFRESH_TOKEN);
+		if (c != null)
+		System.out.println(c.getValue());
 		
 		if (jwt != null) {
 			String result = tokenProvider.validateToken(jwt);
