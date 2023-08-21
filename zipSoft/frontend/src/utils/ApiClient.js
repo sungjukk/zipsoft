@@ -1,13 +1,14 @@
 import axios from "axios";
+import store from '@/store/index';
 
 export const callGetApi = async(url, params) => {
 	let headers = {};
 	let encUrl = encodeURI(url);
 	
-	const token = "";
+	const token = sessionStorage.getItem('authorization');
 	
 	if (token != "") {
-		headers['Authorization'] = 'Bearer ' + token;	
+		headers['Authorization'] = token;	
 	}
 	
 	const _axios = axios.create({
@@ -20,8 +21,26 @@ export const callGetApi = async(url, params) => {
 		let result = await _axios.get(encUrl + appendGetParams(params));
 		return result.data;		
 	} catch (err) {
-		console.log(err.response);
-		return err.response;
+		
+		if (err.response.status == 401) {
+			
+			// 401에러 && 토큰 만료인 경우 새로 받아옴
+			if (err.response.data && err.response.data.msg === 'expired') {
+				const res = await republicToken();
+				console.log(res);
+				if (res) {
+					callGetApi(url, params);
+				} else {
+					store.dispatch('UserStore/logout');
+				}
+			}
+			
+			
+		}
+		
+		
+		
+		return err.response.data;
 	}
 	
 	
@@ -45,11 +64,10 @@ export const callPostApi = async(url, params) => {
 	
 	try {
 		let result = await _axios.post(encUrl, params);
-		console.log(result.data);
 		return result.data;		
 	} catch (err) {
 		console.log(err.response);
-		return err.response;
+		return err.response.data;
 	}
 	
 	
@@ -69,3 +87,32 @@ const appendGetParams = (params) => {
 
   return paramSuffix;
 };
+
+
+const republicToken =  async () => {
+	let headers = {
+		Authorization : sessionStorage.getItem('authorization')
+	};
+	
+	const _axios = axios.create({
+		baseURL: "http://localhost:8080",
+		withCredentials: true,
+		headers
+	});
+	
+	try {
+		const res = await _axios.get('/auth/republishToken');
+		console.log(res);
+		if (res.data.result == 200) {
+			store.commit('UserStore/currentUser', res.data.data);
+			return true;
+		} else {
+			return false;
+		}
+		
+	} catch (err) {
+		return false;
+	}
+	
+	
+}

@@ -11,6 +11,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zipsoft.commons.payload.ApiResponse;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +24,9 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException e) throws IOException, ServletException {
-		this.sendError(response, "인증에 실패하였습니다.");
+		
+		
+		if (HttpStatus.UNAUTHORIZED.value() != response.getStatus()) this.sendError(response, "인증에 실패하였습니다.");
 	}
 	
 	private void sendError(HttpServletResponse res, String msg) throws IOException {
@@ -31,9 +34,10 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 		res.setStatus(HttpStatus.UNAUTHORIZED.value());
 		res.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		
-		JSONObject obj = new JSONObject();
-		obj.put("message", msg);
-		res.getWriter().write(obj.toJSONString());
+		ObjectMapper mapper = new ObjectMapper();
+		String txt = mapper.writeValueAsString(ApiResponse.fail(HttpStatus.UNAUTHORIZED, msg));
+		
+		res.getWriter().write(txt);
 		
 	}
 

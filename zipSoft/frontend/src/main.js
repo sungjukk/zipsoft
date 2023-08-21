@@ -7,5 +7,11 @@ import store from './store/index'
 
 
 
-const app = createApp(App);
+const app = createApp({
+	extends: App,
+	async beforeCreate() {
+		//await this.$store.dispatch('UserStore/republicToken');
+		//console.log('asdasd');
+	}
+});
 app.use(store).use(router).mount('#app')

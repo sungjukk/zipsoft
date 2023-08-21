@@ -4,7 +4,10 @@
 		<div class="menuWrap">
 			<ul class="menu">
 				<li><router-link :to="`${RouteUrl.MAIN}`">Home</router-link></li>
-				<li><router-link :to="`${RouteUrl.LOGIN}`">로그인</router-link></li>
+				<li>
+					<a href="javascript:;" @click="logout" v-if="$store.getters['UserStore/isLogin']">로그아웃</a>
+					<router-link :to="`${RouteUrl.LOGIN}`" v-else>로그인</router-link>
+				</li>
 				<li><router-link :to="`${RouteUrl.ABOUT}`">About</router-link></li>
 				<li><router-link :to="`${RouteUrl.BOARD}`">게시판</router-link></li>
 			</ul>
@@ -19,7 +22,15 @@ import {RouteUrl} from '@/router/index';
 			return {
 				RouteUrl
 			}
-		}
+		},
+		methods: {
+			logout() {
+				//console.log('test');
+				this.$store.dispatch('UserStore/logout');
+			}
+		},
+		mounted() {
+	    },
 	}
 </script>
 

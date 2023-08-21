@@ -7,8 +7,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.zipsoft.login.LoginMapper;
-import com.zipsoft.login.dto.User;
+import com.zipsoft.auth.AuthMapper;
+import com.zipsoft.auth.dto.User;
+import com.zipsoft.config.CacheKeys;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class UserDetailService implements UserDetailsService {
 	
-	private final LoginMapper loginMapper;
+	private final AuthMapper loginMapper;
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -28,7 +29,7 @@ public class UserDetailService implements UserDetailsService {
 		return new UserPrincipal(user);
 	}
 	
-	@Cacheable(value = "loadUserById", key = "#id", unless = "#result == null")
+	@Cacheable(value = CacheKeys.loadUserById, key = "#id", unless = "#result == null")
 	public UserDetails loadUserById(long id) {
 		User user = loginMapper.findById(id);
 		

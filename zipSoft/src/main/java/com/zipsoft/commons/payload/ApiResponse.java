@@ -13,25 +13,26 @@ import lombok.Setter;
 @Builder
 public class ApiResponse<T> {
 	
-	private ApiHeader header;
+	private int result;
+	private String msg;
+	private T data;
 	
-	private ApiBody body;
-	
-	public ApiResponse(ApiHeader header, ApiBody body) {
-		this.header = header;
-		this.body = body;
+	public ApiResponse(int result, String msg, T data) {
+		this.result = result;
+		this.msg = msg;
+		this.data = data;
 	}
 	
 	public static <T> ApiResponse OK(T data) {
-		return new ApiResponse<T>(new ApiHeader(HttpStatus.OK, "SUCCESS"), new ApiBody(data, null));
+		return new ApiResponse<T>(HttpStatus.OK.value(), "success", data);
 	}
 	
 	public static <T> ApiResponse fail(HttpStatus status) {
-		return new ApiResponse<T>(new ApiHeader(status, status.name()), new ApiBody(null, null));
+		return new ApiResponse<T>(status.value(), status.name(), null);
 	}
 	
 	public static <T> ApiResponse fail(HttpStatus status, String msg) {
-		return new ApiResponse<T>(new ApiHeader(status, msg), new ApiBody(null, null));
+		return new ApiResponse<T>(status.value(), msg, null);
 	}
 	
 }

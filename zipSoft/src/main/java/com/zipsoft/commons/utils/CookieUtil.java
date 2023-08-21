@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Service
 public class CookieUtil {
@@ -37,6 +38,16 @@ public class CookieUtil {
 		}
 		
 		return null;
+	}
+	
+	public void removeCookie(HttpServletRequest req, HttpServletResponse res, String key) {
+		Cookie c = this.getCookie(req, key);
+		
+		if (c != null) {
+			c.setMaxAge(0);
+			c.setPath("/");
+			res.addCookie(c);
+		}
 	}
 	
 }

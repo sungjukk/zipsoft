@@ -1,4 +1,4 @@
-package com.zipsoft.login.dto;
+package com.zipsoft.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

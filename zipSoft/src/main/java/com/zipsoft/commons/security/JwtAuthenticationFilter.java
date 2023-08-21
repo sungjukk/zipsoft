@@ -2,18 +2,23 @@ package com.zipsoft.commons.security;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zipsoft.commons.payload.ApiResponse;
 import com.zipsoft.commons.utils.Constants;
 import com.zipsoft.commons.utils.CookieUtil;
 import com.zipsoft.commons.utils.RedisUtil;
@@ -60,11 +65,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				isAuth = true; 
 				userId = tokenProvider.getUserNoFromJWT(jwt);
 			} else if ("ExpiredToken".equals(result)) {
-				if ("/login/republishToken".equals(req.getRequestURI())) {
+				if ("/auth/republishToken".equals(req.getRequestURI())) {
 					userId = this.refreshTokenCheck(req, res);
 					isAuth = userId != 0;
 				} else {
-					this.setErrorResponse(HttpStatus.UNAUTHORIZED, res, "expired");
+					setErrorResponse(req,res);
 				}
 			}
 
@@ -89,7 +94,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private String getJwtFromRequest(HttpServletRequest req) {
         String bearerToken = req.getHeader("Authorization");
 
-        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith(Constants.TOKEN_GRANT + " ")) {
+        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith(Constants.TOKEN_GRANT)) {
             return bearerToken.substring(7);
         }
 
@@ -118,22 +123,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		return 0;
 	}
 	
-	//에러 전송
-    private void setErrorResponse(HttpStatus status, HttpServletResponse response, String msg){
-        response.setStatus(status.value());
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        try {
-        	
-        	JSONObject jsonObj = new JSONObject();
-        	jsonObj.put("status", status.value());
-        	jsonObj.put("message", msg);
-        	jsonObj.put("timestamp", LocalDateTime.now() + "");
-        	
-            String json = jsonObj.toJSONString();
-            response.getWriter().write(json);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+	public void setErrorResponse(HttpServletRequest req, HttpServletResponse res) throws IOException {
+        
+		res.setCharacterEncoding("utf-8");
+		res.setStatus(HttpStatus.UNAUTHORIZED.value());
+		res.setContentType(MediaType.APPLICATION_JSON_VALUE);
+		
+		ObjectMapper mapper = new ObjectMapper();
+		String txt = mapper.writeValueAsString(ApiResponse.fail(HttpStatus.UNAUTHORIZED, "expired"));
+		
+		res.getWriter().write(txt);
     }
+	
 
 }

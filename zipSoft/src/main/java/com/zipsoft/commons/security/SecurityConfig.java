@@ -35,7 +35,8 @@ public class SecurityConfig {
 	private static final String[] WHITE_LIST = {
             "/users/**",
             "/test/**",
-            "/login"
+            "/auth/login",
+            "/error"
     };
 	
 	public SecurityConfig (JwtAccessDeniedHandler unacccessDeniedHandler, JwtAuthenticationEntryPoint unauthorizedHandler, UserDetailService userDetailService) {
@@ -74,9 +75,10 @@ public class SecurityConfig {
         http.exceptionHandling(e -> e.accessDeniedHandler(unacccessDeniedHandler).authenticationEntryPoint(unauthorizedHandler));
         http.authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(WHITE_LIST).permitAll()
+                        .requestMatchers("/error").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated());
-        http.httpBasic(Customizer.withDefaults());
+        http.cors(cors -> cors.configure(http));
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
 	

@@ -22,7 +22,7 @@ export default {
 	},
 	methods: {
 		submit() {
-			console.log(this.$store.state.UserStore.id);
+			console.log(this.$store.state.UserStore.token);
 			
 			const data = {
 				userId: this.userId,

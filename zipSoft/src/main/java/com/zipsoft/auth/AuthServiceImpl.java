@@ -1,6 +1,8 @@
-package com.zipsoft.login;
+package com.zipsoft.auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,17 +11,20 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.zipsoft.login.dto.LoginDto;
-import com.zipsoft.login.dto.User;
+import com.zipsoft.auth.dto.LoginDto;
+import com.zipsoft.auth.dto.User;
+import com.zipsoft.config.CacheKeys;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
-public class LoginServiceImpl implements LoginService {
+public class AuthServiceImpl implements AuthService {
 	
 	private final AuthenticationManager authManager;
-	private final LoginMapper loginMapper;
+	private final AuthMapper loginMapper;
 	
 	@Override
 	public User findByUserId(LoginDto dto) {
@@ -33,6 +38,14 @@ public class LoginServiceImpl implements LoginService {
 		SecurityContextHolder.getContext().setAuthentication(auth);
 		return auth;
 		
+	}
+
+	@Override
+	@Caching(evict = {
+			@CacheEvict(value=CacheKeys.loadUserById, key="#id")
+	})
+	public void removeUserCache(long id) {
+		log.info("userId : " + id + " 캐시 삭제 완료");
 	}
 	
 	

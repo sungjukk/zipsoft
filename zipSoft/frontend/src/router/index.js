@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import PageHome from '@/views/PageHome.vue'
 import BoardList from '@/views/board/BoardList.vue'
 import Login from '@/views/login/Login.vue'
+import store from '@/store/index';
 
 export const RouteUrl = {
   MAIN : '/',
@@ -40,5 +41,13 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 });
+
+router.beforeEach(async (to, from, next) => {
+  await store.dispatch('UserStore/loginCheck');
+  console.log(store.getters['UserStore/isLogin']);
+  //return next({ path: "/login" });
+  next();
+});
+
 
 export default router;
