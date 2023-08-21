@@ -54,26 +54,11 @@ export const callGetApi = async(url, params) => {
 };
 
 export const callPostApi = async(url, params) => {
-	let headers = {};
 	let encUrl = encodeURI(url);
-	
-	const token = "";
-	
-	if (token != "") {
-		headers['Authorization'] = 'Bearer ' + token;	
-	}
-	
-	const _axios = axios.create({
-		baseURL: "http://localhost:8080",
-		withCredentials: true,
-		headers
-	});
-	
 	try {
-		let result = await _axios.post(encUrl, params);
+		let result = await instance.post(encUrl, params);
 		return result.data;		
 	} catch (err) {
-		console.log(err.response);
 		return err.response.data;
 	}
 	
