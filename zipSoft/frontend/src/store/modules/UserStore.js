@@ -18,7 +18,7 @@ const UserStore = {
         currentUser: (state, payload) => {
             
            if (!payload) return false;
-            
+            console.log(payload.accessToken);
            /*
                여기서는 payload를 객체로 받습니다.
                payload를 객체로 받으면, mutation를 조금더 유연하게 사용할 수 있기는 합니다.
@@ -27,8 +27,7 @@ const UserStore = {
            state.token = payload.accessToken;
            state.id = decode.sub;
            state.name = decode.name;
-           console.log("state.id", state.id);
-           sessionStorage.setItem('authorization', "Bearer " + payload.accessToken);
+           sessionStorage.setItem('authorization', payload.accessToken);
         },
         removeUser: (state) => {
 			state.token = '';
@@ -47,15 +46,17 @@ const UserStore = {
 				alert(res.msg);
 			}
 		},
-		loginCheck: async({commit}, payload) => {
+		loginCheck: async({commit, state}, payload) => {
 			const accessToken = sessionStorage.getItem('authorization');
-			console.log("accessToken", accessToken);
 			if (!accessToken) return false;
 			
 			const res = await callGetApi('/auth/ping',payload);
 			if (res && res.result == 200) {
-				commit('currentUser', {accessToken});
-				console.log('commit');
+				
+				if (state.id == 0) {
+					commit('currentUser', {accessToken});				
+				}
+				
 			} else {
 				//commit('removeUser');
 			}

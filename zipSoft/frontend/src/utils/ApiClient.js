@@ -1,44 +1,51 @@
 import axios from "axios";
 import store from '@/store/index';
 
-export const callGetApi = async(url, params) => {
-	let headers = {};
-	let encUrl = encodeURI(url);
+const instance = axios.create({
+	baseURL: "http://localhost:8080",
+	withCredentials: true
+});
+
+
+instance.interceptors.request.use(config => {
 	
-	const token = sessionStorage.getItem('authorization');
+	const accessToken = sessionStorage.getItem('authorization');
+	console.log('request');
+	config.headers['Content-Type'] = 'application/json';
+	if (accessToken) config.headers['Authorization'] = `Bearer ${accessToken}`;
+	console.log('asda');
+    return config;
+}, err => {
+	console.log(err);
+	return Promise.reject(err);
+});
+
+instance.interceptors.response.use(response => response, async (err) => {
 	
-	if (token != "") {
-		headers['Authorization'] = token;	
+	const { config, response: { status } } = err;
+	
+	if (status == 401) {
+		// 401에러 && 토큰 만료인 경우 새로 받아옴
+		if (err.response.data && err.response.data.msg === 'expired') {
+			const res = await republicToken();
+			if (res) {
+				config.headers['Authorization'] = `Bearer ${sessionStorage.getItem('authorization')}`;
+				return axios(config);
+			} 
+				
+		}
 	}
 	
-	const _axios = axios.create({
-		baseURL: "http://localhost:8080",
-		withCredentials: true,
-		headers
-	});
+	return Promise.reject(err);
+})
+
+export const callGetApi = async(url, params) => {
+	let encUrl = encodeURI(url);
 	
 	try {
-		let result = await _axios.get(encUrl + appendGetParams(params));
+		let result = await instance.get(encUrl + appendGetParams(params));
 		return result.data;		
 	} catch (err) {
-		
-		if (err.response.status == 401) {
-			
-			// 401에러 && 토큰 만료인 경우 새로 받아옴
-			if (err.response.data && err.response.data.msg === 'expired') {
-				const res = await republicToken();
-				console.log(res);
-				if (res) {
-					callGetApi(url, params);
-				} else {
-					store.dispatch('UserStore/logout');
-				}
-			}
-			
-			
-		}
-		
-		
 		
 		return err.response.data;
 	}
@@ -90,19 +97,10 @@ const appendGetParams = (params) => {
 
 
 const republicToken =  async () => {
-	let headers = {
-		Authorization : sessionStorage.getItem('authorization')
-	};
-	
-	const _axios = axios.create({
-		baseURL: "http://localhost:8080",
-		withCredentials: true,
-		headers
-	});
 	
 	try {
-		const res = await _axios.get('/auth/republishToken');
-		console.log(res);
+		const res = await instance.get('/auth/republishToken');
+		console.log(res.data.data);
 		if (res.data.result == 200) {
 			store.commit('UserStore/currentUser', res.data.data);
 			return true;

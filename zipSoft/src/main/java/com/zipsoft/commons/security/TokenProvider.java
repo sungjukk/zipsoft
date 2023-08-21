@@ -56,7 +56,7 @@ public class TokenProvider implements InitializingBean {
     }
 	
 	public String generateToken(UserPrincipal user) {
-    	Date expiryDate = new Date(new Date().getTime() + (jwtExpirationInMs * 1000 * 60));
+    	Date expiryDate = new Date(new Date().getTime() + (jwtExpirationInMs * 1000));
     	String uuid = UUID.randomUUID().toString();
     	
     	redisUtil.setData(Constants.ACCESS_TOKEN + "_" + user.getUserId(), uuid);
