@@ -1,22 +1,25 @@
 <template>
-	<div id="app">
-		<PageHeader></PageHeader>
-		<router-view/>
-		<PageFooter></PageFooter>
-	</div>
+  <div>
+	  <PageHeader />
+	  <div class="container">
+		  <router-view/>
+	  </div>
+	  <PageFooter />
+  </div>
 </template>
 
-<script>
-import PageHeader from '@/components/layouts/PageHeader'
-import PageFooter from '@/components/layouts/PageFooter'
+<script lang="ts">
+import { Options, Vue } from 'vue-class-component';
+import PageHeader from '@/components/layouts/PageHeader.vue';
+import PageFooter from '@/components/layouts/PageFooter.vue';
 
-export default {
-  name: 'App',
+@Options({
   components: {
     PageHeader,
     PageFooter
-  }
-}
+  },
+})
+export default class App extends Vue {}
 </script>
 
 <style>

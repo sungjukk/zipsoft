@@ -12,26 +12,23 @@
 	</div>
 </template>
 
-<script>
-export default {
-	data() {
-		return {
-			userId: '',
-			password: '',
-		}
-	},
-	methods: {
-		submit() {
-			console.log(this.$store.state.UserStore.token);
-			
-			const data = {
-				userId: this.userId,
-				password: this.password
-			};
-			
-			this.$store.dispatch('UserStore/login',data);
-			
-		}
+<script lang="ts">
+import { Component, Vue } from 'vue-facing-decorator';
+import store from '@/store/index';
+
+@Component
+export default class Login extends Vue {
+	userId = '';
+	password = '';
+	
+	submit() {
+		const data = {
+			userId: this.userId,
+			password: this.password
+		};
+		console.log(store.state.UserStore.id);
+		store.dispatch('UserStore/login',data);
 	}
+	
 }
 </script>

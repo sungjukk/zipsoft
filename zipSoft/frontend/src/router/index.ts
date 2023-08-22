@@ -4,12 +4,12 @@ import BoardList from '@/views/board/BoardList.vue'
 import Login from '@/views/login/Login.vue'
 import store from '@/store/index';
 
-export const RouteUrl = {
-  MAIN : '/',
-  ABOUT : '/about',
-  BOARD : '/board',
-  LOGIN : '/login',
-};
+export enum RouteUrl  {
+  MAIN = '/',
+  ABOUT = '/about',
+  BOARD = '/board',
+  LOGIN = '/login',
+}
 
 const routes = [
   {

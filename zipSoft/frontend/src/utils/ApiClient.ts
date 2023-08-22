@@ -1,8 +1,10 @@
 import axios from "axios";
 import store from '@/store/index';
 
+const API_URL = process.env.VUE_APP_API_URL;
+
 const instance = axios.create({
-	baseURL: "http://localhost:8080",
+	baseURL: API_URL,
 	withCredentials: true
 });
 
@@ -39,33 +41,37 @@ instance.interceptors.response.use(response => response, async (err) => {
 	return Promise.reject(err);
 })
 
-export const callGetApi = async(url, params) => {
-	let encUrl = encodeURI(url);
+export const callGetApi = async(url : string, params? : object) => {
+	const encUrl = encodeURI(url);
 	
 	try {
-		let result = await instance.get(encUrl + appendGetParams(params));
+		const result = await instance.get(encUrl + appendGetParams(params));
 		return result.data;		
 	} catch (err) {
-		
-		return err.response.data;
+		if (axios.isAxiosError(err)) {
+			// axios에서 발생한 error
+			return err.response?.data;
+		}
 	}
 	
 	
 };
 
-export const callPostApi = async(url, params) => {
-	let encUrl = encodeURI(url);
+export const callPostApi = async(url:string, params?:object) => {
+	const encUrl = encodeURI(url);
 	try {
-		let result = await instance.post(encUrl, params);
+		const result = await instance.post(encUrl, params);
 		return result.data;		
 	} catch (err) {
-		return err.response.data;
+		if (axios.isAxiosError(err)) {
+			return err.response?.data;			
+		}
 	}
 	
 	
 };
 
-const appendGetParams = (params) => {
+const appendGetParams = (params?:any) => {
   if (!params) return '';
 
   let paramSuffix = '';

@@ -1,8 +1,16 @@
+import { Module, ActionContext } from "vuex";
+import {Rootstate} from '@/store/index';
 import {callPostApi, callGetApi} from '@/utils/ApiClient';
-import router, {RouteUrl} from '@/router/index.js';
+import router, {RouteUrl} from '@/router/index';
 import jwt_decode from "jwt-decode";
 
-const UserStore = {
+export interface User {
+	id : number;
+	name : string;
+	token : string;
+}
+
+export const UserStore : Module<User, Rootstate> = {
 	namespaced: true,
 	state: () => ({
 		id : 0,
@@ -10,12 +18,12 @@ const UserStore = {
 		token : ''
 	}),
 	getters: {
-        getUserName: state => state.name,
-        getUserId: state => state.id,
-        isLogin: state => {return state.id != 0}
+        getUserName: (state:User) => state.name,
+        getUserId: (state:User) => state.id,
+        isLogin: (state:User) => {return state.id != 0}
     },
     mutations: {
-        currentUser: (state, payload) => {
+        currentUser: (state:User, payload:any) => {
             
            if (!payload) return false;
             console.log(payload.accessToken);
@@ -23,13 +31,13 @@ const UserStore = {
                여기서는 payload를 객체로 받습니다.
                payload를 객체로 받으면, mutation를 조금더 유연하게 사용할 수 있기는 합니다.
            */
-		   const decode = jwt_decode(payload.accessToken);
+		   const decode:any = jwt_decode(payload.accessToken);
            state.token = payload.accessToken;
            state.id = decode.sub;
            state.name = decode.name;
            sessionStorage.setItem('authorization', payload.accessToken);
         },
-        removeUser: (state) => {
+        removeUser: (state:User) => {
 			state.token = '';
 			state.id = 0;
 			state.name = '';
@@ -37,7 +45,7 @@ const UserStore = {
 		}
     },
     actions: {
-        login: async ({commit}, payload) => {
+        login: async ({commit}, payload:any) => {
 			const res = await callPostApi('/auth/login',payload);
 			if (res.result == 200) {
 				commit('currentUser', res.data);
@@ -46,7 +54,7 @@ const UserStore = {
 				alert(res.msg);
 			}
 		},
-		loginCheck: async({commit, state}, payload) => {
+		loginCheck: async({commit, state}, payload:any) => {
 			const accessToken = sessionStorage.getItem('authorization');
 			if (!accessToken) return false;
 			
@@ -61,7 +69,7 @@ const UserStore = {
 				//commit('removeUser');
 			}
 		},
-		republishToken: async({commit}, payload) =>{
+		republishToken: async({commit}, payload:any) =>{
 			
 			const token = sessionStorage.getItem('authorization');
 			
@@ -83,5 +91,3 @@ const UserStore = {
 		}
     }
 }
-
-export default UserStore;

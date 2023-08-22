@@ -23,6 +23,9 @@ import {RouteUrl} from '@/router/index';
 				RouteUrl
 			}
 		},
+		setup() {
+			console.log(process.env);
+		},
 		methods: {
 			logout() {
 				//console.log('test');
