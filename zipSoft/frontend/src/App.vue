@@ -2,25 +2,26 @@
   <div>
 	  <PageHeader />
 	  <div class="container">
-		  <router-view/>
+		  <router-view />
 	  </div>
 	  <PageFooter />
   </div>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
 import PageHeader from '@/components/layouts/PageHeader.vue';
 import PageFooter from '@/components/layouts/PageFooter.vue';
+import {defineComponent, ref, onMounted} from 'vue';
 
-@Options({
+export default defineComponent({
+  name: 'App',
   components: {
-    PageHeader,
-    PageFooter
-  },
+    PageHeader, PageFooter
+  }
 })
-export default class App extends Vue {}
+
 </script>
+
 
 <style>
 #app {

@@ -12,23 +12,27 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { Component, Vue } from 'vue-facing-decorator';
-import store from '@/store/index';
+<script lang="ts" setup>
+import { ref, getCurrentInstance, onMounted } from 'vue';
+import { useStore } from 'vuex';
 
-@Component
-export default class Login extends Vue {
-	userId = '';
-	password = '';
-	
-	submit() {
-		const data = {
-			userId: this.userId,
-			password: this.password
-		};
-		console.log(store.state.UserStore.id);
-		store.dispatch('UserStore/login',data);
-	}
-	
+const userId = ref('');
+const password = ref('');
+const store = useStore();
+const {proxy} = getCurrentInstance() as any;
+
+onMounted(() => {
+	console.log('onMounted');
+});
+
+const submit = async () => {
+	const data = {
+		userId,
+		password
+	};
+
+	//await store.dispatch('UserStore/login');
+	//proxy.$alert('test');
+	//console.log(store);
 }
 </script>

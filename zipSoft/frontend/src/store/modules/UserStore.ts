@@ -47,7 +47,7 @@ export const UserStore : Module<User, Rootstate> = {
     actions: {
         login: async ({commit}, payload:any) => {
 			const res = await callPostApi('/auth/login',payload);
-			if (res.result == 200) {
+			if (res?.result == 200) {
 				commit('currentUser', res.data);
 				router.push(RouteUrl.ABOUT);
 			} else {

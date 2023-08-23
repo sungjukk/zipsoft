@@ -4,6 +4,12 @@ import BoardList from '@/views/board/BoardList.vue'
 import Login from '@/views/login/Login.vue'
 import store from '@/store/index';
 
+export interface MenuDef {
+  path: string;
+  name: string;
+  component: any;
+}
+
 export enum RouteUrl  {
   MAIN = '/',
   ABOUT = '/about',
@@ -11,7 +17,7 @@ export enum RouteUrl  {
   LOGIN = '/login',
 }
 
-const routes = [
+export const routes = [
   {
     path: RouteUrl.MAIN,
     name: 'PageHome',
@@ -25,9 +31,6 @@ const routes = [
   {
     path: RouteUrl.ABOUT,
     name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/PageAbout.vue')
   },
   {
@@ -35,7 +38,7 @@ const routes = [
     name: 'BoardList',
     component: BoardList
   },
-]
+] as Array<MenuDef>;
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),

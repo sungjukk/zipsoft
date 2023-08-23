@@ -1,10 +1,15 @@
 import {createApp} from 'vue';
 import AlertComponent from '@/components/modal/AlertComponent.vue';
 
-export const Alert = {
-    install : (app:any) => {
-        const instance:any = createApp(AlertComponent).mount(document.createElement('div'));
+declare module '@vue/runtime-core' {
+  interface ComponentCustomProperties {
+    $alert:any
+  }
+}
 
+const Alert = {
+    install : (app:any) => {
+        const instance:any = createApp({extends: AlertComponent}).mount(document.createElement('div'));
         app.config.globalProperties.$alert = (msg:string) => {
             document.body.appendChild(instance.$el);
             instance.type = 'alert'
@@ -14,8 +19,20 @@ export const Alert = {
         };
 
         app.config.globalProperties.$confirm = (msg : string, success? : Function, cancel? : Function) => {
-            
+            document.body.appendChild(instance.$el);
+		    instance.type = 'confirm';
+		    instance.msg = msg;
+		    instance.isShow = true;
+		    instance.instance = instance;
+		    if (typeof success !== 'undefined') {
+		      instance.success = success;
+		    }
+		    if (typeof cancel !== 'undefined') {
+		      instance.cancel = cancel;
+		    }
         }
 
     }
 }
+
+export default Alert;

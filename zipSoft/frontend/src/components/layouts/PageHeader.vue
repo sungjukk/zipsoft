@@ -1,5 +1,22 @@
 <template>
 	<header>
+		<nav class="navbar navbar-dark bg-dark fixed-top">
+			<div class="container-fluid">
+				<div>
+					<button class="navbar-toggler" type="button" @click="openSidebar()">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+					<a class="navbar-brand" href="#" style="margin-left: 20px;">{{ title }}</a>
+				</div>
+				<div>
+					<a href="javascript:;" class="navbar-brand" @click="logout" v-if="$store.getters['UserStore/isLogin']">로그아웃</a>
+					<router-link class="navbar-brand" :to="`${RouteUrl.LOGIN}`" v-else>로그인</router-link>
+				</div>
+			</div>
+			<SideMenu ref="sideBar" :title="title"/>
+		</nav>
+	</header>
+	<!--<header>
 		<h1><a href="#" class="logo"><img alt="Vue logo" src="../../assets/logo.png" width="80"></a></h1>
 		<div class="menuWrap">
 			<ul class="menu">
@@ -12,29 +29,42 @@
 				<li><router-link :to="`${RouteUrl.BOARD}`">게시판</router-link></li>
 			</ul>
 		</div>
-	</header>
+	</header>-->
 </template>
 
-<script>
+<script lang="ts">
+import {defineComponent, ref, onMounted} from 'vue';
+import { useStore } from 'vuex';
+
 import {RouteUrl} from '@/router/index';
-	export default {
-		data () {
-			return {
-				RouteUrl
-			}
-		},
-		setup() {
-			console.log(process.env);
-		},
-		methods: {
-			logout() {
-				//console.log('test');
-				this.$store.dispatch('UserStore/logout');
-			}
-		},
-		mounted() {
-	    },
+import SideMenu from './SideMenu.vue';
+
+export default defineComponent({
+	name : 'PageHeader',
+	components: {
+		SideMenu
+	},
+	setup() {
+		const sideBar = ref<any>();
+		const title = ref(process.env.VUE_APP_TITLE);
+
+		const store = useStore();
+
+		const openSidebar = () => {
+			sideBar.value.openSidebar();
+		}
+
+		const logout = () => {
+			//console.log('test');
+			store.dispatch('UserStore/logout');
+		}
+
+		return {
+			sideBar, RouteUrl, title, openSidebar, logout
+		}
 	}
+})
+
 </script>
 
 <style scoped>

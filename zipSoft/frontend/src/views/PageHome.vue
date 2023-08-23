@@ -1,3 +1,7 @@
+<script lang="ts" setup>
+import HelloWorld from '@/components/HelloWorld.vue'
+</script>
+
 <template>
 	<div class="home">
 		<img alt="Vue logo" src="../assets/logo.png">
@@ -5,13 +9,3 @@
 	</div>
 </template>
 
-<script>
-import HelloWorld from '@/components/HelloWorld.vue'
-
-export default {
-	name: 'PageHome',
-	components: {
-		HelloWorld
-	}
-}
-</script>

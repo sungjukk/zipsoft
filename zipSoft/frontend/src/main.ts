@@ -1,11 +1,12 @@
 import './assets/common.css'
-import "bootstrap/dist/css/bootstrap.min.css" // [bootstrap]
 import "bootstrap" // [bootstrap]
+import "bootstrap/dist/css/bootstrap.min.css" // [bootstrap]
 
 import {createApp} from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store/index'
+import Alert from './utils/AlertUtil';
 
 
 const app = createApp({
@@ -15,4 +16,7 @@ const app = createApp({
 		//console.log('asdasd');
 	}
 });
-app.use(store).use(router).mount('#app')
+
+console.log(app);
+
+app.use(store).use(router).use(Alert).mount('#app')
