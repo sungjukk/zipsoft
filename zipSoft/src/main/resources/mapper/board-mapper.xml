@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zipsoft.board.BoardMapper">
+	
+	<select id="insertBoard" parameterType="boardDto" >
+		INSERT INTO TB_BOARD (
+			SUBJECT
+			,CONTENT
+			,REG_DATE
+			,REG_ID
+			,UPDATE_DATE
+			,UPDATE_ID
+		) VALUES (
+			#{subject}
+			,#{content}
+			,date_format(now(), '%Y%m%d%H%i%s')
+			,#{regId}
+			,date_format(now(), '%Y%m%d%H%i%s')
+			,#{regId}
+		)
+	</select>
+	
+</mapper>

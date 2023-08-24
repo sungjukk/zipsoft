@@ -9,8 +9,11 @@
 					<a class="navbar-brand" href="#" style="margin-left: 20px;">{{ title }}</a>
 				</div>
 				<div>
-					<a href="javascript:;" class="navbar-brand" @click="logout" v-if="$store.getters['UserStore/isLogin']">로그아웃</a>
-					<router-link class="navbar-brand" :to="`${RouteUrl.LOGIN}`" v-else>로그인</router-link>
+					<div class="navbar-font" v-if="$store.getters['UserStore/isLogin']">
+						<span >{{$store.state.UserStore.name}}님 </span>
+						<a href="javascript:;"  @click="logout">로그아웃</a>
+					</div>
+					<router-link class="navbar-font" :to="`${RouteUrl.LOGIN}`" v-else>로그인</router-link>
 				</div>
 			</div>
 			<SideMenu ref="sideBar" :title="title"/>
@@ -33,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, ref, onMounted} from 'vue';
+import {defineComponent, ref} from 'vue';
 import { useStore } from 'vuex';
 
 import {RouteUrl} from '@/router/index';
@@ -68,4 +71,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
+	.navbar-font {
+		font-size: 16px;
+		font-weight: bold;
+		color: #fff !important;
+		text-decoration: none !important;
+	}
 </style>

@@ -6,7 +6,7 @@
       </div>
       <div class="offcanvas-body">
         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3" >
-            <SideMenuList v-for="(row, idx) in menuArr" :key="idx" :menu="row" />
+            <SideMenuList v-for="(row, idx) in menuArr" :key="idx" :menu="row" :currentPage="currentPage" @closeSidebar="closeSidebar" />
           <!--<li class="nav-item">
             <a class="nav-link active"  href="#">Home</a>
           </li>
@@ -35,7 +35,9 @@
     </div>
 </template>
 <script lang="ts">
-import {defineComponent, ref, onMounted} from 'vue';
+import {defineComponent, ref, onMounted, computed} from 'vue';
+import { useRouter } from 'vue-router';
+
 import { routes} from '@/router/index';
 
 import SideMenuList from './SideMenuList.vue';
@@ -48,10 +50,11 @@ export default defineComponent({
     props: {
         title : {type:String}
     },
-    setup(context) {
-
+    setup() {
+        const {currentRoute} = useRouter(); 
+        const currentPage = computed(() => currentRoute.value.path);
         const sideBar = ref<HTMLDivElement>();
-        const menuArr = ref(routes);
+        const menuArr = ref(routes.filter(r => r.meta.isShow));
 
         onMounted(() => {
              
@@ -69,7 +72,7 @@ export default defineComponent({
             }
         }
 
-        return {sideBar, menuArr, openSidebar, closeSidebar}
+        return {sideBar, menuArr, currentPage, openSidebar, closeSidebar}
 
     }
 });

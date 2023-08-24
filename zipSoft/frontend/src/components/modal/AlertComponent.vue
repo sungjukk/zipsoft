@@ -23,8 +23,7 @@
 	</div>
 </template>
 <script lang="ts">
-import {h} from 'vue';
-import { Component, Ref, Model, Vue, Watch } from 'vue-facing-decorator';
+import { Component, Ref, Vue, Watch } from 'vue-facing-decorator';
 @Component
 export default class AlertComponent extends Vue {
 	@Ref() openBtn: HTMLButtonElement;
