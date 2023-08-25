@@ -4,7 +4,22 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zipsoft.board.BoardMapper">
 	
-	<select id="insertBoard" parameterType="boardDto" >
+	<select id="getBoardList" resultType="boardDto">
+		SELECT ROW_NUMBER() OVER(ORDER BY UPDATE_DATE ) AS NO
+			   ,TB.ID
+			   ,TB.SUBJECT
+			   ,TB.CONTENT
+			   ,TB.VIEW_CNT
+			   ,TU.NAME AS USER_NAME
+			   ,TB.UPDATE_DATE
+		  FROM TB_BOARD TB
+         INNER JOIN TB_USER TU 
+            ON TB.REG_ID = TU.ID
+         ORDER BY TB.UPDATE_DATE DESC
+         LIMIT 10
+	</select>
+	
+	<insert id="insertBoard" parameterType="boardDto" >
 		INSERT INTO TB_BOARD (
 			SUBJECT
 			,CONTENT
@@ -20,6 +35,6 @@
 			,date_format(now(), '%Y%m%d%H%i%s')
 			,#{regId}
 		)
-	</select>
+	</insert>
 	
 </mapper>

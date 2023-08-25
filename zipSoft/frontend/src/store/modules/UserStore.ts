@@ -1,4 +1,5 @@
 import { Module, ActionContext } from "vuex";
+import { globals } from "@/main";
 import {Rootstate} from '@/store/index';
 import {callPostApi, callGetApi} from '@/utils/ApiClient';
 import router, {RouteUrl} from '@/router/index';
@@ -51,7 +52,7 @@ export const UserStore : Module<User, Rootstate> = {
 				commit('currentUser', res.data);
 				router.push(RouteUrl.ABOUT);
 			} else {
-				alert(res.msg);
+				globals.$alert(res.msg);
 			}
 		},
 		loginCheck: async({commit, state}, payload:any) => {

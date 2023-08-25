@@ -11,6 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class BoardDto {
 	
+	private int no;
 	private long id;
 	private String subject;
 	private String content;

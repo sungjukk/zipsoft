@@ -19,4 +19,7 @@ const app = createApp({
 
 console.log(app);
 
-app.use(store).use(router).use(Alert).mount('#app')
+app.use(store).use(router).use(Alert).mount('#app');
+
+const globals = app.config.globalProperties
+export { globals };

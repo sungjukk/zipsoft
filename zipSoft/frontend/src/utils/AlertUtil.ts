@@ -10,26 +10,28 @@ declare module '@vue/runtime-core' {
 const Alert = {
     install : (app:any) => {
         const instance:any = createApp({extends: AlertComponent}).mount(document.createElement('div'));
-        app.config.globalProperties.$alert = (msg:string) => {
-            document.body.appendChild(instance.$el);
-            instance.type = 'alert'
-            instance.msg = msg
-            instance.isShow = true
-            instance.instance = instance
+        app.config.globalProperties.$alert = (msg:string, callback? : Function, ele?:HTMLElement) => {
+          document.body.appendChild(instance.$el);
+          instance.type = 'alert'
+          instance.msg = msg
+          instance.isShow = true
+          instance.ele = ele
+          instance.callback = callback
+          instance.instance = instance
         };
 
         app.config.globalProperties.$confirm = (msg : string, success? : Function, cancel? : Function) => {
-            document.body.appendChild(instance.$el);
-		    instance.type = 'confirm';
-		    instance.msg = msg;
-		    instance.isShow = true;
-		    instance.instance = instance;
-		    if (typeof success !== 'undefined') {
-		      instance.success = success;
-		    }
-		    if (typeof cancel !== 'undefined') {
-		      instance.cancel = cancel;
-		    }
+          document.body.appendChild(instance.$el);
+          instance.type = 'confirm';
+          instance.msg = msg;
+          instance.isShow = true;
+          instance.instance = instance;
+          if (typeof success !== 'undefined') {
+            instance.success = success;
+          }
+          if (typeof cancel !== 'undefined') {
+            instance.cancel = cancel;
+          }
         }
 
     }

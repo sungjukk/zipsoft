@@ -36,8 +36,7 @@ public class SecurityConfig {
             "/users/**",
             "/test/**",
             "/auth/login",
-            "/error",
-            "/board/**"
+            "/error"
     };
 	
 	public SecurityConfig (JwtAccessDeniedHandler unacccessDeniedHandler, JwtAuthenticationEntryPoint unauthorizedHandler, UserDetailService userDetailService) {

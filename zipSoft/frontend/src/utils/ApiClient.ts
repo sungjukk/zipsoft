@@ -12,13 +12,10 @@ const instance = axios.create({
 instance.interceptors.request.use(config => {
 	
 	const accessToken = sessionStorage.getItem('authorization');
-	console.log('request');
 	config.headers['Content-Type'] = 'application/json';
 	if (accessToken) config.headers['Authorization'] = `Bearer ${accessToken}`;
-	console.log('asda');
     return config;
 }, err => {
-	console.log(err);
 	return Promise.reject(err);
 });
 

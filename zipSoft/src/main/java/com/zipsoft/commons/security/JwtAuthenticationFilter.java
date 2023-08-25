@@ -70,6 +70,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 					isAuth = userId != 0;
 				} else {
 					setErrorResponse(req,res);
+					return;
 				}
 			}
 

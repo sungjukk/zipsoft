@@ -1,5 +1,7 @@
 package com.zipsoft.board;
 
+import java.util.List;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +20,13 @@ public class BoardServiceImpl implements BoardService {
 	private final BoardMapper boardMapper;
 
 	@Override
+	public List<BoardDto> getBoardList() {
+		return boardMapper.getBoardList();
+	}
+	
+	@Override
 	public void insertBoard(BoardDto board) {
 		boardMapper.insertBoard(board);
 	}
-	
 
 }

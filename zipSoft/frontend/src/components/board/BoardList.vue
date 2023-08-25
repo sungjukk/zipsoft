@@ -16,7 +16,7 @@
                     <th scope="row">{{board.no}}</th>
                     <td>{{board.subject}}</td>
                     <td>{{board.userName}}</td>
-                    <td>{{board.updateDate}}</td>
+                    <td>{{dateFormat(board.updateDate)}}</td>
                     <td>{{board.viewCnt}}</td>
                     <td>{{board.commentCnt}}</td>
                 </tr>
@@ -28,31 +28,31 @@
     </div>
 </template>
 <script lang="ts">
-import {defineComponent, ref, onMounted} from 'vue';
+import {defineComponent, ref, onMounted, getCurrentInstance} from 'vue';
 import { Board } from '@/views/board/BoardListSection.vue';
 import { useRouter } from 'vue-router';
+import {callGetApi} from '@/utils/ApiClient';
 import {RouteUrl} from '@/router/index';
+import { dateFormat } from '@/utils/CommonUtil';
 
 export default defineComponent({
     name : 'BoardList',
     setup() {
         const route = useRouter();
+        const {proxy} = getCurrentInstance() as any;
         const boardList = ref<Board[]>();
 
 
-        onMounted(() => {
-            boardList.value = [
-                {
-                    no : 10,
-                    id : '10',
-                    subject: '테스트 12312321',
-                    content : 'ㅁㄴㅇㅁㄴㅇㅁㄴㅇㄴㅁㅇㅁㄴㅇㄴㅁㅇ',
-                    userName : '테스터',
-                    updateDate : '20230824170023',
-                    viewCnt : 0,
-                    commentCnt : 0
-                }
-            ]
+        onMounted(async () => {
+
+            const res = await callGetApi('/board');
+
+            if (res.result == 200) {
+                boardList.value = res.data;
+            } else {
+                proxy.$alert("서버와의 통신 중 오류가 발생하였습니다.");
+            }
+
         });
 
         const onButtonClick = () => {
