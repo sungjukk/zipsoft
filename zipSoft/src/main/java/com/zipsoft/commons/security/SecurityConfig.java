@@ -36,6 +36,7 @@ public class SecurityConfig {
             "/users/**",
             "/test/**",
             "/auth/login",
+            "/auth/insert",
             "/error"
     };
 	

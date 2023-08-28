@@ -7,16 +7,17 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.zipsoft.auth.dto.User;
+import com.zipsoft.auth.dto.UserDto;
+import com.zipsoft.model.entity.User;
 
 import lombok.Getter;
 import lombok.Setter;
 
 public class UserPrincipal implements UserDetails {
 	
-	private User user;
+	private UserDto user;
 	
-	public UserPrincipal(User user) {
+	public UserPrincipal(UserDto user) {
 		this.user = user;
 	}
 	
@@ -24,7 +25,7 @@ public class UserPrincipal implements UserDetails {
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Collection<GrantedAuthority> collections = new ArrayList<>();
         collections.add(() -> {
-            return user.getName();
+            return user.getUserName();
         });
 
         return collections;
@@ -37,7 +38,7 @@ public class UserPrincipal implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		return user.getName();
+		return user.getUserName();
 	}
 
 	@Override
@@ -64,7 +65,7 @@ public class UserPrincipal implements UserDetails {
 		return this.user.getId();
 	}
 	
-	public User getUser() {
+	public UserDto getUser() {
 		return this.user;
 	}
 

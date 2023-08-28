@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.zipsoft.auth.dto.LoginDto;
-import com.zipsoft.auth.dto.User;
+import com.zipsoft.auth.dto.UserDto;
 import com.zipsoft.config.CacheKeys;
 
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class AuthServiceImpl implements AuthService {
 	private final AuthMapper loginMapper;
 	
 	@Override
-	public User findByUserId(LoginDto dto) {
+	public UserDto findByUserId(LoginDto dto) {
 		return loginMapper.findByUserId(dto.getUserId());
 	}
 

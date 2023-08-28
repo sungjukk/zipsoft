@@ -14,12 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zipsoft.auth.dto.LoginDto;
+import com.zipsoft.auth.dto.UserDto;
 import com.zipsoft.commons.payload.ApiResponse;
 import com.zipsoft.commons.security.TokenProvider;
 import com.zipsoft.commons.security.UserPrincipal;
 import com.zipsoft.commons.utils.Constants;
 import com.zipsoft.commons.utils.CookieUtil;
 import com.zipsoft.model.TokenVo;
+import com.zipsoft.model.entity.User;
 
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.Cookie;
@@ -39,6 +41,8 @@ public class AuthController {
 	private final TokenProvider tokenProvider;
 	
 	private final CookieUtil cookieUtil;
+	
+	private final AuthRepository authRepository;
 	
 	@PostMapping("login")
 	public ApiResponse login(HttpServletResponse res, @RequestBody LoginDto dto) {
@@ -92,6 +96,22 @@ public class AuthController {
 		
 		return ApiResponse.OK(null);
 		
+	}
+	
+	@GetMapping("insert")
+	public ApiResponse insert(@RequestBody UserDto user1) {
+		User user = User.builder()
+				.userId("tester")
+				.password("1234")
+				.userName("tester")
+				.email("test@test.com")
+				.build();
+
+
+
+		long userId = authRepository.insert(user);
+		
+		return ApiResponse.OK(null);
 	}
 	
 }

@@ -3,13 +3,13 @@ package com.zipsoft.auth;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.zipsoft.auth.dto.LoginDto;
-import com.zipsoft.auth.dto.User;
+import com.zipsoft.auth.dto.UserDto;
 
 @Mapper
 public interface AuthMapper {
 	
-	User findByUserId(String userId);
+	UserDto findByUserId(String userId);
 	
-	User findById(long id);
+	UserDto findById(long id);
 	
 }

@@ -3,11 +3,11 @@ package com.zipsoft.auth;
 import org.springframework.security.core.Authentication;
 
 import com.zipsoft.auth.dto.LoginDto;
-import com.zipsoft.auth.dto.User;
+import com.zipsoft.auth.dto.UserDto;
 
 public interface AuthService  {
 	
-	User findByUserId(LoginDto dto);
+	UserDto findByUserId(LoginDto dto);
 	
 	Authentication authenticate(String id, String password)  throws Exception;
 	
