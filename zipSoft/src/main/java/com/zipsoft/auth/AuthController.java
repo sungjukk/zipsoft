@@ -98,20 +98,4 @@ public class AuthController {
 		
 	}
 	
-	@GetMapping("insert")
-	public ApiResponse insert(@RequestBody UserDto user1) {
-		User user = User.builder()
-				.userId("tester")
-				.password("1234")
-				.userName("tester")
-				.email("test@test.com")
-				.build();
-
-
-
-		long userId = authRepository.insert(user);
-		
-		return ApiResponse.OK(null);
-	}
-	
 }
