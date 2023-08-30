@@ -13,4 +13,5 @@ public interface AuthService  {
 	
 	void removeUserCache(long id);
 	
+	void insertUser(LoginDto dto);
 }

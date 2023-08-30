@@ -32,10 +32,11 @@ public class SecurityConfig {
 	private final JwtAuthenticationEntryPoint unauthorizedHandler;
 	private final UserDetailService userDetailService;
 	
-	private static final String[] WHITE_LIST = {
+	public static final String[] WHITE_LIST = {
             "/users/**",
             "/test/**",
             "/auth/login",
+            "/auth/logout",
             "/auth/insert",
             "/error"
     };

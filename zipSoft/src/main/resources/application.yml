@@ -6,6 +6,10 @@ server:
       enabled: true
       force: true
 
+spring:
+  data:
+    rest:
+      default-page-size: 10
 app:
   jwt:
     jwtSecret: rkGU45258GGhiolLO2465TFY5345kGU45258GGhiolLO2465TFY5345WETsdfg1234vxsd32QWRSDGGSDGSwetSDFWETW123124856XGBFSDGS

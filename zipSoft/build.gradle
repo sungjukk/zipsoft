@@ -52,7 +52,7 @@ dependencies {
 }
 
 test {
-	useJUnitPlatform()
+	//useJUnitPlatform()
 }
 
 // === Querydsl 빌드 옵션 (선택사항) ===

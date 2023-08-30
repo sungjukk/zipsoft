@@ -87,15 +87,22 @@ public class AuthController {
 		
 		cookieUtil.removeCookie(req, res, Constants.REFRESH_TOKEN);
 		
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Object auth = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
 		if (auth != null) {
-			UserPrincipal user = (UserPrincipal) auth.getPrincipal();
+			UserPrincipal user = (UserPrincipal) auth;
 			authService.removeUserCache(user.getUserId());
 		}
 		
 		return ApiResponse.OK(null);
 		
+	}
+	
+	@GetMapping("insert")
+	public ApiResponse insert(@RequestBody LoginDto dto) {
+		authService.insertUser(dto);
+		
+		return ApiResponse.OK(null);
 	}
 	
 }

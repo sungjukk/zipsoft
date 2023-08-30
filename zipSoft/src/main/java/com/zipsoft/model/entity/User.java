@@ -25,12 +25,7 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 @Table(name="TB_USER")
-public class User {
-	
-	@Id
-	@Column(name="id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+public class User extends Base {
 	
 	@Column(nullable = false)
 	private String userId;
@@ -50,23 +45,12 @@ public class User {
 	@Column 
     private long regId; // reg_id 등록자 아이디 VARCHAR(24) NOT NULL
 	
-	@Column(name="reg_dt", nullable = false, updatable = false)
-	@CreationTimestamp 
-	private LocalDateTime regDt; // reg_dt 등록일시 일시 DATETIME NOT NULL
-	
 	@Column 
     private long updateId; // reg_id 등록자 아이디 VARCHAR(24) NOT NULL
-	
-	@Column(name="update_dt", nullable = false, updatable = false)
-	@CreationTimestamp 
-	private LocalDateTime updateDt; // reg_dt 등록일시 일시 DATETIME NOT NULL
 	
 	
 	@PrePersist
     public void prePersist() {
-		this.regId = this.id;
-        this.regDt = Optional.ofNullable(this.regDt).orElse(LocalDateTime.now());
-        this.updateDt = Optional.ofNullable(this.updateDt).orElse(LocalDateTime.now());
-        this.useYn = Optional.ofNullable(this.useYn).orElse("Y");
+		this.useYn = Optional.ofNullable(this.useYn).orElse("Y");
     }
 }

@@ -52,41 +52,70 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		
 		boolean isAuth = false;
 		long userId = 0;
+		String errorMsg = "";
 		
-		String jwt = this.getJwtFromRequest(req);
-		Cookie c = cookieUtil.getCookie(req, Constants.REFRESH_TOKEN);
-		if (c != null)
-		System.out.println(c.getValue());
 		
-		if (jwt != null) {
-			String result = tokenProvider.validateToken(jwt);
-			
-			if ("SUCC".equals(result)) {
-				isAuth = true; 
-				userId = tokenProvider.getUserNoFromJWT(jwt);
-			} else if ("ExpiredToken".equals(result)) {
-				if ("/auth/republishToken".equals(req.getRequestURI())) {
-					userId = this.refreshTokenCheck(req, res);
-					isAuth = userId != 0;
+		if ("/auth/republishToken".equals(req.getRequestURI())) {
+			Cookie cookie = cookieUtil.getCookie(req, Constants.REFRESH_TOKEN);
+			if (cookie == null) {
+				errorMsg = "refresh_token_not_fonud";
+			} else {
+				String refreshToken = cookie.getValue();
+				if (!"".equals(refreshToken) && refreshToken != null) {
+					
+					String msg = tokenProvider.validateToken(refreshToken);
+					
+					if (!"SUCC".equals(msg)) {
+						errorMsg = "refresh_token_not_fonud";				
+					};
+					
+					userId = tokenProvider.getUserNoFromJWT(refreshToken);
+					String saveRefreshToken = redisUtil.getData(Constants.REFRESH_TOKEN + "_" + userId);
+					
+					if (refreshToken.equals(saveRefreshToken)) {
+						isAuth = true;
+					} else {
+						errorMsg = "refresh_token_expired";
+					}
 				} else {
-					setErrorResponse(req,res);
-					return;
+					errorMsg = "refresh_token_not_fonud";
 				}
 			}
-
 			
 			
-			if (isAuth) {
-				
-				UserDetails userDetails = userDetailService.loadUserById(userId);
-				
-				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
-
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+			if (!"".equals(errorMsg)) {
+				setErrorResponse(req,res,errorMsg);
+				return;
 			}
 			
-		} 
+		} else {
+			String jwt = this.getJwtFromRequest(req);
+			
+			if (jwt != null) {
+				String result = tokenProvider.validateToken(jwt);
+				
+				if ("SUCC".equals(result)) {
+					isAuth = true; 
+					userId = tokenProvider.getUserNoFromJWT(jwt);
+				} else if ("/auth/logout".equals(req.getRequestURI())) {
+					
+				} else if ("ExpiredToken".equals(result)) {
+					setErrorResponse(req,res,"expired");
+					return;
+				}
+
+			}
+		}
+		
+		if (isAuth) {
+			
+			UserDetails userDetails = userDetailService.loadUserById(userId);
+			
+			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+		}
 		
 		
 		filterChain.doFilter(req, res);
@@ -102,39 +131,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return null;
     }
 	
-	private long refreshTokenCheck(HttpServletRequest req, HttpServletResponse res) {
-		Cookie cookie = cookieUtil.getCookie(req, Constants.REFRESH_TOKEN);
-		
-		if (cookie == null) return 0;
-		
-		String refreshToken = cookie.getValue();
-		
-		if (!"".equals(refreshToken) && refreshToken != null) {
-			
-			if (!"SUCC".equals(tokenProvider.validateToken(refreshToken))) return 0;
-			
-			long userId = tokenProvider.getUserNoFromJWT(refreshToken);
-			String saveRefreshToken = redisUtil.getData(Constants.REFRESH_TOKEN + "_" + userId);
-			
-			if (refreshToken.equals(saveRefreshToken) || saveRefreshToken == null || "".equals(saveRefreshToken)) {
-				return userId;
-			}
-		}
-		
-		return 0;
-	}
 	
-	public void setErrorResponse(HttpServletRequest req, HttpServletResponse res) throws IOException {
+	public void setErrorResponse(HttpServletRequest req, HttpServletResponse res, String msg) throws IOException {
         
 		res.setCharacterEncoding("utf-8");
 		res.setStatus(HttpStatus.UNAUTHORIZED.value());
 		res.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		
 		ObjectMapper mapper = new ObjectMapper();
-		String txt = mapper.writeValueAsString(ApiResponse.fail(HttpStatus.UNAUTHORIZED, "expired"));
+		String txt = mapper.writeValueAsString(ApiResponse.fail(HttpStatus.UNAUTHORIZED, msg));
 		
 		res.getWriter().write(txt);
     }
 	
-
 }

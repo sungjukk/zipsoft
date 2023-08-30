@@ -9,11 +9,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.zipsoft.auth.dto.LoginDto;
 import com.zipsoft.auth.dto.UserDto;
 import com.zipsoft.config.CacheKeys;
+import com.zipsoft.model.entity.User;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,9 @@ public class AuthServiceImpl implements AuthService {
 	
 	private final AuthenticationManager authManager;
 	private final AuthMapper loginMapper;
+	private final AuthRepository authRepository;
+	private final PasswordEncoder passwordEncoder;
+	
 	
 	@Override
 	public UserDto findByUserId(LoginDto dto) {
@@ -46,6 +51,17 @@ public class AuthServiceImpl implements AuthService {
 	})
 	public void removeUserCache(long id) {
 		log.info("userId : " + id + " 캐시 삭제 완료");
+	}
+
+	@Override
+	public void insertUser(LoginDto dto) {
+		User user = User.builder()
+						.userId(dto.getUserId())
+						.password(passwordEncoder.encode(dto.getPassword()))
+						.userName("tester")
+						.email("test@test.com")
+						.build();
+		authRepository.insert(user);
 	}
 	
 	

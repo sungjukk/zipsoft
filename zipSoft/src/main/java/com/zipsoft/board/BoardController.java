@@ -2,6 +2,8 @@ package com.zipsoft.board;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zipsoft.board.dto.BoardDto;
+import com.zipsoft.board.dto.SearchDto;
 import com.zipsoft.commons.payload.ApiResponse;
 import com.zipsoft.commons.security.UserPrincipal;
 
@@ -24,10 +27,11 @@ public class BoardController {
 	
 	private final BoardService boardService;
 	
+	
 	@GetMapping
-	public ApiResponse list() {
+	public ApiResponse list(SearchDto search) {
 		
-		List<BoardDto> list = boardService.getBoardList();
+		Page<BoardDto> list = boardService.getBoardList(search);
 		
 		return ApiResponse.OK(list);
 	}
