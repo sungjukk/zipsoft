@@ -12,7 +12,7 @@ export interface Board {
   subject: String;
   content : String;
   userName : String;
-  updateDate : String;
+  updateDt : String;
   fileId? : Number;
   viewCnt : Number;
   commentCnt : Number;

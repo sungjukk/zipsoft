@@ -25,11 +25,15 @@ instance.interceptors.response.use(response => response, async (err) => {
 	
 	if (status == 401) {
 		// 401에러 && 토큰 만료인 경우 새로 받아옴
+		console.log('401');
 		if (err.response.data && err.response.data.msg === 'expired') {
 			const res = await republicToken();
 			if (res) {
 				config.headers['Authorization'] = `Bearer ${sessionStorage.getItem('authorization')}`;
 				return axios(config);
+			} else {
+				await store.dispatch('UserStore/logout');
+				return false;
 			} 
 				
 		}
@@ -88,7 +92,6 @@ const republicToken =  async () => {
 	
 	try {
 		const res = await instance.get('/auth/republishToken');
-		console.log(res.data.data);
 		if (res.data.result == 200) {
 			store.commit('UserStore/currentUser', res.data.data);
 			return true;

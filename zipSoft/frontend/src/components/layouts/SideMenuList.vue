@@ -1,6 +1,6 @@
 <template>
     <li class="nav-item">
-        <a class="nav-link asd" :class="menu?.path == currentPage ? 'active' : currentPage" :to="`${menu?.path}`" href="javascript:;" @click="onClick(menu.path)" >{{ menu?.name }}</a>
+        <a class="nav-link asd" :class="menu.path == currentPage ? 'active' : ''" :to="`${menu?.path}`" href="javascript:;" @click="onClick(menu.path)" >{{ menu?.name }}</a>
     </li>
 </template>
 <script lang="ts" setup>

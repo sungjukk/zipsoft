@@ -87,6 +87,7 @@ export const UserStore : Module<User, Rootstate> = {
 		},
 		logout: async({commit}) => {
 			await callGetApi('/auth/logout');
+			console.log('asdasd');
 			commit('removeUser');
 			router.push(RouteUrl.MAIN);
 		}
