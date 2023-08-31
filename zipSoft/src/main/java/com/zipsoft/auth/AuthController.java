@@ -87,12 +87,16 @@ public class AuthController {
 		
 		cookieUtil.removeCookie(req, res, Constants.REFRESH_TOKEN);
 		
-		Object auth = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		
-		if (auth != null) {
-			UserPrincipal user = (UserPrincipal) auth;
-			authService.removeUserCache(user.getUserId());
+		try {
+			Object auth = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			if (auth != null) {
+				UserPrincipal user = (UserPrincipal) auth;
+				authService.removeUserCache(user.getUserId());
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
+		
 		
 		return ApiResponse.OK(null);
 		

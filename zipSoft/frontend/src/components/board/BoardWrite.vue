@@ -8,7 +8,7 @@
                 </tr>
                 <tr>
                     <th>첨부파일</th>
-                    <td><input type="file" class="form-control"></td>
+                    <td><input type="file" class="form-control" ref="file" /></td>
                 </tr>
                 <tr>
                     <th>내용</th>
@@ -26,7 +26,7 @@
 import { defineComponent, getCurrentInstance, ref} from 'vue'
 import { BoardWriteDef } from '@/views/board/BoardWriteSection.vue';
 import {validationCheck} from '@/utils/CommonUtil';
-import {callPostApi} from '@/utils/ApiClient';
+import {callFileApi} from '@/utils/ApiClient';
 import { useRouter } from 'vue-router';
 import {RouteUrl} from '@/router/index';
 
@@ -40,11 +40,24 @@ export default defineComponent({
             content : ''
         });
 
+        const file = ref<HTMLInputElement>();
+
         const submit = async () => {
             //proxy.$alert('test');
             if (!validationCheck('write-form')) return false;
+            const formData = new FormData();
+            const sub = write.value.subject;
+            formData.append('subject', sub.toString());
+            formData.append('content', write.value.content.toString());
+            if (file.value?.files) {
+                for (const f of file.value.files) {
+                    formData.append("files",f);
+                }
+            }
+            
 
-            const res = await callPostApi('/board',write.value);
+            
+            const res = await callFileApi('/board',formData);
 
             if (res.result == 200) {
                 proxy.$alert("등록하였습니다.", ()=> {
@@ -54,7 +67,7 @@ export default defineComponent({
                 proxy.$alert("등록에 실패하였습니다.");
             }
 
-            console.log(res);
+            //console.log(res);
 
         }
 
@@ -62,7 +75,7 @@ export default defineComponent({
             route.push(RouteUrl.BOARD);
         }
 
-        return {write, submit, moveBoardList};
+        return {write, submit, moveBoardList, file};
     },
 })
 </script>

@@ -123,3 +123,28 @@ footer {
 .container {
     padding-top: 100px;
 }
+
+.board-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.board-container .table {
+    text-align: center;
+    color: #ddd;
+    border-top: 2px solid #ddd;
+    border-bottom: 2px solid #ddd;
+}
+
+.board-container .table tr {
+    height: 70px;
+}
+
+.board-container .table tr td, .table tr th {
+    vertical-align: middle;
+    color:#434343;
+}
+
+.ta-left {
+    text-align: left;
+}

@@ -1,18 +1,23 @@
 import axios from "axios";
 import store from '@/store/index';
+import { globals } from "@/main";
 
 const API_URL = process.env.VUE_APP_API_URL;
 
 const instance = axios.create({
 	baseURL: API_URL,
-	withCredentials: true
+	withCredentials: true,
+	headers: {
+		'Content-Type' : 'application/json'
+	}
 });
 
 
 instance.interceptors.request.use(config => {
 	
 	const accessToken = sessionStorage.getItem('authorization');
-	config.headers['Content-Type'] = 'application/json';
+	console.log(config.headers);
+	//config.headers['Content-Type'] = 'application/json';
 	if (accessToken) config.headers['Authorization'] = `Bearer ${accessToken}`;
     return config;
 }, err => {
@@ -33,14 +38,19 @@ instance.interceptors.response.use(response => response, async (err) => {
 				return axios(config);
 			} else {
 				await store.dispatch('UserStore/logout');
-				return false;
 			} 
 				
 		}
-	}
-	
+	} 
+
 	return Promise.reject(err);
+	
 })
+
+const sleep = async (ms: number) => {
+	const wakeUpTime = Date.now() + ms;
+	while (Date.now() < wakeUpTime) {}
+}
 
 export const callGetApi = async(url : string, params? : object) => {
 	const encUrl = encodeURI(url);
@@ -71,6 +81,21 @@ export const callPostApi = async(url:string, params?:object) => {
 	
 	
 };
+
+export const callFileApi = async(url:string, params?:object) => {
+	const headers = {
+		"Content-Type": "multipart/form-data"
+	};
+	try {
+		const result = await instance.post(url, params, {headers});
+		return result.data;		
+	} catch (err) {
+		if (axios.isAxiosError(err)) {
+			return err.response?.data;			
+		}
+	}
+};
+	
 
 const appendGetParams = (params?:any) => {
   if (!params) return '';

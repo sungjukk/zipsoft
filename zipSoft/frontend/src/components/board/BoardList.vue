@@ -1,24 +1,32 @@
 <template>
-    <div>
+    <div class="board-container">
         <table class="table table-hover">
+            <colgroup>
+                <col width="50px"  />
+                <col width="300px" />
+                <col width="100px" />
+                <col width="200px" />
+                <col width="70px"  />
+                <col width="70px"  />
+            </colgroup>
             <thead class="table-light">
                 <tr>
-                <th scope="col">No</th>
-                <th scope="col">제목</th>
-                <th scope="col">작성자</th>
-                <th scope="col">날짜</th>
-                <th scope="col">조회수</th>
-                <th scope="col">댓글수</th>
+                    <th scope="col">No</th>
+                    <th scope="col" class="ta-left">제목</th>
+                    <th scope="col">작성자</th>
+                    <th scope="col">날짜</th>
+                    <th scope="col">조회수</th>
+                    <th scope="col">댓글수</th>
                 </tr>
             </thead>
             <tbody class="table-group-divider">
-                <tr v-for="(board) in boardList" :key="board.id">
-                    <th scope="row">{{board.no}}</th>
-                    <td>{{board.subject}}</td>
+                <tr v-for="(board, idx) in boardList" :key="board.id">
+                    <td scope="row">{{no - idx}}</td>
+                    <td class="ta-left">{{board.subject}} <img v-if="board.fileCnt > 0" src="@/assets/svg/files.svg" /></td>
                     <td>{{board.userName}}</td>
                     <td>{{board.updateDt}}</td>
                     <td>{{board.viewCnt}}</td>
-                    <td>{{board.commentCnt}}</td>
+                    <td>0</td>
                 </tr>
             </tbody>
         </table>
@@ -38,6 +46,7 @@ import {callGetApi} from '@/utils/ApiClient';
 import {RouteUrl} from '@/router/index';
 import Pagination from '@/components/modal/Pagination.vue';
 
+
 export interface PageParam {
     number: number,
     totalElements: number,
@@ -53,6 +62,7 @@ export default defineComponent({
         const route = useRouter();
         const {proxy} = getCurrentInstance() as any;
         const boardList = ref<Board[]>();
+        const no = ref(0);
         const pageParam = ref<PageParam>({
             number : 0,
             totalElements : 0,
@@ -65,17 +75,13 @@ export default defineComponent({
 
             if (res.result == 200) {
                 boardList.value = res.data.content;
-                const {number, totalElements, totalPages} = res.data;
+                const {number, totalElements, totalPages, size} = res.data;
                 pageParam.value = {
                     number,
                     totalElements,
                     totalPages
-                }
-                /*page.value = {
-                    number : 15,
-                    totalElements : 10,
-                    totalPages : 100
-                }*/
+                };
+                no.value = totalElements - (number * size);
             } else {
                 proxy.$alert("서버와의 통신 중 오류가 발생하였습니다.");
             }
@@ -90,7 +96,7 @@ export default defineComponent({
             route.push(RouteUrl.BOARD_WRITE);
         }
 
-        return {boardList, pageParam, onButtonClick, callApiBoardList}
+        return {boardList, pageParam, onButtonClick, callApiBoardList, no}
     }
 })
 </script>

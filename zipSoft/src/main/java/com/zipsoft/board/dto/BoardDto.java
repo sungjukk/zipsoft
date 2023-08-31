@@ -1,6 +1,9 @@
 package com.zipsoft.board.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -24,9 +27,11 @@ public class BoardDto {
 	private String userName;
 	private int viewCnt;
 	private long regId;
+	private long fileCnt;
 	private LocalDateTime regDt;
 	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
 	private LocalDateTime updateDt;
 	
+	private List<MultipartFile> files;
 }

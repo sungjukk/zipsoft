@@ -37,7 +37,7 @@ public class BoardController {
 	}
 	
 	@PostMapping
-	public ApiResponse insert(@RequestBody BoardDto board, @AuthenticationPrincipal UserPrincipal user) {
+	public ApiResponse insert(BoardDto board, @AuthenticationPrincipal UserPrincipal user) {
 		board.setRegId(user.getUserId());
 		boardService.insertBoard(board);
 		

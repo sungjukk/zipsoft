@@ -7,13 +7,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.zipsoft.board.dto.BoardDto;
 import com.zipsoft.board.dto.SearchDto;
 import com.zipsoft.model.entity.Board;
+import com.zipsoft.model.entity.BoardFile;
 import com.zipsoft.model.entity.QBoard;
+import com.zipsoft.model.entity.QBoardFile;
 import com.zipsoft.model.entity.QUser;
 
 import jakarta.persistence.EntityManager;
@@ -29,6 +33,7 @@ public class BoardRepository {
 	private final EntityManager entityManager;
 	
 	QBoard board = QBoard.board;
+	QBoardFile boardFile = QBoardFile.boardFile;
 	QUser user = QUser.user;
 	
 	public Page<BoardDto> list(SearchDto search) {
@@ -41,7 +46,8 @@ public class BoardRepository {
 							                     board.content,
 							                     user.userName,
 							                     board.viewCnt,
-							                     board.updateDt)
+							                     board.updateDt,
+							                     ExpressionUtils.as(JPAExpressions.select(boardFile.id.count()).from(boardFile).where(boardFile.board.id.eq(board.id)), "fileCnt"))
 									              )
 							               .from(board)
 							               .innerJoin(user).on(board.regId.eq(user.id))
@@ -60,6 +66,14 @@ public class BoardRepository {
 	@Transactional
 	public void insert(Board b) {
 		entityManager.persist(b);
+		
+		if (b.getBoardFiles() != null && b.getBoardFiles().size() > 0) {
+			for (BoardFile bf : b.getBoardFiles()) {
+				bf.setBoard(b);
+				entityManager.persist(bf);
+			}
+		}
+		
 		entityManager.flush();
 	}
 	

@@ -89,7 +89,7 @@ export const UserStore : Module<User, Rootstate> = {
 			await callGetApi('/auth/logout');
 			console.log('asdasd');
 			commit('removeUser');
-			router.push(RouteUrl.MAIN);
+			location.href = RouteUrl.LOGIN;
 		}
     }
 }
