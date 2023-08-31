@@ -51,6 +51,7 @@ public class BoardRepository {
 									              )
 							               .from(board)
 							               .innerJoin(user).on(board.regId.eq(user.id))
+							               .orderBy(board.updateDt.desc())
 							               .offset(page.getOffset())
 							               .limit(page.getPageSize())
 							               .fetch();
