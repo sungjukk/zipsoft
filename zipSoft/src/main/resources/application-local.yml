@@ -7,10 +7,10 @@ spring:
       on-profile: local
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    jdbc-url: jdbc:mysql://127.0.0.1:3306/zipSoft?useUnicode=true&characterEncoding=UTF-8&characterSetResults=UTF-8&useSSL=true&serverTimezone=Asia/Seoul
+    jdbc-url: jdbc:mysql://192.168.0.12:3306/DockerTest?useUnicode=true&characterEncoding=UTF-8&characterSetResults=UTF-8&useSSL=true&serverTimezone=Asia/Seoul
     #driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
     #jdbc-url: jdbc:log4jdbc:mysql://127.0.0.1:3306/DockerTest?useUnicode=true&characterEncoding=UTF-8&characterSetResults=UTF-8&useSSL=true&serverTimezone=Asia/Seoul
-    username: admin
+    username: root
     password: 1234
     connection-test-query: SELECT 1
     minimum-idle: 10
@@ -35,7 +35,7 @@ file:
   location: C:/zipsoft/upload
         
 logging:
-  config: classpath:logback.xml
   file:
-    path: C:/zipsoft/log      
+    path: C:/zipsoft/log
+  config: classpath:logback-local.xml
     
