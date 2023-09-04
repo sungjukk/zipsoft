@@ -1,37 +1,42 @@
 <template>
     <div class="board-container">
-        <table class="table table-hover">
-            <colgroup>
-                <col width="50px"  />
-                <col width="300px" />
-                <col width="100px" />
-                <col width="200px" />
-                <col width="70px"  />
-                <col width="70px"  />
-            </colgroup>
-            <thead class="table-light">
-                <tr>
-                    <th scope="col">No</th>
-                    <th scope="col" class="ta-left">제목</th>
-                    <th scope="col">작성자</th>
-                    <th scope="col">날짜</th>
-                    <th scope="col">조회수</th>
-                    <th scope="col">댓글수</th>
-                </tr>
-            </thead>
-            <tbody class="table-group-divider">
-                <tr v-for="(board, idx) in boardList" :key="board.id">
-                    <td scope="row">{{no - idx}}</td>
-                    <td class="ta-left">{{board.subject}} <img v-if="board.fileCnt > 0" src="@/assets/svg/files.svg" /></td>
-                    <td>{{board.userName}}</td>
-                    <td>{{board.updateDt}}</td>
-                    <td>{{board.viewCnt}}</td>
-                    <td>0</td>
-                </tr>
-            </tbody>
-        </table>
-        <div style="text-align: right">
-            <button type="button" class="btn btn-primary" @click="onButtonClick">등록</button>
+        <div class="container-header">
+            <h5>총 : {{pageParam.totalElements}}건</h5>
+        </div>
+        <div>
+            <table class="table table-hover">
+                <colgroup>
+                    <col width="50px"  />
+                    <col width="300px" />
+                    <col width="100px" />
+                    <col width="200px" />
+                    <col width="70px"  />
+                    <col width="70px"  />
+                </colgroup>
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col" class="ta-left">제목</th>
+                        <th scope="col">작성자</th>
+                        <th scope="col">날짜</th>
+                        <th scope="col">조회수</th>
+                        <th scope="col">댓글수</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    <tr v-for="(board, idx) in boardList" :key="board.id">
+                        <td scope="row">{{no - idx}}</td>
+                        <td class="ta-left"><a href="javascript:;" @click="onDetailClick(board.id)">{{board.subject}} <img v-if="board.fileCnt > 0" src="@/assets/svg/files.svg" /></a></td>
+                        <td>{{board.userName}}</td>
+                        <td>{{board.updateDt}}</td>
+                        <td>{{board.viewCnt}}</td>
+                        <td>0</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="text-align: right">
+                <button type="button" class="btn btn-primary" @click="onButtonClick">등록</button>
+            </div>
         </div>
     </div>
     <div>
@@ -94,9 +99,13 @@ export default defineComponent({
 
         const onButtonClick = () => {
             route.push(RouteUrl.BOARD_WRITE);
+        };
+
+        const onDetailClick = (id : string) => {
+            route.push(RouteUrl.BOARD_DETAIL.replace(":id",id));
         }
 
-        return {boardList, pageParam, onButtonClick, callApiBoardList, no}
+        return {boardList, pageParam, onButtonClick, callApiBoardList, no, onDetailClick}
     }
 })
 </script>

@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, {AxiosRequestConfig, AxiosProgressEvent, ResponseType} from "axios";
 import store from '@/store/index';
 import { globals } from "@/main";
 
@@ -95,6 +95,39 @@ export const callFileApi = async(url:string, params?:object) => {
 		}
 	}
 };
+
+export const callFileDownApi = async(url:string, params?:object) => {
+	const config = {
+		onDownloadProgress: (event : any) => {
+			const per = Math.round((event.loaded * 100) / event.total);
+        	console.log(`${event.loaded} / ${event.total} ${per}`);
+			console.log(event);
+		},
+		responseType : 'blob' as ResponseType
+	}
+
+	try {
+		const result = await instance.get(url, config);
+		let fileName = result.headers['content-disposition'].split('filename=')[1].replaceAll(/"/gi,'');
+
+		const fileUrl = window.URL.createObjectURL(new Blob([result.data], {
+			type: result.headers['content-type'],
+		  }));
+		const link = document.createElement('a');
+		link.href = fileUrl;
+		link.download = decodeURI(fileName);
+		document.body.appendChild(link);
+		link.click();
+
+	} catch (err) {
+		if (axios.isAxiosError(err)) {	
+			
+		} 
+
+		globals.$alert('다운로드에 실패하였습니다');
+		return false;
+	}
+}
 	
 
 const appendGetParams = (params?:any) => {

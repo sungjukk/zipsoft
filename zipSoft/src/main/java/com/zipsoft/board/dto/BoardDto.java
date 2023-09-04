@@ -34,4 +34,6 @@ public class BoardDto {
 	private LocalDateTime updateDt;
 	
 	private List<MultipartFile> files;
+	
+	private List<BoardFileDto> fileList;
 }

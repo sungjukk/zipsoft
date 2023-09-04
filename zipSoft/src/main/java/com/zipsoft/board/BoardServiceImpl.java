@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.zipsoft.auth.AuthMapper;
 import com.zipsoft.auth.AuthServiceImpl;
 import com.zipsoft.board.dto.BoardDto;
+import com.zipsoft.board.dto.BoardFileDto;
 import com.zipsoft.board.dto.SearchDto;
 import com.zipsoft.commons.utils.FileUtil;
 import com.zipsoft.enums.FilePath;
@@ -61,6 +62,19 @@ public class BoardServiceImpl implements BoardService {
 		
 		
 		boardRepository.insert(b);
+	}
+
+	@Override
+	public BoardDto detail(long id) {
+		BoardDto dto = boardRepository.detail(id);
+		if (dto != null) dto.setFileList(boardRepository.detailFileList(id));
+		
+		return dto;
+	}
+
+	@Override
+	public BoardFileDto detailFile(long id) {
+		return boardRepository.detailFile(id);
 	}
 
 }

@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -30,6 +31,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 			    .allowedOrigins("http://localhost:3000")
 			    .allowCredentials(true)
 			    .allowedMethods("HEAD","OPTIONS","GET","POST","PUT","PATCH","DELETE")
+			    .exposedHeaders(HttpHeaders.CONTENT_DISPOSITION, HttpHeaders.CONTENT_LENGTH)
 			    .maxAge(MAX_AGE_SEC);
 		
 	}

@@ -13,6 +13,7 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.zipsoft.board.dto.BoardDto;
+import com.zipsoft.board.dto.BoardFileDto;
 import com.zipsoft.board.dto.SearchDto;
 import com.zipsoft.model.entity.Board;
 import com.zipsoft.model.entity.BoardFile;
@@ -78,4 +79,44 @@ public class BoardRepository {
 		entityManager.flush();
 	}
 	
+	public BoardDto detail(long id) {
+		
+		return jpaQueryFactory.select(Projections.fields(BoardDto.class, 
+							                             board.id
+							                             ,board.subject
+							                             ,board.content
+							                             ,user.userName
+							                             ,board.viewCnt
+							                             ,board.updateDt))
+							   .from(board)
+							   .innerJoin(user).on(board.regId.eq(user.id))
+							   .where(board.id.eq(id))
+							   .fetchOne();
+	}
+	
+	public List<BoardFileDto> detailFileList(long boardId) {
+		
+		return jpaQueryFactory.select(Projections.fields(BoardFileDto.class, 
+												 		 boardFile.id
+												 		 ,boardFile.fileName
+												 		 ,boardFile.orgFileName
+												 		 ,boardFile.ext
+												 		 ,boardFile.fileSize))
+					                             .from(boardFile)
+					                             .where(boardFile.board.id.eq(boardId))
+					                             .fetch();
+		
+	}
+	
+	public BoardFileDto detailFile(long id) {
+		return jpaQueryFactory.select(Projections.fields(BoardFileDto.class, 
+												 		 boardFile.id
+												 		 ,boardFile.fileName
+												 		 ,boardFile.orgFileName
+												 		 ,boardFile.ext
+												 		 ,boardFile.fileSize))
+										        .from(boardFile)
+										        .where(boardFile.id.eq(id))
+										        .fetchOne();
+	}
 }
