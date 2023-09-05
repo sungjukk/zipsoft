@@ -47,7 +47,7 @@
 import {defineComponent, ref, onMounted, getCurrentInstance} from 'vue';
 import { Board } from '@/views/board/BoardListSection.vue';
 import { useRouter } from 'vue-router';
-import {callGetApi} from '@/utils/ApiClient';
+import {callGetApi, HTTP_STATUS} from '@/utils/ApiClient';
 import {RouteUrl} from '@/router/index';
 import Pagination from '@/components/modal/Pagination.vue';
 
@@ -78,7 +78,7 @@ export default defineComponent({
         const callApiBoardList = async (page : number) => {
             const res = await callGetApi('/board',{page});
 
-            if (res.result == 200) {
+            if (res && res.result == HTTP_STATUS.OK) {
                 boardList.value = res.data.content;
                 const {number, totalElements, totalPages, size} = res.data;
                 pageParam.value = {

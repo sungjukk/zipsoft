@@ -1,15 +1,18 @@
 import {createApp} from 'vue';
 import AlertComponent from '@/components/modal/AlertComponent.vue';
+import LoadingBar from '@/components/modal/LoadingBar.vue';
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
-    $alert:any
+    $alert:any,
+    $loadingBar:any
   }
 }
 
 const Alert = {
     install : (app:any) => {
         const instance:any = createApp({extends: AlertComponent}).mount(document.createElement('div'));
+        const loading:any = createApp({extends: LoadingBar}).mount(document.createElement('div'));
         app.config.globalProperties.$alert = (msg:string, callback? : Function, ele?:HTMLElement) => {
           document.body.appendChild(instance.$el);
           instance.type = 'alert'
@@ -34,6 +37,12 @@ const Alert = {
           }
         }
 
+        app.config.globalProperties.$loadingBar = (isShow : boolean, percent : number) => {
+          document.body.appendChild(loading.$el);
+          loading.isShow = isShow;
+          loading.percent = percent;
+          loading.instance = loading
+        };
     }
 }
 

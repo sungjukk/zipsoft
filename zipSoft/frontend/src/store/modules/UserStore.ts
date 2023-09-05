@@ -1,7 +1,7 @@
 import { Module, ActionContext } from "vuex";
 import { globals } from "@/main";
 import {Rootstate} from '@/store/index';
-import {callPostApi, callGetApi} from '@/utils/ApiClient';
+import {callPostApi, callGetApi, HTTP_STATUS} from '@/utils/ApiClient';
 import router, {RouteUrl} from '@/router/index';
 import jwt_decode from "jwt-decode";
 
@@ -27,7 +27,6 @@ export const UserStore : Module<User, Rootstate> = {
         currentUser: (state:User, payload:any) => {
             
            if (!payload) return false;
-            console.log(payload.accessToken);
            /*
                여기서는 payload를 객체로 받습니다.
                payload를 객체로 받으면, mutation를 조금더 유연하게 사용할 수 있기는 합니다.
@@ -48,7 +47,7 @@ export const UserStore : Module<User, Rootstate> = {
     actions: {
         login: async ({commit}, payload:any) => {
 			const res = await callPostApi('/auth/login',payload);
-			if (res?.result == 200) {
+			if (res.result == HTTP_STATUS.OK) {
 				commit('currentUser', res.data);
 				router.push(RouteUrl.ABOUT);
 			} else {
@@ -60,7 +59,7 @@ export const UserStore : Module<User, Rootstate> = {
 			if (!accessToken) return false;
 			
 			const res = await callGetApi('/auth/ping',payload);
-			if (res && res.result == 200) {
+			if (res.result == HTTP_STATUS.OK) {
 				
 				if (state.id == 0) {
 					commit('currentUser', {accessToken});				
@@ -77,8 +76,7 @@ export const UserStore : Module<User, Rootstate> = {
 			if (!token) return false;
 			
 			const res = await callGetApi('/auth/republishToken',payload);
-			console.log(res);
-			if (res && res.result == 200) {
+			if (res.result == HTTP_STATUS.OK) {
 				commit('currentUser', res.data);
 				console.log('commit');
 			} else {
@@ -87,7 +85,6 @@ export const UserStore : Module<User, Rootstate> = {
 		},
 		logout: async({commit}) => {
 			await callGetApi('/auth/logout');
-			console.log('asdasd');
 			commit('removeUser');
 			location.href = RouteUrl.LOGIN;
 		}

@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.zipsoft.auth.AuthMapper;
 import com.zipsoft.auth.AuthServiceImpl;
+import com.zipsoft.board.dto.BoardCommentDto;
 import com.zipsoft.board.dto.BoardDto;
 import com.zipsoft.board.dto.BoardFileDto;
 import com.zipsoft.board.dto.SearchDto;
@@ -17,6 +18,7 @@ import com.zipsoft.commons.utils.FileUtil;
 import com.zipsoft.enums.FilePath;
 import com.zipsoft.model.FileDto;
 import com.zipsoft.model.entity.Board;
+import com.zipsoft.model.entity.BoardComment;
 import com.zipsoft.model.entity.BoardFile;
 
 import lombok.RequiredArgsConstructor;
@@ -75,6 +77,19 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public BoardFileDto detailFile(long id) {
 		return boardRepository.detailFile(id);
+	}
+
+	@Override
+	public void insertBoardComment(BoardCommentDto dto) {
+		BoardComment bc = BoardComment.builder().board(Board.builder().id(dto.getBoardId()).build())
+												.comment(dto.getComment())
+												.regId(dto.getRegId())
+												.updateId(dto.getRegId())
+												.parentId(dto.getParentId())
+												.build();
+		
+		boardRepository.insertBoardComment(bc);
+		
 	}
 
 }

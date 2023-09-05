@@ -27,6 +27,11 @@ import lombok.Setter;
 @Table(name="TB_USER")
 public class User extends Base {
 	
+	@Id
+	@Column(name="id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
+	
 	@Column(nullable = false)
 	private String userId;
 	

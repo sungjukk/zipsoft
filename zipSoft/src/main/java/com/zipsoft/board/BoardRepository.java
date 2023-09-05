@@ -16,6 +16,7 @@ import com.zipsoft.board.dto.BoardDto;
 import com.zipsoft.board.dto.BoardFileDto;
 import com.zipsoft.board.dto.SearchDto;
 import com.zipsoft.model.entity.Board;
+import com.zipsoft.model.entity.BoardComment;
 import com.zipsoft.model.entity.BoardFile;
 import com.zipsoft.model.entity.QBoard;
 import com.zipsoft.model.entity.QBoardFile;
@@ -118,5 +119,11 @@ public class BoardRepository {
 										        .from(boardFile)
 										        .where(boardFile.id.eq(id))
 										        .fetchOne();
+	}
+	
+	@Transactional
+	public void insertBoardComment(BoardComment bc) {
+		entityManager.persist(bc);
+		entityManager.flush();
 	}
 }

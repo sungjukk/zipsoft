@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,11 +20,6 @@ import lombok.Setter;
 @Getter
 @MappedSuperclass
 public class Base {
-	
-	@Id
-	@Column(name="id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
 	
 	@Column(name="reg_dt", nullable = false, updatable = false)
 	@CreationTimestamp 

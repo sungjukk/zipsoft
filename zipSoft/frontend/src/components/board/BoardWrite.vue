@@ -8,7 +8,7 @@
                 </tr>
                 <tr>
                     <th>첨부파일</th>
-                    <td><input type="file" class="form-control" ref="file" /></td>
+                    <td><input type="file" class="form-control" ref="file" multiple /></td>
                 </tr>
                 <tr>
                     <th>내용</th>
@@ -26,7 +26,7 @@
 import { defineComponent, getCurrentInstance, ref} from 'vue'
 import { BoardWriteDef } from '@/views/board/BoardWriteSection.vue';
 import {validationCheck} from '@/utils/CommonUtil';
-import {callFileApi} from '@/utils/ApiClient';
+import {callFileApi, HTTP_STATUS} from '@/utils/ApiClient';
 import { useRouter } from 'vue-router';
 import {RouteUrl} from '@/router/index';
 
@@ -59,7 +59,7 @@ export default defineComponent({
             
             const res = await callFileApi('/board',formData);
 
-            if (res.result == 200) {
+            if (res.result == HTTP_STATUS.OK) {
                 proxy.$alert("등록하였습니다.", ()=> {
                     route.push(RouteUrl.BOARD);
                 });

@@ -38,11 +38,15 @@ public class TestController {
 		return result;
 	}
 	
-	@GetMapping("/dfdf")
-	public String test(@AuthenticationPrincipal UserPrincipal user) {
+	@GetMapping("/test/dfdf")
+	public String test(@AuthenticationPrincipal UserPrincipal user) throws Exception {
 		
 		System.out.println("Asdadadsa");
-		return "SUCC";
+		if (1 == 1) {
+			throw new Exception("asdasdas");			
+		}
+		
+		return "asdasd";
 	}
 	
 }

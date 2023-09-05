@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.zipsoft.board.dto.BoardCommentDto;
 import com.zipsoft.board.dto.BoardDto;
 import com.zipsoft.board.dto.BoardFileDto;
 import com.zipsoft.board.dto.SearchDto;
@@ -65,5 +66,14 @@ public class BoardController {
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
+	}
+	
+	@PostMapping("/{id}/comment")
+	public ApiResponse insertBoardComment(@PathVariable("id") long id, @RequestBody BoardCommentDto dto, @AuthenticationPrincipal UserPrincipal user) {
+		dto.setBoardId(id);
+		dto.setRegId(user.getUserId());
+		
+		boardService.insertBoardComment(dto);
+		return ApiResponse.OK(null);
 	}
 }

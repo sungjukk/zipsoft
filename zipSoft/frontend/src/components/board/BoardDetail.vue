@@ -18,35 +18,30 @@
             <div>
                 <span>첨부파일</span>
             </div>
-            <div>
-                <a href="javascript:;" @click="downloadFile(3)"><img style="vertical-align: text-top" src="@/assets/svg/download.svg" />&nbsp; 가나다라마바사.pdf</a>
+            <div class="board-file-list" >
+                <div v-for="(file, idx) in detail.fileList" :key="file.id">
+                    <a href="javascript:;" @click="downloadFile(file.id)">
+                        {{file.orgFileName}}
+                    </a>
+                </div>
             </div>
         </div>
         <div class="board-content">
             {{detail.content}}
         </div>
     </div>
-    <div class="card">
-  <div class="percent">
-    <svg>
-      <circle cx="105" cy="105" r="100"></circle>
-      <circle cx="105" cy="105" r="100" style="--percent: 90"></circle>
-    </svg>
-    <div class="number">
-      <h3>90<span>%</span></h3>
+    <div class="comment-container">
+        <CommentList :boardId="detail.id" />
     </div>
-  </div>
-  <div class="title">
-    <h2>JavaScript</h2>
-  </div>
-</div>   
 </template>
 <script lang="ts" setup>
-import {BoardDetail, BoardFile} from '@/views/board/BoardDetailSection.vue';
+import {BoardDetail} from '@/views/board/BoardDetailSection.vue';
 import { useRouter, useRoute } from 'vue-router';
 import {RouteUrl} from '@/router/index';
 import {ref, onMounted, getCurrentInstance} from 'vue';
-import {callGetApi, callFileDownApi} from '@/utils/ApiClient';
+import {callGetApi, callFileDownApi , HTTP_STATUS} from '@/utils/ApiClient';
+
+import CommentList from '@/components/comment/CommentList.vue';
 
 const {proxy} = getCurrentInstance() as any;
 const router = useRouter();
@@ -69,7 +64,7 @@ onMounted(async () => {
 const callApiBoardDetail = async () => {
 
     const res = await callGetApi(`/board/${route.params.id}`, {});
-    if (res.result == 200) {
+    if (res.result == HTTP_STATUS.OK) {
 
         if (res.data) {
             detail.value = res.data;

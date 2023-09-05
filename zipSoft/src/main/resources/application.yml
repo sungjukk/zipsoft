@@ -5,11 +5,20 @@ server:
       charset: UTF-8
       enabled: true
       force: true
-
+  tomcat:
+    max-swallow-size: -1
+      
 spring:
   data:
     rest:
       default-page-size: 10
+  servlet:
+    multipart:
+      resolve-lazily: true
+      max-file-size: 150MB
+      max-request-size: 150MB
+        
+  
 app:
   jwt:
     jwtSecret: rkGU45258GGhiolLO2465TFY5345kGU45258GGhiolLO2465TFY5345WETsdfg1234vxsd32QWRSDGGSDGSwetSDFWETW123124856XGBFSDGS
