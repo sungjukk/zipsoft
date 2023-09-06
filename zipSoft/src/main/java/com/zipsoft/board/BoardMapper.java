@@ -4,12 +4,12 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.zipsoft.board.dto.BoardCommentDto;
 import com.zipsoft.board.dto.BoardDto;
 
 @Mapper
 public interface BoardMapper {
 	
-	void insertBoard(BoardDto board);
+	List<BoardCommentDto> getCommentList(long id);
 	
-	List<BoardDto> getBoardList();
 }

@@ -25,6 +25,25 @@ export const dateFormat = (date:string, pattern : string) => {
     return date.replace(/^(\d{4})(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)$/, pat);
 }
 
+export const timeForToday = (value : string) => {
+
+    const exp = /\d{4}(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])(0[1-9]|1[0-9]|2[0-4])(0[1-9]|[1-5][0-9])(0[1-9]|[1-5][0-9])/;
+
+    if (!exp.test(value)) return value;
+
+    const today = Math.floor(new Date().getTime() - new Date(dateFormat(value,'yyyy-MM-dd HH:mm:ss')).getTime());
+    const betweenTime = Math.floor(today / 1000 / 60);
+
+    if (betweenTime < 1) return '방금전';
+    if (betweenTime < 60) return `${betweenTime}분전`;
+
+    const betweenHour = Math.floor(betweenTime / 60);
+    if (betweenHour < 24) return `${betweenHour}시간전`;
+
+    return value;
+
+}
+
 export const validationCheck = (formId : string) => {
 
     const validArr:NodeListOf<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> = document.querySelectorAll(`#${formId} input, #${formId} select, #${formId} textarea`);

@@ -1,6 +1,8 @@
 package com.zipsoft.board;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +14,8 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.zipsoft.board.dto.BoardCommentDto;
+import com.zipsoft.board.dto.BoardCommentInterface;
 import com.zipsoft.board.dto.BoardDto;
 import com.zipsoft.board.dto.BoardFileDto;
 import com.zipsoft.board.dto.SearchDto;
@@ -23,6 +27,7 @@ import com.zipsoft.model.entity.QBoardFile;
 import com.zipsoft.model.entity.QUser;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -120,6 +125,7 @@ public class BoardRepository {
 										        .where(boardFile.id.eq(id))
 										        .fetchOne();
 	}
+	
 	
 	@Transactional
 	public void insertBoardComment(BoardComment bc) {

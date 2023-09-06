@@ -2,6 +2,7 @@ package com.zipsoft.board;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.zipsoft.auth.AuthMapper;
 import com.zipsoft.auth.AuthServiceImpl;
 import com.zipsoft.board.dto.BoardCommentDto;
+import com.zipsoft.board.dto.BoardCommentInterface;
 import com.zipsoft.board.dto.BoardDto;
 import com.zipsoft.board.dto.BoardFileDto;
 import com.zipsoft.board.dto.SearchDto;
@@ -31,6 +33,7 @@ public class BoardServiceImpl implements BoardService {
 	
 	private final BoardRepository boardRepository;
 	
+	private final BoardMapper boardMapper;
 	
 	@Override
 	public Page<BoardDto> getBoardList(SearchDto search) {
@@ -90,6 +93,11 @@ public class BoardServiceImpl implements BoardService {
 		
 		boardRepository.insertBoardComment(bc);
 		
+	}
+
+	@Override
+	public List<BoardCommentDto> commentList(long id) {
+		return boardMapper.getCommentList(id);
 	}
 
 }

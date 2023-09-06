@@ -24,6 +24,9 @@ public class BoardCommentDto {
 	private long regId;
 	private String userName;
 	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
-	private LocalDateTime updateDt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMddHHmmss", timezone = "Asia/Seoul")
+	private LocalDateTime regDt;
+	
+	private int depth;
+	private long rootId;
 }

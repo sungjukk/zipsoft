@@ -4,37 +4,47 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zipsoft.board.BoardMapper">
 	
-	<select id="getBoardList" resultType="boardDto">
-		SELECT ROW_NUMBER() OVER(ORDER BY UPDATE_DATE ) AS NO
-			   ,TB.ID
-			   ,TB.SUBJECT
-			   ,TB.CONTENT
-			   ,TB.VIEW_CNT
-			   ,TU.NAME AS USER_NAME
-			   ,TB.UPDATE_DATE
-		  FROM TB_BOARD TB
-         INNER JOIN TB_USER TU 
-            ON TB.REG_ID = TU.ID
-         ORDER BY TB.UPDATE_DATE DESC
-         LIMIT 10
+	<select id="getCommentList" parameterType="long" resultType="boardCommentDto">
+		WITH RECURSIVE T3 AS ( SELECT T1.ID
+									  ,T1.BOARD_ID
+									  ,T1.COMMENT
+									  ,T1.PARENT_ID
+									  ,1 AS DEPTH
+									  ,CONVERT(LPAD(CONVERT(T1.ID, CHAR(4)), 4, '0'), CHAR(100)) AS SEQ_CHAR
+									  ,T1.REG_ID
+									  ,T1.REG_DT
+									  ,T1.ID AS ROOT_ID
+								 FROM tb_board_comment T1 
+								WHERE PARENT_ID = 0
+								  AND BOARD_ID = #{id}
+   							    UNION ALL
+    						   SELECT T2.ID
+    						          ,T2.BOARD_ID
+    						          ,T2.COMMENT
+    						          ,T2.PARENT_ID
+    						          ,T.DEPTH + 1 AS DEPTH
+    						          ,CONCAT(T.SEQ_CHAR, LPAD(CONVERT(T2.ID, CHAR(4)), 4, '0')) AS SEQ_CHAR
+    						          ,T2.REG_ID
+    						          ,T2.REG_DT
+    						          ,(CASE WHEN T.DEPTH = 0 THEN T.ID ELSE T.ROOT_ID END) AS ROOT_ID
+    						     FROM tb_board_comment T2 
+								INNER JOIN T3 T 
+								   ON T.ID = T2.PARENT_ID
+								WHERE T2.BOARD_ID = #{id} )
+		SELECT T.ID
+			   ,T.BOARD_ID
+			   ,T.COMMENT
+			   ,T.PARENT_ID
+			   ,T.DEPTH
+			   ,T.REG_ID
+			   ,T.REG_DT
+			   ,T.ROOT_ID
+			   ,TU.USER_NAME
+		  FROM T3 T
+		 INNER JOIN tb_user TU
+		    ON T.REG_ID = TU.ID
+		  ORDER BY SEQ_CHAR
 	</select>
 	
-	<insert id="insertBoard" parameterType="boardDto" >
-		INSERT INTO TB_BOARD (
-			SUBJECT
-			,CONTENT
-			,REG_DATE
-			,REG_ID
-			,UPDATE_DATE
-			,UPDATE_ID
-		) VALUES (
-			#{subject}
-			,#{content}
-			,date_format(now(), '%Y%m%d%H%i%s')
-			,#{regId}
-			,date_format(now(), '%Y%m%d%H%i%s')
-			,#{regId}
-		)
-	</insert>
 	
 </mapper>

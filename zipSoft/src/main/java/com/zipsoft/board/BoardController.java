@@ -76,4 +76,11 @@ public class BoardController {
 		boardService.insertBoardComment(dto);
 		return ApiResponse.OK(null);
 	}
+	
+	@GetMapping("/{id}/comment")
+	public ApiResponse commentList(@PathVariable("id") long id) {
+		List<BoardCommentDto> list = boardService.commentList(id);
+		
+		return ApiResponse.OK(list);
+	}
 }

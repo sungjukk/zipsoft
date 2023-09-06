@@ -20,4 +20,6 @@ public interface BoardService {
 	public BoardFileDto detailFile(long id);
 	
 	public void insertBoardComment(BoardCommentDto dto);
+	
+	public List<BoardCommentDto> commentList(long id);
 }
