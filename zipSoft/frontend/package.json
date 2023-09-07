@@ -19,6 +19,7 @@
     "vue-class-component": "^8.0.0-0",
     "vue-facing-decorator": "^3.0.1",
     "vue-router": "^4.2.4",
+    "vue3-quill": "^0.3.0",
     "vuex": "^4.1.0"
   },
   "devDependencies": {

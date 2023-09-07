@@ -11,6 +11,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -69,14 +70,14 @@ public class FileUtil {
 	public static ResponseEntity<Resource> download(HttpServletRequest request,String fileName, String orgFileName, String ext, FilePath filePath) {
 		try {
 			Path p = Paths.get(root + filePath.getPath() + File.separator + fileName);
-			Resource resource = new InputStreamResource(Files.newInputStream(p));
+			Resource resource = new FileSystemResource(p);
 			
 			if (!resource.exists()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 			
 			String encodedFileName = null;
 	        String contentType = null;
 	        
-	        contentType = request.getServletContext().getMimeType(orgFileName);
+	        contentType = Files.probeContentType(p);
 	        encodedFileName = URLEncoder.encode(orgFileName,"UTF-8").replaceAll("\\+", "%20");
 	        
 	        if (contentType == null || "".equals(contentType)) contentType = "application/octet-stream";
@@ -93,6 +94,30 @@ public class FileUtil {
 		} 
 		
 		
+	}
+	
+	public static ResponseEntity<Resource> imageViewer(FilePath filePath, String fileName) {
+		try {
+			Path p = Paths.get(root + filePath.getPath() + File.separator + fileName);
+			Resource resource = new FileSystemResource(p);
+			
+			if (!resource.exists()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+			
+			String encodedFileName = null;
+	        String contentType = null;
+	        
+	        contentType = Files.probeContentType(p);
+	        
+	        if (contentType == null || "".equals(contentType)) contentType = "application/octet-stream";
+			
+	        return ResponseEntity.ok()
+	                .contentType(MediaType.parseMediaType(contentType))
+	                .body(resource);
+	        
+		} catch (IOException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null); 
+		} 
 	}
 	
 }

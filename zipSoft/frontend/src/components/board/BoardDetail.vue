@@ -26,9 +26,11 @@
                 </div>
             </div>
         </div>
-        <div class="board-content">
-            {{detail.content}}
-        </div>
+        <div class="board-content" v-html="detail.content"></div>
+    </div>
+    <div v-if="$store.state.UserStore.id == detail.regId" class="board-btn-group mt-3">
+        <button type="button" class="btn btn-secondary" style="font-size : 13px; padding : 10px 30px">삭제</button>
+        <button type="button" class="btn btn-primary" style="font-size : 13px; padding : 10px 30px" >수정</button>
     </div>
     <div class="comment-container">
         <CommentList :boardId="detail.id" />
@@ -37,6 +39,7 @@
 <script lang="ts" setup>
 import {BoardDetail} from '@/views/board/BoardDetailSection.vue';
 import { useRouter, useRoute } from 'vue-router';
+import { useStore } from 'vuex';
 import {RouteUrl} from '@/router/index';
 import {ref, onMounted, getCurrentInstance} from 'vue';
 import {callGetApi, callFileDownApi , HTTP_STATUS} from '@/utils/ApiClient';
@@ -46,14 +49,16 @@ import CommentList from '@/components/comment/CommentList.vue';
 const {proxy} = getCurrentInstance() as any;
 const router = useRouter();
 const route = useRoute();
+const store = useStore();
 const tootip = ref<HTMLDivElement>();
 const detail = ref<BoardDetail>({
-    id : '0',
+    id : 0,
     subject: '',
     content : '',
     userName : '',
     updateDt : '',
     viewCnt : 0,
+    regId : 0,
     fileList : []
 });
 
@@ -88,7 +93,7 @@ const clipboard = () => {
     window.navigator.clipboard.writeText(window.location.href).then(() => {
         console.log('복사 완료');
 
-        if (tootip && tootip.value) {
+        if (tootip.value) {
             tootip.value.style.display = 'block';
             setTimeout((value: HTMLDivElement) => {
                 value.style.opacity = '1';

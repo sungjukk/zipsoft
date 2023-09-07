@@ -28,6 +28,7 @@ public class BoardDto {
 	private int viewCnt;
 	private long regId;
 	private long fileCnt;
+	private long commentCnt;
 	private LocalDateTime regDt;
 	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")

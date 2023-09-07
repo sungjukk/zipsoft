@@ -12,7 +12,7 @@
                 </tr>
                 <tr>
                     <th>내용</th>
-                    <td><textarea class="form-control" v-model="write.content" data-require title="내용" /></td>
+                    <td><Editor ref="editor" style="min-height : 250px"/></td>
                 </tr>
             </tbody>
         </table>
@@ -29,12 +29,17 @@ import {validationCheck} from '@/utils/CommonUtil';
 import {callFileApi, HTTP_STATUS} from '@/utils/ApiClient';
 import { useRouter } from 'vue-router';
 import {RouteUrl} from '@/router/index';
+import Editor from '../editor/Editor.vue';
 
 export default defineComponent({
     name: 'BoardWrite',
+    components: {
+        Editor
+    },
     setup(props,context) {
         const {proxy} = getCurrentInstance() as any;
         const route = useRouter();
+        const editor = ref();
         const write = ref<BoardWriteDef>({
             subject : '',
             content : ''
@@ -44,11 +49,13 @@ export default defineComponent({
 
         const submit = async () => {
             //proxy.$alert('test');
+            console.log(editor.value);
             if (!validationCheck('write-form')) return false;
+            if (!editor.value.editorValidationCheck('내용')) return false;
             const formData = new FormData();
             const sub = write.value.subject;
             formData.append('subject', sub.toString());
-            formData.append('content', write.value.content.toString());
+            formData.append('content', editor.value.state.content);
             if (file.value?.files) {
                 for (const f of file.value.files) {
                     formData.append("files",f);
@@ -75,7 +82,7 @@ export default defineComponent({
             route.push(RouteUrl.BOARD);
         }
 
-        return {write, submit, moveBoardList, file};
+        return {write, submit, moveBoardList, file, editor};
     },
 })
 </script>

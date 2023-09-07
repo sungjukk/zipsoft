@@ -1,6 +1,9 @@
 <template>
-    <section class="mb-5">
+    <section class="mt-5">
         <div>
+            <div class="mb-3">
+                <h6>총 {{total}}개의 댓글</h6>
+            </div>
             <div class="card-body">
                 <!-- Comment form-->
                 <CommentWrite :boardId="boardId" :parentId="0" @callback="callApiCommentList" />
@@ -40,6 +43,7 @@ export default defineComponent({
     },
     setup(props) {
         const commentList = ref<Array<BoardComment>>([]);
+        const total = ref(0);
         
         const callApiCommentList = async () => {
             const res = await callGetApi(`/board/${props.boardId}/comment`);
@@ -55,24 +59,25 @@ export default defineComponent({
                     });
 
                     commentList.value = list;
+                    total.value = data.length;
                 }
 
             }
         }
 
         onMounted(() => {
-            if (props.boardId != '0') {
+            if (props.boardId != 0) {
                 callApiCommentList();
             }
         })
 
         watch(props, () => {
-            if (props.boardId != '0') {
+            if (props.boardId != 0) {
                 callApiCommentList();
             }
         })
 
-        return {commentList, callApiCommentList}
+        return {commentList, callApiCommentList, total}
 
     }
 })

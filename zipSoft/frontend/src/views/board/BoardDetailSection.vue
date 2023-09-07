@@ -3,17 +3,18 @@
 </template>
 <script lang="ts">
 export interface BoardDetail {
-    id : String;
+    id : Number;
     subject: String;
     content : String;
     userName : String;
     updateDt : String;
     viewCnt : Number;
+    regId: Number;
     fileList? : Array<BoardFile>
 }
 
 export interface BoardFile {
-    id : String;
+    id : Number;
     orgFileName : String;
     fileName : String;
     fileSize : Number;

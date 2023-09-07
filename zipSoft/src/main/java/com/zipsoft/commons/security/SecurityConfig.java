@@ -38,6 +38,7 @@ public class SecurityConfig {
             "/auth/login",
             "/auth/logout",
             "/auth/insert",
+            "/common/editor/imageView",
             "/error"
     };
 	

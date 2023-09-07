@@ -35,10 +35,13 @@ export const timeForToday = (value : string) => {
     const betweenTime = Math.floor(today / 1000 / 60);
 
     if (betweenTime < 1) return '방금전';
-    if (betweenTime < 60) return `${betweenTime}분전`;
+    if (betweenTime < 60) return `약 ${betweenTime}분전`;
 
     const betweenHour = Math.floor(betweenTime / 60);
-    if (betweenHour < 24) return `${betweenHour}시간전`;
+    if (betweenHour < 24) return `약 ${betweenHour}시간전`;
+
+    const betweenDay = Math.floor(betweenHour / 24);
+    if (betweenDay < 365) return `약 ${betweenDay}일전`;
 
     return value;
 

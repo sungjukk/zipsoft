@@ -23,6 +23,7 @@ import com.zipsoft.model.entity.Board;
 import com.zipsoft.model.entity.BoardComment;
 import com.zipsoft.model.entity.BoardFile;
 import com.zipsoft.model.entity.QBoard;
+import com.zipsoft.model.entity.QBoardComment;
 import com.zipsoft.model.entity.QBoardFile;
 import com.zipsoft.model.entity.QUser;
 
@@ -42,6 +43,7 @@ public class BoardRepository {
 	QBoard board = QBoard.board;
 	QBoardFile boardFile = QBoardFile.boardFile;
 	QUser user = QUser.user;
+	QBoardComment boardComment = QBoardComment.boardComment;
 	
 	public Page<BoardDto> list(SearchDto search) {
 		
@@ -54,7 +56,9 @@ public class BoardRepository {
 							                     user.userName,
 							                     board.viewCnt,
 							                     board.updateDt,
-							                     ExpressionUtils.as(JPAExpressions.select(boardFile.id.count()).from(boardFile).where(boardFile.board.id.eq(board.id)), "fileCnt"))
+							                     ExpressionUtils.as(JPAExpressions.select(boardFile.id.count()).from(boardFile).where(boardFile.board.id.eq(board.id)), "fileCnt"),
+							                     ExpressionUtils.as(JPAExpressions.select(boardComment.id.count()).from(boardComment).where(boardComment.board.id.eq(board.id)), "commentCnt")
+							                     )
 									              )
 							               .from(board)
 							               .innerJoin(user).on(board.regId.eq(user.id))
@@ -93,7 +97,8 @@ public class BoardRepository {
 							                             ,board.content
 							                             ,user.userName
 							                             ,board.viewCnt
-							                             ,board.updateDt))
+							                             ,board.updateDt
+							                             ,board.regId))
 							   .from(board)
 							   .innerJoin(user).on(board.regId.eq(user.id))
 							   .where(board.id.eq(id))
@@ -131,5 +136,10 @@ public class BoardRepository {
 	public void insertBoardComment(BoardComment bc) {
 		entityManager.persist(bc);
 		entityManager.flush();
+	}
+	
+	@Transactional
+	public void updateBoardView(long id) {
+		jpaQueryFactory.update(board).set(board.viewCnt, board.viewCnt.add(1)).where(board.id.eq(id)).execute();
 	}
 }

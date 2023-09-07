@@ -19,7 +19,8 @@ export enum RouteUrl  {
   BOARD = '/board',
   LOGIN = '/login',
   BOARD_DETAIL = '/board/:id',
-  BOARD_WRITE = '/board/new'
+  BOARD_WRITE = '/board/new',
+  BOARD_EDIT = '/board/:id/edit'
 }
 
 export const routes = [

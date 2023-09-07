@@ -124,7 +124,7 @@ footer {
     padding-top: 100px;
 }
 
-.board-container, .comment-container {
+.board-container, .board-btn-group, .comment-container {
     max-width: 900px;
     margin: 0 auto;
 }
@@ -218,6 +218,12 @@ footer {
     padding: 25px 15px;
     border-bottom: 2px solid #ddd;
     min-height: 300px;
+}
+
+.board-btn-group {
+    display: flex;
+    justify-content: flex-end;
+    gap : 10px;
 }
 
 .prtooltip {
@@ -319,3 +325,29 @@ footer {
     font-size: 13px;
     color: #979797;
   }
+
+  .comment-container .comment-footer {
+    display: flex;
+    gap: 15px;
+    margin-top: 5px;
+  }
+
+  .comment-container .comment-show-btn {
+    font-size: 13px;
+    color: #4792ff;
+  }
+
+.comment-container .comment-root {
+    padding: 1.5rem 0rem 2.5rem 0rem !important;
+    border-bottom: 1px solid #ddd;
+}
+
+.comment-container .comment-root .comment-child:last-child {
+    border-bottom: none;
+}
+
+.comment-container .comment-child {
+    padding: 1.5rem 0 !important;
+    border-bottom: 1px dashed #ddd;
+}
+

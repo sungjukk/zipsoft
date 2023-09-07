@@ -30,7 +30,7 @@
                         <td>{{board.userName}}</td>
                         <td>{{board.updateDt}}</td>
                         <td>{{board.viewCnt}}</td>
-                        <td>0</td>
+                        <td>{{board.commentCnt}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -53,9 +53,9 @@ import Pagination from '@/components/modal/Pagination.vue';
 
 
 export interface PageParam {
-    number: number,
-    totalElements: number,
-    totalPages: number
+    number: Number,
+    totalElements: Number,
+    totalPages: Number
 }
 
 export default defineComponent({

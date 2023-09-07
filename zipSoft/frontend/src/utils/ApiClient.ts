@@ -40,7 +40,6 @@ instance.interceptors.request.use(config => {
 });
 
 instance.interceptors.response.use(response => response, async (err) => {
-	console.log(err.response);
 	const { config, response } = err;
 	if (response && response.status == HTTP_STATUS.UNAUTHORIZED) {
 
@@ -59,9 +58,11 @@ instance.interceptors.response.use(response => response, async (err) => {
 			if (responseData.msg === 'expired') {
 				const res = await republicToken();
 				if (res) {
+					console.log('재인증');
 					config.headers['Authorization'] = `Bearer ${sessionStorage.getItem('authorization')}`;
 					return axios(config);
 				} else {
+					console.log('실패');
 					await store.dispatch('UserStore/logout');
 				} 
 			}
@@ -186,10 +187,13 @@ const republicToken =  async () => {
 	try {
 		const res:AxiosResponse<any> = await instance.get('/auth/republishToken');
 		const data : ApiResponse = res.data;
-		if (res.data.result == 200) {
-			store.commit('UserStore/currentUser', data);
+		console.log('republicToken',data.result);
+		if (data.result == HTTP_STATUS.OK) {
+			console.log('republicToken','성공');
+			store.commit('UserStore/currentUser', data.data);
 			return true;
 		} else {
+			console.log('republicToken','실패');
 			return false;
 		}
 		

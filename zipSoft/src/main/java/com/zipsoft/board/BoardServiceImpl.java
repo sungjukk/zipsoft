@@ -71,6 +71,7 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public BoardDto detail(long id) {
+		boardRepository.updateBoardView(id);
 		BoardDto dto = boardRepository.detail(id);
 		if (dto != null) dto.setFileList(boardRepository.detailFileList(id));
 		
