@@ -101,4 +101,43 @@ public class BoardServiceImpl implements BoardService {
 		return boardMapper.getCommentList(id);
 	}
 
+	@Override
+	public void deleteBoardFile(long id) {
+		BoardFileDto dto = boardRepository.detailFile(id);
+		FileUtil.deleteFile(FilePath.BOARD, dto.getFileName());
+		
+		long result = boardRepository.deleteFile(id);
+		
+		log.info("result : " + result);
+	}
+
+	@Override
+	public void edit(BoardDto board) {
+		Board b = Board.builder().id(board.getId())
+				 .subject(board.getSubject())
+				 .content(board.getContent())
+				 .updateId(board.getUpdateId())
+				 .build();
+
+		if (board.getFiles() != null && board.getFiles().size() > 0) {
+			List<BoardFile> list = new ArrayList<BoardFile>();
+			for (MultipartFile m : board.getFiles()) {
+			
+				FileDto file = FileUtil.upload(m, FilePath.BOARD);
+				if (file != null) {
+					BoardFile boardFile = new BoardFile(file);
+					boardFile.setRegId(board.getRegId());
+					boardFile.setUpdateId(board.getRegId());
+					list.add(boardFile);
+				}
+			
+			}
+			
+			b.setBoardFiles(list);
+		}
+		
+		
+		boardRepository.editBoard(b);
+	}
+
 }

@@ -104,9 +104,26 @@ export default {
         }
     }
 
+    const focusEnd = () => {
+      const contentEditableElement = document.getElementsByClassName('ql-editor')[0];
+      contentEditableElement.focus();
+      //Firefox, Chrome, Opera, Safari, IE 9+
+      const range = document.createRange(); //Create a range (a range is a like the selection but invisible)
+      range.deleteContents();
+      range.selectNodeContents(contentEditableElement); //Select the entire contents of the element with the range
+      
+      const selection = window.getSelection(); //get the selection object (allows you to change selection)
+      selection?.removeAllRanges(); //remove any selections already made
+      selection?.addRange(range); //make the range you have just created the visible selection
+      selection?.collapseToEnd();
+      contentEditableElement.focus();
+      range.detach();
+                
+    };
+
    
 
-    return { state, onEditorBlur, onEditorFocus, onEditorReady, onEditorChange, imageHandler, editorValidationCheck, quill }
+    return { state, onEditorBlur, onEditorFocus, onEditorReady, onEditorChange, imageHandler, editorValidationCheck, quill, focusEnd }
   }
 }
 </script>

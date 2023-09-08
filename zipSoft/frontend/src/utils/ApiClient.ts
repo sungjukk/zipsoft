@@ -110,6 +110,24 @@ export const callPostApi = async(url:string, params?:object) => {
 	
 };
 
+export const callDeleteApi = async(url:string, params?:object) => {
+	const encUrl = encodeURI(url);
+	try {
+		const result : AxiosResponse<any> = await instance.delete(encUrl, params);
+
+		console.log(result);
+		return returnData(result.data);		
+	} catch (err) {
+		if (axios.isAxiosError(err)) {
+			return returnData(err.response?.data);			
+		} else {
+			return returnData(null);
+		}
+	}
+	
+	
+};
+
 export const callFileApi = async(url:string, params?:object) => {
 	const config = {
 		onUploadProgress: (event : any) => {
@@ -193,11 +211,12 @@ const republicToken =  async () => {
 			store.commit('UserStore/currentUser', data.data);
 			return true;
 		} else {
-			console.log('republicToken','실패');
+			store.dispatch('UserStore/logout');
 			return false;
 		}
 		
 	} catch (err) {
+		store.dispatch('UserStore/logout');
 		return false;
 	}
 	

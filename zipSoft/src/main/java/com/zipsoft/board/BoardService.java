@@ -17,9 +17,13 @@ public interface BoardService {
 	
 	public BoardDto detail(long id);
 	
+	public void edit(BoardDto board);
+	
 	public BoardFileDto detailFile(long id);
 	
 	public void insertBoardComment(BoardCommentDto dto);
 	
 	public List<BoardCommentDto> commentList(long id);
+	
+	public void deleteBoardFile(long id);
 }

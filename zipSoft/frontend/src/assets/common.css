@@ -130,7 +130,6 @@ footer {
 }
 
 .board-container .table {
-    text-align: center;
     color: #ddd;
     border-top: 2px solid #ddd;
     border-bottom: 2px solid #ddd;
@@ -226,6 +225,25 @@ footer {
     gap : 10px;
 }
 
+.board-write th {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.board-write textarea {
+    height: 400px;
+}
+
+.board-write-btn-group {
+    text-align: right;
+    padding: 8px;
+}
+
+.board-write-btn-group button {
+    font-size: 13px;
+    padding: 10px 30px;
+}
+
 .prtooltip {
     background-color: #007bff;
     border: 1px solid #007bff;
@@ -314,6 +332,21 @@ footer {
     justify-content: flex-start;
   }
 
+  .board-form-files {
+    text-align: left;
+    color: #3285ff;
+    font-size: 13px;
+  }
+
+  .board-form-files ul {
+    list-style: none !important;
+    padding: 0 !important;
+  }
+
+  .board-form-files ul li span {
+    cursor: pointer;
+  }
+
   .comment-title {
     display: flex;
     gap: 10px;
@@ -349,5 +382,11 @@ footer {
 .comment-container .comment-child {
     padding: 1.5rem 0 !important;
     border-bottom: 1px dashed #ddd;
+}
+
+.enroll_btn {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
 }
 

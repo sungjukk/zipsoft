@@ -27,6 +27,7 @@ public class BoardDto {
 	private String userName;
 	private int viewCnt;
 	private long regId;
+	private long updateId;
 	private long fileCnt;
 	private long commentCnt;
 	private LocalDateTime regDt;

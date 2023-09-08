@@ -2,10 +2,11 @@
 	<div v-if="isShow">
 	<section class="custom-alert modal-section type-alert">
 		<div class="enroll_box">
-			<p class="menu_msg">{{msg}}</p>
+			<div class="menu_msg">{{msg}}</div>
 		</div>
 		<div class="enroll_btn">
-			<button class="btn btn-primary" @click="closeAlert">확인</button>
+            <button v-if="type == 'confirm'" class="btn btn-secondary" @click="closeAlert('cancel')">취소</button>
+			<button class="btn btn-primary" @click="closeAlert('callback')">확인</button>
 		</div>
 	</section>
 	<div class="dimLayer"></div>
@@ -14,9 +15,11 @@
 <script lang="ts">
 interface AlertData {
 	msg : String;
+    type : String;
 	ele? : HTMLElement;
 	isShow : boolean;
 	callback?: Function;
+    cancel? : Function;
 }
 
 import { defineComponent } from "vue";
@@ -26,17 +29,23 @@ export default defineComponent({
 	data() {
 		return {
 			msg : '',
+            type: '',
 			ele : undefined,
 			isShow : false,
-			callback : undefined
+			callback : undefined,
+            cancel : undefined
 		} as AlertData
 	},
 	methods: {
-		closeAlert() {
+		closeAlert(type : string) {
 			this.isShow = false;
 
-			if (this.callback) {
+			if (this.callback && type === 'callback') {
 				this.callback();
+			}
+
+            if (this.cancel && type === 'calcel') {
+				this.cancel();
 			}
 
 			if (this.ele) {
@@ -48,8 +57,7 @@ export default defineComponent({
 </script>
 <style>
 .custom-alert {
-        width: 320px;
-    height: 260px;
+    width: 320px;
     border-radius: 25px;
     padding: 32px;
     box-sizing: border-box;

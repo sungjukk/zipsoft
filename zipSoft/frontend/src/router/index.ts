@@ -2,7 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import PageHome from '@/views/PageHome.vue'
 import BoardListSection from '@/views/board/BoardListSection.vue'
 import BoardDetailSection from '@/views/board/BoardDetailSection.vue';
-import BoardWriteSection from '@/views/board/BoardWriteSection.vue'
+import BoardWriteSection from '@/views/board/BoardWriteSection.vue';
+import BoardEditSection from '@/views/board/BoardEditSection.vue';
 import Login from '@/views/login/Login.vue'
 import store from '@/store/index';
 
@@ -74,6 +75,15 @@ export const routes = [
     path: RouteUrl.BOARD_DETAIL,
     name: 'BoardDetailSection',
     component: BoardDetailSection,
+    meta : {
+      unauthorized: true,
+      isShow: false
+    }
+  },
+  {
+    path: RouteUrl.BOARD_EDIT,
+    name: 'BoardEditSection',
+    component: BoardEditSection,
     meta : {
       unauthorized: true,
       isShow: false
