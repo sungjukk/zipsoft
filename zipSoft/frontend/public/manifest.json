@@ -1,0 +1,35 @@
+{
+    "name": "euneezz",
+    "short_name": "euneezz",
+    "theme_color": "#2196f3",
+    "background_color": "#2196f3",
+    "display": "standalone",
+    "scope": "/",
+    "start_url": "/",
+    "icons": [
+        {
+          "src": "icon/48.png",
+          "sizes": "48x48"
+        },
+        {
+            "src": "icon/72.png",
+            "sizes": "72x72"
+        },
+        {
+            "src": "icon/96.png",
+            "sizes": "96x96"
+        },
+        {
+            "src": "icon/144.png",
+            "sizes": "144x144"
+        },
+        {
+            "src": "icon/192.png",
+            "sizes": "192x192"
+        },
+        {
+          "src": "icon/512.png",
+          "sizes": "512x512"
+        }
+      ]
+}

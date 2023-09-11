@@ -1,9 +1,11 @@
 import { createStore } from 'vuex';
 import { Store } from 'vuex'
 import {UserStore, User} from './modules/UserStore';
+import { MenuStore, Menu } from './modules/MenuStore';
 
 export interface Rootstate {
 	UserStore: User;
+  MenuStore: Menu;
 }
 
 declare module '@vue/runtime-core' {
@@ -13,5 +15,5 @@ declare module '@vue/runtime-core' {
 }
 
 export default createStore({
-	modules: { UserStore }
+	modules: { UserStore, MenuStore }
 });

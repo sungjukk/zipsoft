@@ -8,8 +8,7 @@
     </div>
 </template>
 <script lang="ts">
-import { defineComponent, getCurrentInstance, ref} from 'vue'
-import {validationCheck} from '@/utils/CommonUtil';
+import { defineComponent, getCurrentInstance, ref} from 'vue';
 import {callFileApi, HTTP_STATUS} from '@/utils/ApiClient';
 import { useRouter } from 'vue-router';
 import {RouteUrl} from '@/router/index';

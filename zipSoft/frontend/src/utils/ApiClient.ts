@@ -58,13 +58,13 @@ instance.interceptors.response.use(response => response, async (err) => {
 			if (responseData.msg === 'expired') {
 				const res = await republicToken();
 				if (res) {
-					console.log('재인증');
 					config.headers['Authorization'] = `Bearer ${sessionStorage.getItem('authorization')}`;
 					return axios(config);
 				} else {
-					console.log('실패');
 					await store.dispatch('UserStore/logout');
 				} 
+			}  else {
+				await store.dispatch('UserStore/logout');
 			}
 
 		}

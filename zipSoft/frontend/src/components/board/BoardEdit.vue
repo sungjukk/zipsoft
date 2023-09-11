@@ -30,10 +30,11 @@ export default defineComponent({
             if (res.result == HTTP_STATUS.OK) {
 
                 if (res.data) {
-                    console.log(res.data);
-                    frm.value.write.subject = res.data.subject;
-                    frm.value.write.content = res.data.content;
-                    frm.value.write.fileList = res.data.fileList;
+                    if (frm.value) {
+                        frm.value.write.subject = res.data.subject;
+                        frm.value.write.content = res.data.content;
+                        frm.value.write.fileList = res.data.fileList;
+                    }
                 } else {
                     proxy.$alert("해당 글이 존재하지 않습니다.", () => {
                         router.push(RouteUrl.BOARD);
@@ -67,6 +68,7 @@ export default defineComponent({
         }
 
         onMounted(async () => {
+            console.log('test');
             await callApiBoardDetail();
         })
 
