@@ -30,7 +30,7 @@ const instance = axios.create({
 
 
 instance.interceptors.request.use(config => {
-	
+	console.log(process.env.VUE_APP_API_URL);
 	const accessToken = sessionStorage.getItem('authorization');
 	//config.headers['Content-Type'] = 'application/json';
 	if (accessToken) config.headers['Authorization'] = `Bearer ${accessToken}`;
