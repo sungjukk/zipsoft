@@ -5,6 +5,7 @@ import LoadingBar from '@/components/modal/LoadingBar.vue';
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     $alert:any,
+    $confirm:any,
     $loadingBar:any
   }
 }
@@ -30,7 +31,7 @@ const Alert = {
           instance.isShow = true;
           instance.instance = instance;
           if (typeof success !== 'undefined') {
-            instance.success = success;
+            instance.callback = success;
           }
           if (typeof cancel !== 'undefined') {
             instance.cancel = cancel;

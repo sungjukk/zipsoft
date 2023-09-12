@@ -17,7 +17,7 @@ export const UserStore : Module<User, Rootstate> = {
 		id : 0,
 		name : '',
 		token : ''
-	}),
+	} as User),
 	getters: {
         getUserName: (state:User) => state.name,
         getUserId: (state:User) => state.id,
@@ -64,8 +64,9 @@ export const UserStore : Module<User, Rootstate> = {
 				if (state.id == 0) {
 					commit('currentUser', {accessToken});				
 				}
-				
+				return true;
 			} else {
+				return false;
 				//commit('removeUser');
 			}
 		},
@@ -86,8 +87,8 @@ export const UserStore : Module<User, Rootstate> = {
 		},
 		logout: async({commit}) => {
 			await callGetApi('/auth/logout');
-			//commit('removeUser');
-			//location.href = RouteUrl.LOGIN;
+			commit('removeUser');
+			location.href = RouteUrl.LOGIN;
 		}
     }
 }

@@ -13,8 +13,14 @@ import { quillEditor } from 'vue3-quill';
 const app = createApp({
 	extends: App,
 	async beforeCreate() {
-		//await this.$store.dispatch('UserStore/republicToken');
-		//console.log('asdasd');
+		if ('serviceWorker' in navigator) {
+			navigator.serviceWorker.register('/sw.js').then(() => {
+				console.log('Service worker Registred!!');
+			})
+			.catch(err => {
+				console.log(err);
+			})
+		}
 	}
 });
 

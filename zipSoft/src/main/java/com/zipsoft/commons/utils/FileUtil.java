@@ -120,4 +120,14 @@ public class FileUtil {
 		} 
 	}
 	
+	public static boolean deleteFile(FilePath filePath, String fileName) {
+		try {
+			Path p = Paths.get(root + filePath.getPath() + File.separator + fileName);
+			Files.deleteIfExists(p);
+			return true;
+		} catch (IOException e) {
+			return false;
+		}
+	}
+	
 }

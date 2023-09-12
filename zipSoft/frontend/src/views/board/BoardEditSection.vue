@@ -1,11 +1,11 @@
 <template>
-    <BoardWrite />
+    <BoardEdit />
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import BoardWrite from '@/components/board/BoardWrite.vue';
+import BoardEdit from '@/components/board/BoardEdit.vue';
 
-export interface BoardWriteDef {
+export interface BoardEditDef {
     subject : String;
     content : String;
     file? : HTMLInputElement;
@@ -13,6 +13,6 @@ export interface BoardWriteDef {
 
 export default defineComponent({
     name : 'BoardWriteSection',
-    components : { BoardWrite }
+    components : { BoardEdit }
 })
 </script>

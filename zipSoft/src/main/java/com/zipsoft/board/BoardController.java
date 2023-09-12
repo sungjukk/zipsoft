@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -58,6 +59,15 @@ public class BoardController {
 		return ApiResponse.OK(boardService.detail(id));
 	}
 	
+	@PostMapping("{id}")
+	public ApiResponse edit(BoardDto board, @AuthenticationPrincipal UserPrincipal user, @PathVariable("id") long id) {
+		board.setId(id);
+		board.setUpdateId(user.getUserId());
+		
+		boardService.edit(board);
+		return ApiResponse.OK(null);
+	}
+	
 	@GetMapping("/file/{id}")
 	public ResponseEntity<Resource> downloadFile(HttpServletRequest request, @PathVariable("id") long id) {
 		BoardFileDto dto = boardService.detailFile(id);
@@ -66,6 +76,13 @@ public class BoardController {
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
+	}
+	
+	@DeleteMapping("/file/{id}")
+	public ApiResponse deleteFile(@PathVariable("id") long id) {
+		boardService.deleteBoardFile(id);
+		
+		return ApiResponse.OK(null);
 	}
 	
 	@PostMapping("/{id}/comment")

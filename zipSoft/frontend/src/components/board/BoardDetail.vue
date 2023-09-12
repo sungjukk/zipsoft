@@ -19,7 +19,7 @@
                 <span>첨부파일</span>
             </div>
             <div class="board-file-list" >
-                <div v-for="(file, idx) in detail.fileList" :key="file.id">
+                <div v-for="(file) in detail.fileList" :key="file.id">
                     <a href="javascript:;" @click="downloadFile(file.id)">
                         {{file.orgFileName}}
                     </a>
@@ -30,7 +30,7 @@
     </div>
     <div v-if="$store.state.UserStore.id == detail.regId" class="board-btn-group mt-3">
         <button type="button" class="btn btn-secondary" style="font-size : 13px; padding : 10px 30px">삭제</button>
-        <button type="button" class="btn btn-primary" style="font-size : 13px; padding : 10px 30px" >수정</button>
+        <button type="button" class="btn btn-primary" style="font-size : 13px; padding : 10px 30px" @click="onEditBtnClick" >수정</button>
     </div>
     <div class="comment-container">
         <CommentList :boardId="detail.id" />
@@ -39,7 +39,6 @@
 <script lang="ts" setup>
 import {BoardDetail} from '@/views/board/BoardDetailSection.vue';
 import { useRouter, useRoute } from 'vue-router';
-import { useStore } from 'vuex';
 import {RouteUrl} from '@/router/index';
 import {ref, onMounted, getCurrentInstance} from 'vue';
 import {callGetApi, callFileDownApi , HTTP_STATUS} from '@/utils/ApiClient';
@@ -49,7 +48,6 @@ import CommentList from '@/components/comment/CommentList.vue';
 const {proxy} = getCurrentInstance() as any;
 const router = useRouter();
 const route = useRoute();
-const store = useStore();
 const tootip = ref<HTMLDivElement>();
 const detail = ref<BoardDetail>({
     id : 0,
@@ -63,6 +61,7 @@ const detail = ref<BoardDetail>({
 });
 
 onMounted(async () => {
+    console.log('onMounted');
     await callApiBoardDetail();
 })
 
@@ -91,7 +90,6 @@ const callApiBoardDetail = async () => {
 
 const clipboard = () => {
     window.navigator.clipboard.writeText(window.location.href).then(() => {
-        console.log('복사 완료');
 
         if (tootip.value) {
             tootip.value.style.display = 'block';
@@ -110,6 +108,10 @@ const clipboard = () => {
 
 const downloadFile = async (id : number) => {
     await callFileDownApi(`/board/file/${id}`);
+}
+
+const onEditBtnClick = () => {
+    router.push(RouteUrl.BOARD_EDIT.replace(':id',detail.value.id + ''));
 }
 
 </script>

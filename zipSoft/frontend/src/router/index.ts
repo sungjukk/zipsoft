@@ -2,7 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import PageHome from '@/views/PageHome.vue'
 import BoardListSection from '@/views/board/BoardListSection.vue'
 import BoardDetailSection from '@/views/board/BoardDetailSection.vue';
-import BoardWriteSection from '@/views/board/BoardWriteSection.vue'
+import BoardWriteSection from '@/views/board/BoardWriteSection.vue';
+import BoardEditSection from '@/views/board/BoardEditSection.vue';
 import Login from '@/views/login/Login.vue'
 import store from '@/store/index';
 
@@ -48,7 +49,7 @@ export const routes = [
     name: 'About',
     component: () => import(/* webpackChunkName: "about" */ '../views/PageAbout.vue'),
     meta : {
-      unauthorized: true,
+      unauthorized: false,
       isShow: true
     }
   },
@@ -57,7 +58,7 @@ export const routes = [
     name: 'BoardList',
     component: BoardListSection,
     meta : {
-      unauthorized: true,
+      unauthorized: false,
       isShow: true
     }
   },
@@ -66,7 +67,7 @@ export const routes = [
     name: 'BoardWriteSection',
     component: BoardWriteSection,
     meta : {
-      unauthorized: true,
+      unauthorized: false,
       isShow: false
     }
   },
@@ -75,7 +76,16 @@ export const routes = [
     name: 'BoardDetailSection',
     component: BoardDetailSection,
     meta : {
-      unauthorized: true,
+      unauthorized: false,
+      isShow: false
+    }
+  },
+  {
+    path: RouteUrl.BOARD_EDIT,
+    name: 'BoardEditSection',
+    component: BoardEditSection,
+    meta : {
+      unauthorized: false,
       isShow: false
     }
   }
@@ -87,10 +97,19 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  await store.dispatch('UserStore/loginCheck');
-  console.log(store.getters['UserStore/isLogin']);
-  //return next({ path: "/login" });
+  store.commit('MenuStore/updateState', false);
+  const {meta : {unauthorized}} = to;
+  if (!unauthorized) {
+    const isSucc = await store.dispatch('UserStore/loginCheck');
+    if (!isSucc) {
+      return next({path : RouteUrl.LOGIN});
+    }
+  }
+
+  store.commit('MenuStore/updateState', true);
   next();
+
+  //return next({ path: "/login" });
 });
 
 

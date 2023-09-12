@@ -1,5 +1,6 @@
 package com.zipsoft.board;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -131,6 +132,11 @@ public class BoardRepository {
 										        .fetchOne();
 	}
 	
+	@Transactional
+	public long deleteFile(long id) {
+		return jpaQueryFactory.delete(boardFile).where(boardFile.id.eq(id)).execute();
+	}
+	
 	
 	@Transactional
 	public void insertBoardComment(BoardComment bc) {
@@ -141,5 +147,20 @@ public class BoardRepository {
 	@Transactional
 	public void updateBoardView(long id) {
 		jpaQueryFactory.update(board).set(board.viewCnt, board.viewCnt.add(1)).where(board.id.eq(id)).execute();
+	}
+	
+	@Transactional
+	public void editBoard(Board b) {
+		
+		entityManager.merge(b);
+		
+		if (b.getBoardFiles() != null && b.getBoardFiles().size() > 0) {
+			for (BoardFile bf : b.getBoardFiles()) {
+				bf.setBoard(b);
+				entityManager.persist(bf);
+			}
+		}
+		
+		entityManager.flush();
 	}
 }

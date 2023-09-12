@@ -58,13 +58,13 @@ instance.interceptors.response.use(response => response, async (err) => {
 			if (responseData.msg === 'expired') {
 				const res = await republicToken();
 				if (res) {
-					console.log('재인증');
 					config.headers['Authorization'] = `Bearer ${sessionStorage.getItem('authorization')}`;
 					return axios(config);
 				} else {
-					console.log('실패');
 					await store.dispatch('UserStore/logout');
 				} 
+			}  else {
+				await store.dispatch('UserStore/logout');
 			}
 
 		}
@@ -96,6 +96,24 @@ export const callPostApi = async(url:string, params?:object) => {
 	const encUrl = encodeURI(url);
 	try {
 		const result : AxiosResponse<any> = await instance.post(encUrl, params);
+
+		console.log(result);
+		return returnData(result.data);		
+	} catch (err) {
+		if (axios.isAxiosError(err)) {
+			return returnData(err.response?.data);			
+		} else {
+			return returnData(null);
+		}
+	}
+	
+	
+};
+
+export const callDeleteApi = async(url:string, params?:object) => {
+	const encUrl = encodeURI(url);
+	try {
+		const result : AxiosResponse<any> = await instance.delete(encUrl, params);
 
 		console.log(result);
 		return returnData(result.data);		
@@ -193,11 +211,12 @@ const republicToken =  async () => {
 			store.commit('UserStore/currentUser', data.data);
 			return true;
 		} else {
-			console.log('republicToken','실패');
+			store.dispatch('UserStore/logout');
 			return false;
 		}
 		
 	} catch (err) {
+		store.dispatch('UserStore/logout');
 		return false;
 	}
 	
