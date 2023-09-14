@@ -16,8 +16,8 @@ services:
     command: redis-server --port 6379 --bind 0.0.0.0 --protected-mode no
     ports:
       - 6379:6379
-  mysql:
-    container_name: "mysql"
+  database:
+    container_name: "database"
     image: "mysql:8.0.30"
     ports:
       - "3306:3306"
