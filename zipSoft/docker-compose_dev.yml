@@ -56,5 +56,3 @@ services:
 networks:
   db_network:
     driver: bridge
-    external: true
-    internal: true
