@@ -1,30 +1,30 @@
 version: "3"
 services:
-  frontend_local:
+  frontend_dev:
     image: "lsj20605/frontend"
-    container_name: "frontend_local"
+    container_name: "frontend_dev"
     build:
-      context: "/frontend"
+      context: .
       dockerfile: Dockerfile
     ports:
       - "80:80"
     depends_on:
-      - backend_local
+      - backend_dev
   redis:
     image: "redis:alpine"
     container_name: "redis"
     command: redis-server --port 6379 --bind 0.0.0.0 --protected-mode no
     ports:
       - 6379:6379
-  database:
-    container_name: "database"
+  mysql:
+    container_name: "mysql"
     image: "mysql:8.0.30"
     ports:
       - "3306:3306"
     volumes:
-      - C:/Users/user/Documents/db/conf.d:/etc/mysql/conf.d
-      - C:/Users/user/Documents/db/data:/var/lib/mysql
-      - C:/Users/user/Documents/db/my.cnf:/etc/mysql/my.cnf
+      - /home/ubuntu/db/conf.d:/etc/mysql/conf.d
+      - /home/ubuntu/db/data:/var/lib/mysql
+      - /home/ubuntu/db/my.cnf:/etc/mysql/my.cnf
     environment:
       - MYSQL_DATABASE=zipSoft
       - MYSQL_USER=admin
@@ -37,16 +37,17 @@ services:
     restart: always
     networks:
       - db_network
-  backend_local:
+  backend_dev:
     image: "lsj20605/zipsoft"
-    container_name: "backend_local"
+    container_name: "backend_dev"
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
     volumes:
-      - "C:/Users/user/Documents/logs:/data2/potal/logs"  
+      - "/home/ubuntu/logs/backend:/data/logs"
+      - "/home/ubuntu/upload:/data/upload"  
     networks:
       - db_network
     depends_on:
