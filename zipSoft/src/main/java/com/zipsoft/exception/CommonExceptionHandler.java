@@ -35,6 +35,11 @@ public class CommonExceptionHandler {
 		return ApiResponse.fail(HttpStatus.BAD_REQUEST, e.getMessage());
 	}
 	
+	@ExceptionHandler({CustomAuthException.class})
+	public ApiResponse authException(Exception e) {
+		return ApiResponse.fail(HttpStatus.UNAUTHORIZED, e.getMessage());
+	}
+	
 	@ExceptionHandler({Exception.class})
 	public ApiResponse serverException(Exception e) {
 		log.error(e.getMessage());

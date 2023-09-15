@@ -47,6 +47,34 @@ export const timeForToday = (value : string) => {
 
 }
 
+export const convert12H = (value : string) => {
+    const today = new Date();
+    const valueDate = new Date(dateFormat(value, 'yyyy-MM-dd HH:mm:ss'));
+    
+    if (today.getFullYear() - valueDate.getFullYear() >= 1) return dateFormat(value, 'yyyy. MM. dd');
+
+    const result = Math.floor(today.getTime() - valueDate.getTime());
+    const betweenDay = Math.floor(result / 1000 / 60 / 60 / 24);
+
+    if (betweenDay > 1) {
+        return dateFormat(value, 'MM월 dd일');
+    } else if (betweenDay == 1) {
+        return '어제';
+    } else {
+        let txt = '';
+        let hour;
+        if (valueDate.getHours() >= 12) {
+            txt = '오후';
+            hour = valueDate.getHours() - 12;
+        } else {
+            txt = '오전';
+            hour = valueDate.getHours();
+        }
+        return `${txt} ${hour}:${valueDate.getMinutes()}`;
+    }
+
+}
+
 export const validationCheck = (formId : string) => {
 
     const validArr:NodeListOf<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> = document.querySelectorAll(`#${formId} input, #${formId} select, #${formId} textarea`);

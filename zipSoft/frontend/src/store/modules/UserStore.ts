@@ -49,6 +49,7 @@ export const UserStore : Module<User, Rootstate> = {
 			const res = await callPostApi('/auth/login',payload);
 			if (res.result == HTTP_STATUS.OK) {
 				commit('currentUser', res.data);
+				globals.$socket.connect();
 				router.push(RouteUrl.ABOUT);
 			} else {
 				globals.$alert(res.msg);
@@ -64,6 +65,9 @@ export const UserStore : Module<User, Rootstate> = {
 				if (state.id == 0) {
 					commit('currentUser', {accessToken});				
 				}
+
+				if (!globals.$socket.isConnected()) globals.$socket.connect();
+
 				return true;
 			} else {
 				return false;

@@ -7,6 +7,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store/index'
 import Alert from './utils/AlertUtil';
+import Socket from "./utils/Socket"
 import { quillEditor } from 'vue3-quill';
 
 
@@ -24,9 +25,7 @@ const app = createApp({
 	}
 });
 
-console.log(app);
-
-app.use(store).use(router).use(Alert).use(quillEditor).mount('#app');
+app.use(store).use(router).use(Alert).use(Socket).use(quillEditor).mount('#app');
 
 const globals = app.config.globalProperties
 export { globals };

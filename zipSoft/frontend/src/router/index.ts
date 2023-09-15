@@ -4,6 +4,10 @@ import BoardListSection from '@/views/board/BoardListSection.vue'
 import BoardDetailSection from '@/views/board/BoardDetailSection.vue';
 import BoardWriteSection from '@/views/board/BoardWriteSection.vue';
 import BoardEditSection from '@/views/board/BoardEditSection.vue';
+
+import ChatListSection from '@/views/chat/ChatListSection.vue';
+import ChatDetailSection from '@/views/chat/ChatDetailSection.vue';
+
 import Login from '@/views/login/Login.vue'
 import store from '@/store/index';
 
@@ -21,7 +25,9 @@ export enum RouteUrl  {
   LOGIN = '/login',
   BOARD_DETAIL = '/board/:id',
   BOARD_WRITE = '/board/new',
-  BOARD_EDIT = '/board/:id/edit'
+  BOARD_EDIT = '/board/:id/edit',
+  CHAT_LIST = '/chat',
+  CHAT_DETAIL = '/chat/:id'
 }
 
 export const routes = [
@@ -84,6 +90,24 @@ export const routes = [
     path: RouteUrl.BOARD_EDIT,
     name: 'BoardEditSection',
     component: BoardEditSection,
+    meta : {
+      unauthorized: false,
+      isShow: false
+    }
+  },
+  {
+    path: RouteUrl.CHAT_LIST,
+    name: 'ChatListSection',
+    component: ChatListSection,
+    meta : {
+      unauthorized: false,
+      isShow: true
+    }
+  },
+  {
+    path: RouteUrl.CHAT_DETAIL,
+    name: 'ChatDetailSection',
+    component: ChatDetailSection,
     meta : {
       unauthorized: false,
       isShow: false

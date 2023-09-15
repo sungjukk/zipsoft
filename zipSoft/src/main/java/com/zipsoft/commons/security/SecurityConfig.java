@@ -39,7 +39,8 @@ public class SecurityConfig {
             "/auth/logout",
             "/auth/insert",
             "/common/editor/imageView",
-            "/error"
+            "/error",
+            "/ws/**"
     };
 	
 	public SecurityConfig (JwtAccessDeniedHandler unacccessDeniedHandler, JwtAuthenticationEntryPoint unauthorizedHandler, UserDetailService userDetailService) {
