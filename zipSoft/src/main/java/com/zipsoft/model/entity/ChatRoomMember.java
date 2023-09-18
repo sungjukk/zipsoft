@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -39,5 +41,9 @@ public class ChatRoomMember extends Base {
 	private long userId;
 	
 	private int noReadCnt;
+	
+	@Column(length = 1)
+	@ColumnDefault("'N'")
+	private String isActive;
 	
 }

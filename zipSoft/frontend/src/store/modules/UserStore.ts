@@ -49,7 +49,7 @@ export const UserStore : Module<User, Rootstate> = {
 			const res = await callPostApi('/auth/login',payload);
 			if (res.result == HTTP_STATUS.OK) {
 				commit('currentUser', res.data);
-				globals.$socket.connect();
+				globals.$socket.connect(0).then(() => {}).catch(() => {});
 				router.push(RouteUrl.ABOUT);
 			} else {
 				globals.$alert(res.msg);
@@ -66,7 +66,7 @@ export const UserStore : Module<User, Rootstate> = {
 					commit('currentUser', {accessToken});				
 				}
 
-				if (!globals.$socket.isConnected()) globals.$socket.connect();
+				if (!globals.$socket.isConnected()) globals.$socket.connect(0).then(() => {}).catch(() => {});
 
 				return true;
 			} else {

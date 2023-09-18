@@ -3,6 +3,7 @@ package com.zipsoft.chat;
 import lombok.RequiredArgsConstructor;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -10,10 +11,13 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zipsoft.chat.dto.ChatDto;
+import com.zipsoft.chat.dto.ChatRoomMemberDto;
 import com.zipsoft.commons.security.UserPrincipal;
 
 import lombok.RequiredArgsConstructor;
@@ -26,16 +30,27 @@ public class ChatMessageController {
 	
 	private final SimpMessageSendingOperations template;
 	
+	private final ChatService chatService;
+	
 	@MessageMapping("/chat/send")
-	public void enterUser(@Payload ChatDto dto, Principal prin) {
+	public void enterUser(@Payload ChatDto dto, Message<?> message) {
 		
-		System.out.println(prin);
+		UsernamePasswordAuthenticationToken upat = (UsernamePasswordAuthenticationToken) SimpMessageHeaderAccessor.getUser(message.getHeaders());
+		UserPrincipal prin = (UserPrincipal) upat.getPrincipal();
 		
-		if (ChatDto.MessageType.ENTER.equals(dto.getType())) {
-			dto.setMessage(dto.getId()+"님이 입장하였습니다.");
+		List<ChatRoomMemberDto> mberList = chatService.getChatRoomMemberList(dto.getId(), "N");
+		
+		if (mberList != null && mberList.size() > 0) {
+			
+			chatService.updateChatRoomNoReadCnt(dto.getId());
+			
+			for (ChatRoomMemberDto mber : mberList) {
+				template.convertAndSend("/topic/" + mber.getUserId(), dto);
+			}
 		}
 		
-		template.convertAndSend("/topic/chat/room" + dto.getId(), dto);
+		
+		template.convertAndSend("/topic/chat/" + dto.getId(), dto);
 	}
 	
 }
