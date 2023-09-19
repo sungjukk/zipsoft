@@ -110,7 +110,8 @@ export const routes = [
     component: ChatRoomSection,
     meta : {
       unauthorized: false,
-      isShow: false
+      isShow: false,
+      layout : 'NoLayout'
     }
   }
 ] as Array<MenuDef>;

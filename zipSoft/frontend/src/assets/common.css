@@ -404,18 +404,22 @@ footer {
 .chat_img {
     float: left;
     width: 11%;
+    max-width: 40px;
 }
 
 .chat_img img {
     vertical-align: middle;
     border-style: none;
-    max-width: 100%;
+    width: 100%;
+    max-width: 40px;
 }
 
 .chat_ib {
     float: left;
     padding: 0 0 0 15px;
-    width: 88%;
+    width: 100%;
+    max-width: calc(100% - 40px);
+    position: relative;
 }
 
 .chat_ib h5 {
@@ -476,16 +480,25 @@ footer {
     float: right;
     width: 46%;
   }
-  .input_msg_write input {
+  .input_msg_write textarea {
     background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
     border: medium none;
     color: #4c4c4c;
     font-size: 15px;
-    min-height: 48px;
+    height: 40px;
     width: 100%;
+    resize: none;
+    padding: 9px 5px;
+    overflow: hidden;
   }
   
-  .type_msg {border-top: 1px solid #c4c4c4;position: relative;}
+.type_msg {
+    border-top: 1px solid #c4c4c4;
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    background: #fbfbfb;
+}
   .msg_send_btn {
     background: #05728f none repeat scroll 0 0;
     border: medium none;
@@ -495,8 +508,8 @@ footer {
     font-size: 17px;
     height: 33px;
     position: absolute;
-    right: 0;
-    top: 11px;
+    right: 5px;
+    bottom: 7px;
     width: 33px;
   }
   .messaging { padding: 0 0 50px 0;}
@@ -504,4 +517,35 @@ footer {
 .incoming_msg_img img {
     width: 100%;
     max-width: 40px;
+}
+
+.chat-container {
+    padding: 60px 5px 55px 5px;
+}
+
+.chat-back-icon {
+    line-height: 0;
+    vertical-align: baseline;
+    position: absolute;
+    left: 5px;
+    padding-top: 0px;
+    top: 50%;
+    margin-top: -10px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.chat_ib .no_read_cnt {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    background-color: #f66;
+    color: #fff;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: 1.6;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 400;
 }

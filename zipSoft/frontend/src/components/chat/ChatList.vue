@@ -8,10 +8,11 @@
     </div>
 </template>
 <script lang="ts">
-import {defineComponent, ref, onMounted, getCurrentInstance} from 'vue';
+import {defineComponent, ref, onMounted, getCurrentInstance, onUnmounted} from 'vue';
 import { useStore } from 'vuex';
 import {ChatRoom} from '@/views/chat/ChatListSection.vue';
 import ChatListRow from './ChatListRow.vue';
+import ChatRoomVue from './ChatRoom.vue';
 
 export default defineComponent({
     name : 'ChatList',
@@ -48,7 +49,7 @@ export default defineComponent({
                     noReadCnt : 3
                 },
                 {
-                    id : 'asd',
+                    id : 'asd3',
                     title : '이성주',
                     message : '안녕하냐ㅠㅠㅠㅠㅠ',
                     updateDt : '20220915203600',
@@ -60,8 +61,29 @@ export default defineComponent({
         onMounted(() => {
             callApiChatRoomList();
             proxy.$socket.subscribe(`/topic/${store.state.UserStore.id}`, (res : any) => {
-                console.log('받아옴');
+                const message = JSON.parse(res.body);
+                let room : ChatRoom | undefined = list.value.find((chat) => chat.id === message.id);
+                if (room) {
+                    room.message = message.message;
+                    room.noReadCnt = room.noReadCnt + 1;
+                    room.updateDt = message.sendDt
+                } else {
+                    room = {
+                        id : message.id,
+                        title : message.title ? message.title : message.userName,
+                        message : message.message,
+                        updateDt : '20230915203600',
+                        noReadCnt : 1
+                    }
+                }
+                console.log(room);
+                list.value = list.value.filter((chat) => chat.id != message.id);
+                list.value.unshift(room);
             });
+        });
+
+        onUnmounted(() => {
+            proxy.$socket.unsubscribe(`/topic/${store.state.UserStore.id}`);
         });
 
         const onClickHandler = () => {

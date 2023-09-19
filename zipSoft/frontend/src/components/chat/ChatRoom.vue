@@ -1,4 +1,10 @@
 <template>
+    <nav class="navbar navbar-light" style="background-color: #e3f2fd; position : fixed; width : 100%; top : 0px">
+      <div style="width: 100%; text-align : center">
+        <span class="navbar-brand mb-0 h1 chat-back-icon"><i class="bi bi-chevron-left"></i></span>
+        <span class="navbar-brand mb-0 h1">테스터2</span>
+      </div>
+    </nav>
     <div class="chat-container">
         <div class="mesgs">
           <div class="msg_history">
@@ -40,19 +46,50 @@
                   <span class="time_date"> 11:01 AM    |    Today</span></div>
               </div>
             </div>
-          </div>
-          <div class="type_msg">
-            <div class="input_msg_write">
-              <input type="text" class="write_msg" placeholder="Type a message" v-model="sendMsg" />
-              <button class="msg_send_btn" type="button" @click="onSendBtnClick"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+            <div class="incoming_msg">
+              <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+              <div class="received_msg">
+                <div class="received_withd_msg">
+                  <p>We work directly with our designers and suppliers,
+                    and sell direct to you, which means quality, exclusive
+                    products, at a price anyone can afford.</p>
+                  <span class="time_date"> 11:01 AM    |    Today</span></div>
+              </div>
+            </div>
+            <div class="incoming_msg">
+              <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+              <div class="received_msg">
+                <div class="received_withd_msg">
+                  <p>We work directly with our designers and suppliers,
+                    and sell direct to you, which means quality, exclusive
+                    products, at a price anyone can afford.</p>
+                  <span class="time_date"> 11:01 AM    |    Today</span></div>
+              </div>
+            </div>
+            <div class="incoming_msg">
+              <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+              <div class="received_msg">
+                <div class="received_withd_msg">
+                  <p>We work directly with our designers and suppliers,
+                    and sell direct to you, which means quality, exclusive
+                    products, at a price anyone can afford.</p>
+                  <span class="time_date"> 11:01 AM    |    Today</span></div>
+              </div>
             </div>
           </div>
         </div>
+    </div>
+    <div class="type_msg">
+      <div class="input_msg_write">
+        <textarea ref="chatInput" class="write_msg" v-model="sendMsg" rows="1" @input="handleChange" />
+        <button class="msg_send_btn" type="button" @click="onSendBtnClick"><i class="bi bi-send"></i></button>
+      </div>
     </div>
 </template>
 <script lang="ts">
 import {defineComponent, onMounted, getCurrentInstance, ref, onUnmounted} from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import { useStore } from 'vuex';
 
 export default defineComponent({
     name : 'ChatRoom',
@@ -60,6 +97,9 @@ export default defineComponent({
         const {proxy} = getCurrentInstance() as any;
         const route = useRoute();
         const sendMsg = ref('');
+        const chatInput = ref();
+        const store = useStore();
+        const chatId = ref(route.params.id);
 
         onMounted(() => {
             proxy.$socket.subscribe(`/topic/chat/${route.params.id}`, (res : any) => {
@@ -68,7 +108,7 @@ export default defineComponent({
         });
 
         onUnmounted(() => {
-            proxy.$socket.unsubscribe();
+            proxy.$socket.unsubscribe(`/topic/chat/${chatId.value}`);
         })
 
 
@@ -76,13 +116,23 @@ export default defineComponent({
             const data = {
                 id : `${route.params.id}`,
                 message : sendMsg.value,
-                type: "TALK"
+                type: "TALK",
+                userName: store.state.UserStore.name
             }
+
+            sendMsg.value = '';
+            chatInput.value.style.height = '40px';
 
             proxy.$socket.send('/app/chat/send', JSON.stringify(data));
         };
 
-        return {sendMsg, onSendBtnClick}
+        const handleChange = () => {
+          chatInput.value.style.height = '0px';
+          const scrollHeight = chatInput.value.scrollHeight >= 108 ? 108 : chatInput.value.scrollHeight;
+          chatInput.value.style.height = `${scrollHeight}px`;
+        }
+
+        return {sendMsg, onSendBtnClick, chatInput, handleChange}
     }
 })
 </script>

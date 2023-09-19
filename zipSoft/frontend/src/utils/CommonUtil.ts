@@ -33,7 +33,6 @@ export const timeForToday = (value : string) => {
 
     const today = Math.floor(new Date().getTime() - new Date(dateFormat(value,'yyyy-MM-dd HH:mm:ss')).getTime());
     const betweenTime = Math.floor(today / 1000 / 60);
-
     if (betweenTime < 1) return '방금전';
     if (betweenTime < 60) return `약 ${betweenTime}분전`;
 

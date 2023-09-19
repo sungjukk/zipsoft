@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.zipsoft.board.dto.BoardFileDto;
@@ -29,6 +30,8 @@ public class ChatDto {
 	private String type;	//타입
 	private String id;		//채팅방
 	private String message;	// 메세지
-	private long userId;	//보내는사람
+	private long userId;	//보내는ID
+	private String userName;//보내는이름
+	private String sendDt;  //보낸날짜
 	
 }

@@ -11,7 +11,7 @@ export interface ChatRoom {
   title : String;
   message : String;
   updateDt : String;
-  noReadCnt : Number;
+  noReadCnt : number;
 }
 
 export default defineComponent({

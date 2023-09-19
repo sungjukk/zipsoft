@@ -5,6 +5,7 @@
             <div class="chat_ib" @click="onDetailClick">
                 <h5>{{room.title}} <span class="chat_date">{{convert12H(room.updateDt)}}</span></h5>
                 <p>{{room.message}}</p>
+                <div class="no_read_cnt">{{room.noReadCnt}}</div>
             </div>
         </div>
     </div>

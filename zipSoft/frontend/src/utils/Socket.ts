@@ -19,7 +19,7 @@ const Socket = {
             connect : async (cnt : number) => {
                 return new Promise((resolve, reject) => {
                     step = SOCKET_STEP.LOADING;
-                    const sock = new SockJS('http://localhost:8080/ws/chat123');
+                    const sock = new SockJS(process.env.VUE_APP_SOCKET_URL);
                     stompClient = Stomp.over(sock);
                     console.log('socket 연결시도...');
                     const accessToken = sessionStorage.getItem('authorization');
@@ -28,6 +28,7 @@ const Socket = {
                     };
                     stompClient.connect(header, (frame : any) => {
                         console.log('연결 성공');
+                        console.log(stompClient);
                         step = SOCKET_STEP.SUCCESS;
                         resolve(true);   
                     }, (error : any) => {
@@ -50,12 +51,13 @@ const Socket = {
                 else return false
             },
             subscribe: (url : String, fn : Function) => {
-                
+                console.log('url :' + url);
                 if (step === SOCKET_STEP.LOADING) {
                     setTimeout(() => {
-                        app.config.globalProperties.$socket.subscribe();
+                        app.config.globalProperties.$socket.subscribe(url, fn);
                     }, 500);
                 } else if (step === SOCKET_STEP.SUCCESS) {
+                    app.config.globalProperties.$socket.unsubscribe(url);
                     stompClient.subscribe(url, fn, {id : url});
                 } else if (step === SOCKET_STEP.FAIL) {
                     alert('연결에 실패');
@@ -69,9 +71,9 @@ const Socket = {
                 };
                 if (stompClient!=null) stompClient.send(url, msg, header);
             },
-            unsubscribe: () => {
+            unsubscribe: (id : string) => {
                 if (stompClient!=null) {
-                    stompClient.unsubscribe('/topic/chat/asd');
+                    stompClient.unsubscribe(id);
                 }
             }
         }

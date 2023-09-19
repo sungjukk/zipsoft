@@ -3,6 +3,11 @@ package com.zipsoft.chat;
 import lombok.RequiredArgsConstructor;
 
 import java.security.Principal;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.messaging.Message;
@@ -39,6 +44,9 @@ public class ChatMessageController {
 		UserPrincipal prin = (UserPrincipal) upat.getPrincipal();
 		
 		List<ChatRoomMemberDto> mberList = chatService.getChatRoomMemberList(dto.getId(), "N");
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+		LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+		dto.setSendDt(now.format(dtf));
 		
 		if (mberList != null && mberList.size() > 0) {
 			
@@ -48,6 +56,7 @@ public class ChatMessageController {
 				template.convertAndSend("/topic/" + mber.getUserId(), dto);
 			}
 		}
+		
 		
 		
 		template.convertAndSend("/topic/chat/" + dto.getId(), dto);
