@@ -26,7 +26,7 @@
 
 					<div class="nav-font" v-if="$store.getters['UserStore/isLogin']">
 						<span >{{$store.state.UserStore.name}}님 </span>
-						<a href="javascript:;"  @click="logout">로그아웃</a>
+						<a href="javascript:;" class="nav-font"  @click="logout">로그아웃</a>
 					</div>
 					<router-link class="nav-font" :to="`${RouteUrl.LOGIN}`" v-else>로그인</router-link>
 				</div>
