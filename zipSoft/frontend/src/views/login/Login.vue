@@ -4,7 +4,7 @@
 			<h2>Login</h2>
 			<form method="post" action="서버의url" id="login-form">
 				<input type="text" name="userName" placeholder="Email" v-model="userId" data-require title="아이디">
-				<input type="password" name="userPassword" placeholder="Password" v-model="password" data-require title="패스워드">
+				<input type="password" name="userPassword" placeholder="Password" v-model="password" data-require title="패스워드" @keyup.enter="submit">
 				<label for="remember-check">
 					<input type="checkbox" id="remember-check">아이디 저장하기
 				</label>

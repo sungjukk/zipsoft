@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar navbar-light" style="background-color: #e3f2fd; position : fixed; width : 100%; top : 0px">
+    <nav class="navbar navbar-light" style="background-color: #249d6a; position : fixed; width : 100%; top : 0px;; color:#ededed">
       <div style="width: 100%; text-align : center">
         <span class="navbar-brand mb-0 h1 chat-back-icon"><i class="bi bi-chevron-left"></i></span>
         <span class="navbar-brand mb-0 h1">테스터2</span>

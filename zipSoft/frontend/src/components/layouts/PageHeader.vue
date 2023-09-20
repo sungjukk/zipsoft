@@ -7,54 +7,29 @@
 						<span class="navbar-toggler-icon"></span>
 					</button>-->
 					<a class="navbar-brand nav-font" href="#" >{{ title }}</a>
-					<div class="pc-menu-list">
-						<div class="menu-box">
-							<div class="menu-btn-div">
-								<a class="nav-font menu-hover">Friend</a>
-							</div>
-							<div class="menu-btn-div">
-								<a class="nav-font menu-hover">Chat</a>
-							</div>
-							<div class="menu-btn-div">
-								<a class="nav-font menu-hover">Board</a>
-							</div>
-						</div>
-					</div>
+					<MenuList :viewType="'pc'" />
 				</div>
-
 				<div>
 
-					<div class="nav-font" v-if="$store.getters['UserStore/isLogin']">
+					<div class="nav-font" v-if="$store.getters['UserStore/isLogin']" style="position : relative">
+						<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 						<span >{{$store.state.UserStore.name}}님 </span>
-						<a href="javascript:;" class="nav-font"  @click="logout">로그아웃</a>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a class="dropdown-item" href="#">Action</a></li>
+							<li><a class="dropdown-item" href="#">Another action</a></li>
+							<li><hr class="dropdown-divider"></li>
+							<li><a class="dropdown-item" href="#" @click="logout">로그아웃</a></li>
+						</ul>
 					</div>
 					<router-link class="nav-font" :to="`${RouteUrl.LOGIN}`" v-else>로그인</router-link>
 				</div>
 			</div>
-			<SideMenu ref="sideBar" :title="title"/>
 		</nav>
+		<SubHeader />
 	</header>
 	<div class="menuBar">
-		<div class="menu-list">
-			<div class="menu-box">
-				<div class="menu-btn-div menu-hover">
-					<i class="bi bi-people-fill menu-icon"></i>
-					<p class="menu-description">Friend</p>
-				</div>
-			</div>
-			<div class="menu-box">
-				<div class="menu-btn-div menu-hover">
-					<i class="bi bi-chat-fill menu-icon"></i>
-					<p class="menu-description">Chat</p>
-				</div>
-			</div>
-			<div class="menu-box">
-				<div class="menu-btn-div menu-hover">
-					<i class="bi bi-card-list menu-icon"></i>
-					<p class="menu-description">Board</p>
-				</div>
-			</div>
-		</div>
+		<MenuList :viewType="'mobile'" />
 	</div>
 </template>
 
@@ -63,12 +38,13 @@ import {defineComponent, ref} from 'vue';
 import { useStore } from 'vuex';
 
 import {RouteUrl} from '@/router/index';
-import SideMenu from './SideMenu.vue';
+import MenuList from './MenuList.vue';
+import SubHeader from './SubHeader.vue';
 
 export default defineComponent({
 	name : 'PageHeader',
 	components: {
-		SideMenu
+		MenuList, SubHeader
 	},
 	setup() {
 		const sideBar = ref<any>();

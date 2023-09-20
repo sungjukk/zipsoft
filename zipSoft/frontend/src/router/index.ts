@@ -32,12 +32,16 @@ export enum RouteUrl  {
 
 export const routes = [
   {
+    id: 1,
+    depth: 0,
+    order: 1,
     path: RouteUrl.MAIN,
-    name: 'PageHome',
+    name: '친구',
     component: PageHome,
     meta : {
       unauthorized: true,
-      isShow: true
+      isShow: true,
+      mobileIcon: 'bi-people-fill'
     }
   },
   {
@@ -56,16 +60,17 @@ export const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/PageAbout.vue'),
     meta : {
       unauthorized: false,
-      isShow: true
+      isShow: false
     }
   },
   {
     path: RouteUrl.BOARD,
-    name: 'BoardList',
+    name: '게시판',
     component: BoardListSection,
     meta : {
       unauthorized: false,
-      isShow: true
+      isShow: true,
+      mobileIcon: 'bi-card-list'
     }
   },
   {
@@ -97,11 +102,12 @@ export const routes = [
   },
   {
     path: RouteUrl.CHAT_LIST,
-    name: 'ChatListSection',
+    name: '채팅',
     component: ChatListSection,
     meta : {
       unauthorized: false,
-      isShow: true
+      isShow: true,
+      mobileIcon: 'bi-chat-fill'
     }
   },
   {
