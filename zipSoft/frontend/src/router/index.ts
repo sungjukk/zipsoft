@@ -12,6 +12,9 @@ import Login from '@/views/login/Login.vue'
 import store from '@/store/index';
 
 export interface MenuDef {
+  id: number,
+  parentId: number,
+  order: number,
   path: string;
   name: string;
   component: any;
@@ -32,16 +35,29 @@ export enum RouteUrl  {
 
 export const routes = [
   {
-    id: 1,
-    depth: 0,
-    order: 1,
+    path: RouteUrl.MAIN,
+    name: '메인',
+    component: PageHome,
+    meta : {
+      unauthorized: true,
+      isShow: true,
+      mobileIcon: 'bi-house-fill',
+      id: -1,
+      parentId: 0,
+      order: 1
+    }
+  },
+  {
     path: RouteUrl.MAIN,
     name: '친구',
     component: PageHome,
     meta : {
       unauthorized: true,
       isShow: true,
-      mobileIcon: 'bi-people-fill'
+      mobileIcon: 'bi-people-fill',
+      id: 1,
+      parentId: 0,
+      order: 2
     }
   },
   {
@@ -51,7 +67,10 @@ export const routes = [
     meta : {
       unauthorized: true,
       isShow: false,
-      layout : 'NoLayout'
+      layout : 'NoLayout',
+      id: 2,
+      parentId: 0,
+      order: 1
     }
   },
   {
@@ -60,7 +79,10 @@ export const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/PageAbout.vue'),
     meta : {
       unauthorized: false,
-      isShow: false
+      isShow: false,
+      id: 3,
+      parentId: 0,
+      order: 1
     }
   },
   {
@@ -70,34 +92,46 @@ export const routes = [
     meta : {
       unauthorized: false,
       isShow: true,
-      mobileIcon: 'bi-card-list'
+      mobileIcon: 'bi-card-list',
+      id: 4,
+      parentId: 0,
+      order: 4
     }
   },
   {
     path: RouteUrl.BOARD_WRITE,
-    name: 'BoardWriteSection',
+    name: '글쓰기',
     component: BoardWriteSection,
     meta : {
       unauthorized: false,
-      isShow: false
+      isShow: false,
+      id: 5,
+      parentId: 4,
+      order: 0
     }
   },
   {
     path: RouteUrl.BOARD_DETAIL,
-    name: 'BoardDetailSection',
+    name: '글 상세',
     component: BoardDetailSection,
     meta : {
       unauthorized: false,
-      isShow: false
+      isShow: false,
+      id: 6,
+      parentId: 4,
+      order: 0
     }
   },
   {
     path: RouteUrl.BOARD_EDIT,
-    name: 'BoardEditSection',
+    name: '글 수정',
     component: BoardEditSection,
     meta : {
       unauthorized: false,
-      isShow: false
+      isShow: false,
+      id: 7,
+      parentId: 4,
+      order: 0
     }
   },
   {
@@ -107,7 +141,10 @@ export const routes = [
     meta : {
       unauthorized: false,
       isShow: true,
-      mobileIcon: 'bi-chat-fill'
+      mobileIcon: 'bi-chat-fill',
+      id: 8,
+      parentId: 0,
+      order: 3
     }
   },
   {
@@ -117,7 +154,9 @@ export const routes = [
     meta : {
       unauthorized: false,
       isShow: false,
-      layout : 'NoLayout'
+      id: 9,
+      parentId: 8,
+      order: 0
     }
   }
 ] as Array<MenuDef>;
@@ -128,7 +167,6 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  store.commit('MenuStore/updateState', false);
   const {meta : {unauthorized}} = to;
   if (!unauthorized) {
     const isSucc = await store.dispatch('UserStore/loginCheck');
@@ -136,8 +174,6 @@ router.beforeEach(async (to, from, next) => {
       return next({path : RouteUrl.LOGIN});
     }
   }
-
-  store.commit('MenuStore/updateState', true);
   next();
 
   //return next({ path: "/login" });

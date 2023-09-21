@@ -102,12 +102,17 @@ export default defineComponent({
         const chatId = ref(route.params.id);
 
         onMounted(() => {
+          store.commit('MenuStore/updatePayload', {
+            isShow : false,
+            title : '테스터2'
+          })
             proxy.$socket.subscribe(`/topic/chat/${route.params.id}`, (res : any) => {
                 console.log('받아옴');
             });
         });
 
         onUnmounted(() => {
+            store.commit('MenuStore/init');
             proxy.$socket.unsubscribe(`/topic/chat/${chatId.value}`);
         })
 

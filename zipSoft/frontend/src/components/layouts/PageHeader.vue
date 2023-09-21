@@ -6,8 +6,8 @@
 					<!--<button class="navbar-toggler" type="button" @click="openSidebar()">
 						<span class="navbar-toggler-icon"></span>
 					</button>-->
-					<a class="navbar-brand nav-font" href="#" >{{ title }}</a>
-					<MenuList :viewType="'pc'" />
+					<router-link class="navbar-brand nav-font menu-hover" :to="`${RouteUrl.MAIN}`" >{{ title }}</router-link>
+					<MenuList :viewType="'pc'" :currentPage="currentPage" />
 				</div>
 				<div>
 
@@ -26,15 +26,16 @@
 				</div>
 			</div>
 		</nav>
-		<SubHeader />
+		<SubHeader :currentPage="currentPage" :title="$store.state.MenuStore.title"/>
 	</header>
-	<div class="menuBar">
-		<MenuList :viewType="'mobile'" />
+	<div class="menuBar" v-if="$store.state.MenuStore.isShow">
+		<MenuList :viewType="'mobile'" :currentPage="currentPage"  />
 	</div>
 </template>
 
 <script lang="ts">
-import {defineComponent, ref} from 'vue';
+import {defineComponent, ref, computed} from 'vue';
+import {useRouter} from 'vue-router';
 import { useStore } from 'vuex';
 
 import {RouteUrl} from '@/router/index';
@@ -49,8 +50,9 @@ export default defineComponent({
 	setup() {
 		const sideBar = ref<any>();
 		const title = ref(process.env.VUE_APP_TITLE);
-
 		const store = useStore();
+		const {currentRoute} = useRouter(); 
+		const currentPage = computed(() => currentRoute.value);
 
 		const openSidebar = () => {
 			sideBar.value.openSidebar();
@@ -62,7 +64,7 @@ export default defineComponent({
 		}
 
 		return {
-			sideBar, RouteUrl, title, openSidebar, logout
+			sideBar, RouteUrl, title, openSidebar, logout, currentPage
 		}
 	}
 })
