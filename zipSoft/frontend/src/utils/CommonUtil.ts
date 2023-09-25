@@ -69,7 +69,7 @@ export const convert12H = (value : string) => {
             txt = '오전';
             hour = valueDate.getHours();
         }
-        return `${txt} ${hour}:${valueDate.getMinutes()}`;
+        return `${txt} ${hour >= 10 ? hour : '0' + hour}:${valueDate.getMinutes() >= 10 ? valueDate.getMinutes() : '0' + valueDate.getMinutes()}`;
     }
 
 }

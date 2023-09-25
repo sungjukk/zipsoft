@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import com.zipsoft.chat.ChatRoomService;
 import com.zipsoft.chat.ChatService;
 import com.zipsoft.chat.dto.ChatRoomMemberDto;
 import com.zipsoft.commons.utils.Constants;
@@ -36,6 +37,8 @@ public class SocketInterception implements ChannelInterceptor {
 	private final UserDetailService userDetailService;
 	
 	private final ChatService chatService;
+	
+	private final ChatRoomService chatRoomServive;
 	
 	@Override
 	public Message<?> preSend(Message<?> message, MessageChannel channel) {
@@ -63,7 +66,7 @@ public class SocketInterception implements ChannelInterceptor {
 			String subUrl = String.valueOf(message.getHeaders().get("simpDestination"));
 			this.updateChatActive(subUrl, "Y", message);
 			
-		}
+		} 
 		
 		return message;
 	}
@@ -73,7 +76,7 @@ public class SocketInterception implements ChannelInterceptor {
 		StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 		if (StompCommand.UNSUBSCRIBE.equals(accessor.getCommand())) {
 			String subUrl = String.valueOf(message.getHeaders().get("simpSubscriptionId"));
-			this.updateChatActive(subUrl, "N", message);
+			chatRoomServive.leaveChatRoom(message);
 		} 
 	}
 	
@@ -92,12 +95,8 @@ public class SocketInterception implements ChannelInterceptor {
 			String chatId = url.replaceAll("/topic/chat/", "");
 			UsernamePasswordAuthenticationToken upat = (UsernamePasswordAuthenticationToken) SimpMessageHeaderAccessor.getUser(message.getHeaders());
 			UserPrincipal prin = (UserPrincipal) upat.getPrincipal();
-			ChatRoomMemberDto dto = ChatRoomMemberDto.builder()
-													 .userId(prin.getUserId())
-													 .chatId(chatId)
-													 .isActive(isActive)
-													 .build();
-			chatService.updateChatRoomActive(dto);
+			
+			chatRoomServive.enterChatRoom(chatId, prin.getUserId());
 		}
 	}
 	

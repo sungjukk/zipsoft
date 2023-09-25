@@ -31,28 +31,28 @@ export default defineComponent({
                     id : 'asd',
                     title : '테스터2',
                     message : '안녕하냐',
-                    updateDt : '20230915203600',
+                    sendDate : '20230915203600',
                     noReadCnt : 5
                 },
                 {
                     id : 'asd1',
                     title : '전영은',
                     message : '안녕하냐ㅁㄴㅇㅁㅇㄴㅁㅇㅁㄴㅇㅁㄴ',
-                    updateDt : '20230914203600',
+                    sendDate : '20230914203600',
                     noReadCnt : 0
                 },
                 {
                     id : 'asd2',
                     title : '집현전',
                     message : 'ㅁㄴㅇㅁㄴㅁㄹㅇㄶㄴㅇㅎㄴㅇ',
-                    updateDt : '20230115203600',
+                    sendDate : '20230115203600',
                     noReadCnt : 3
                 },
                 {
                     id : 'asd3',
                     title : '이성주',
                     message : '안녕하냐ㅠㅠㅠㅠㅠ',
-                    updateDt : '20220915203600',
+                    sendDate : '20220915203600',
                     noReadCnt : 0
                 }
             ]
@@ -66,13 +66,13 @@ export default defineComponent({
                 if (room) {
                     room.message = message.message;
                     room.noReadCnt = room.noReadCnt + 1;
-                    room.updateDt = message.sendDt
+                    room.sendDate = message.sendDate
                 } else {
                     room = {
                         id : message.id,
                         title : message.title ? message.title : message.userName,
                         message : message.message,
-                        updateDt : '20230915203600',
+                        sendDate : '20230915203600',
                         noReadCnt : 1
                     }
                 }

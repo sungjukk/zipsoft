@@ -10,7 +10,7 @@ export interface ChatRoom {
   id : String;
   title : String;
   message : String;
-  updateDt : String;
+  sendDate : String;
   noReadCnt : number;
 }
 

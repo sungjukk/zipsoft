@@ -1,6 +1,8 @@
 package com.zipsoft.chat.dto;
 
-import com.zipsoft.model.entity.ChatRoom;
+import java.io.Serializable;
+
+import java.io.Serializable;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ChatRoomMemberDto {
+public class ChatRoomMemberDto implements Serializable {
 	
 	private long id;
 	
@@ -19,7 +21,11 @@ public class ChatRoomMemberDto {
 	
 	private long userId;
 	
+	private String userName;
+	
 	private int noReadCnt;
+	
+	private String isFirst;
 	
 	private String isActive;
 	

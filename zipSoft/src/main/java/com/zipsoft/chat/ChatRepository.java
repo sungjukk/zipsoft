@@ -8,8 +8,11 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.zipsoft.chat.dto.ChatRoomDto;
 import com.zipsoft.chat.dto.ChatRoomMemberDto;
+import com.zipsoft.model.entity.QChatRoom;
 import com.zipsoft.model.entity.QChatRoomMember;
+import com.zipsoft.model.entity.QUser;
 
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -23,7 +26,9 @@ public class ChatRepository {
 	
 	private final EntityManager entityManager;
 	
+	private QChatRoom chatRoom = QChatRoom.chatRoom;
 	private QChatRoomMember chatRoomMember = QChatRoomMember.chatRoomMember;
+	private QUser user = QUser.user;
 	
 	@Transactional
 	public void updateEnterChatRoom(ChatRoomMemberDto dto) {
@@ -40,21 +45,28 @@ public class ChatRepository {
 		
 		
 		jpaQueryFactory.update(chatRoomMember)
-					   .set(chatRoomMember.isActive, dto.getIsActive())
+					   .set(chatRoomMember.isFirst, dto.getIsFirst())
 					   .set(chatRoomMember.noReadCnt, 0)
 					   .where(builder)
 					   .execute();
 	}
 	
 	public List<ChatRoomMemberDto> getChatRoomMemberList(String chatId, String isActive) {
+		
+		BooleanBuilder builder = new BooleanBuilder();
+		builder.and(chatRoomMember.chatRoom.id.eq(chatId));
+		if (isActive != null && !"".equals(isActive)) builder.and(chatRoomMember.isFirst.eq(isActive));
+		
 		return jpaQueryFactory.select(Projections.fields( ChatRoomMemberDto.class, 
 														  chatRoomMember.id
 														  ,ExpressionUtils.as(chatRoomMember.chatRoom.id, "chatId")
 														  ,chatRoomMember.noReadCnt
-														  ,chatRoomMember.isActive
+														  ,user.userName
+														  ,chatRoomMember.isFirst
 														  ,chatRoomMember.userId))
 				              .from(chatRoomMember)
-				              .where(chatRoomMember.chatRoom.id.eq(chatId).and(chatRoomMember.isActive.eq(isActive)))
+				              .join(user).on(chatRoomMember.userId.eq(user.id))
+				              .where(builder)
 				              .fetch();
 	}
 	
@@ -63,10 +75,20 @@ public class ChatRepository {
 		jpaQueryFactory.update(chatRoomMember)
 					   .set(chatRoomMember.noReadCnt, chatRoomMember.noReadCnt.add(1))
 					   .where(chatRoomMember.chatRoom.id.eq(id)
-							   .and(chatRoomMember.isActive.eq("N"))
+							   .and(chatRoomMember.isFirst.eq("N"))
 							 )
 					   .execute();
 	}
 
-	
+	public ChatRoomDto getChatRoom(String chatId) {
+		
+		ChatRoomDto dto = jpaQueryFactory.select(Projections.fields(ChatRoomDto.class,
+																	chatRoom.id
+																	,chatRoom.title))
+				                         .from(chatRoom)
+				                         .where(chatRoom.id.eq(chatId))
+				                         .fetchOne();
+		
+		return dto;
+	}
 }

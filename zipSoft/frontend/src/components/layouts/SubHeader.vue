@@ -38,7 +38,14 @@ export default defineComponent({
 		watch(props, (value : any) => {
 			const {currentPage} = value;
 			menuList.value = [];
-			menuList.value.unshift(currentPage);
+			if (props.title != '') {
+				menuList.value.unshift({
+					...currentPage,
+					name: props.title
+				});
+			} else {
+				menuList.value.unshift(currentPage);
+			}
 			if (currentPage.meta.parentId != 0) {
 				getMenuList(currentPage);
 			}

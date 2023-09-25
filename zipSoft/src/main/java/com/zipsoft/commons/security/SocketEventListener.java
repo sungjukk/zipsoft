@@ -7,6 +7,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
+import com.zipsoft.chat.ChatRoomService;
 import com.zipsoft.chat.ChatService;
 import com.zipsoft.chat.dto.ChatRoomMemberDto;
 
@@ -16,18 +17,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SocketEventListener {
 	
-	private final ChatService chatService;
+	private final ChatRoomService chatRoomService;
 	
 	@EventListener
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
-		UsernamePasswordAuthenticationToken upat = (UsernamePasswordAuthenticationToken) SimpMessageHeaderAccessor.getUser(event.getMessage().getHeaders());
-		UserPrincipal prin = (UserPrincipal) upat.getPrincipal();
-		ChatRoomMemberDto dto = ChatRoomMemberDto.builder()
-												 .userId(prin.getUserId())
-												 .isActive("N")
-												 .build();
 		
-		chatService.updateChatRoomActive(dto);
+		chatRoomService.leaveChatRoom(event.getMessage());
+		
     }
 	
 }

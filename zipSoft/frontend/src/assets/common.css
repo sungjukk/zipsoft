@@ -543,6 +543,10 @@ a {
     font-weight: 400;
 }
 
+.msg_history p {
+    white-space: break-spaces;
+}
+
 
 .page-nav {
     background-color : #249d6a;

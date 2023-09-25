@@ -16,7 +16,7 @@ public class CustomPageRequest {
 	
 	public void setSize(int size) {
 		int DEFAULT_SIZE = 10;
-		int MAX_SIZE = 50;
+		int MAX_SIZE = 300;
 		if (size <= 0) {
 			this.size = DEFAULT_SIZE;
 			return;

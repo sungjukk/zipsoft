@@ -3,7 +3,7 @@
         <div class="chat_people">
             <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
             <div class="chat_ib" @click="onDetailClick">
-                <h5>{{room.title}} <span class="chat_date">{{convert12H(room.updateDt)}}</span></h5>
+                <h5>{{room.title}} <span class="chat_date">{{convert12H(room.sendDate)}}</span></h5>
                 <p>{{room.message}}</p>
                 <div class="no_read_cnt">{{room.noReadCnt}}</div>
             </div>

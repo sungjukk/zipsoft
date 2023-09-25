@@ -43,7 +43,7 @@ public class ChatRoomMember extends Base {
 	private int noReadCnt;
 	
 	@Column(length = 1)
-	@ColumnDefault("'N'")
-	private String isActive;
+	@ColumnDefault("'Y'")
+	private String isFirst;
 	
 }
