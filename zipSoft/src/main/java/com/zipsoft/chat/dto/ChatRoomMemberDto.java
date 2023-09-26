@@ -2,6 +2,9 @@ package com.zipsoft.chat.dto;
 
 import java.io.Serializable;
 
+import com.zipsoft.model.entity.ChatRoom;
+import com.zipsoft.model.entity.ChatRoomMember;
+
 import java.io.Serializable;
 
 import lombok.AllArgsConstructor;
@@ -27,6 +30,19 @@ public class ChatRoomMemberDto implements Serializable {
 	
 	private String isFirst;
 	
-	private String isActive;
+	private String isActive = "N";
+	
+	public ChatRoomMember convertEntity() {
+		
+		ChatRoom room = new ChatRoom();
+		room.setId(this.chatId);
+		
+		return ChatRoomMember.builder().id(this.id)
+									   .chatRoom(room)
+									   .userId(this.userId)
+									   .isFirst(this.isFirst)
+									   .noReadCnt(this.noReadCnt)
+									   .build();
+	}
 	
 }

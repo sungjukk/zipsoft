@@ -91,4 +91,13 @@ public class ChatRepository {
 		
 		return dto;
 	}
+	
+	@Transactional
+	public void updateMemberList(List<ChatRoomMemberDto> list) {
+		for (ChatRoomMemberDto dto : list) {
+			entityManager.merge(dto.convertEntity());
+		}
+		
+		entityManager.flush();
+	}
 }

@@ -17,8 +17,8 @@ public interface ChatService {
 	
 	public void insertChatMessage(ChatMessageDto dto);
 	
-	public ChatRoomDetailDto detail(String chatId);
+	public ChatRoomDetailDto detail(String chatId, long userId);
 	
-	public List<ChatMessage> getchatMessageList(String chatId);
+	public List<ChatMessageDto> getchatMessageList(String chatId, long userId, int page);
 	
 }

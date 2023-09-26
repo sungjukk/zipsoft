@@ -25,7 +25,7 @@ public class ChatController {
 	
 	@GetMapping("{id}")
 	public ApiResponse detail(@PathVariable("id") String id, @AuthenticationPrincipal UserPrincipal user) {
-		ChatRoomDetailDto dto = chatService.detail(id);
+		ChatRoomDetailDto dto = chatService.detail(id, user.getUserId());
 		
 		return ApiResponse.OK(dto);
 	}

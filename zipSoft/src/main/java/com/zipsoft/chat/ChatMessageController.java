@@ -74,6 +74,7 @@ public class ChatMessageController {
 			for (ChatRoomMemberDto mber : mberList) {
 				if ("N".equals(mber.getIsActive())) {
 					mber.setNoReadCnt(mber.getNoReadCnt() + 1);
+					dto.setNoReadCnt(dto.getNoReadCnt() + 1);
 					template.convertAndSend("/topic/" + mber.getUserId(), dto);					
 				}
 			}

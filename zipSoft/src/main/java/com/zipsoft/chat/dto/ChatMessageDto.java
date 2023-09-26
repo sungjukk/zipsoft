@@ -26,6 +26,15 @@ import lombok.Setter;
 @Builder
 public class ChatMessageDto {
 	
+	public ChatMessageDto(ChatMessage msg, String userName, int noReadCnt) {
+		this.id = msg.getChatId();
+		this.message = msg.getMessage();
+		this.userId = msg.getUserId();
+		this.userName = userName;
+		this.sendDate = msg.getSendDate();
+		this.noReadCnt = noReadCnt;
+	}
+	
 	public enum MessageType {
         ENTER, TALK
     }
@@ -36,6 +45,7 @@ public class ChatMessageDto {
 	private long userId;	//보내는ID
 	private String userName;//보내는이름
 	private String sendDate;  //보낸날짜
+	private int noReadCnt;	  // 읽지않은 사람 수	 
 	
 	public ChatMessage convertEntity() {
 		if (this.sendDate == null || "".equals(this.sendDate)) {

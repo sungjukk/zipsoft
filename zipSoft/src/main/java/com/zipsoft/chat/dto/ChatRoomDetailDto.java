@@ -16,6 +16,6 @@ import lombok.NoArgsConstructor;
 public class ChatRoomDetailDto {
 	
 	private ChatRoomDto room;
-	private List<ChatMessage> list;
+	private List<ChatMessageDto> list;
 	
 }

@@ -95,7 +95,9 @@ public class ChatRoomService {
 			
 			long cnt = room.getMemberList().stream().filter(r -> "Y".equals(r.getIsActive())).count();
 			if (cnt == 0) {
+				chatRepository.updateMemberList(room.getMemberList());
 				opsHashChatRoom.delete(CHAT_ROOM, chatId);
+				
 			} else {
 				this.setChatRoomMember(chatId, room.getMemberList());
 			}

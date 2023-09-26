@@ -18,6 +18,20 @@ services:
       - 6379:6379
     networks:
       - redis_network
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - C:/Users/user/Documents/mongodb:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=1234 
+      - MONGO_INITDB_DATABASE=zipsoft
+    networks:
+      - db_network
   database:
     container_name: "database"
     image: "mysql:8.0.30"
