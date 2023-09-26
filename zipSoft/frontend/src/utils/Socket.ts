@@ -69,11 +69,26 @@ const Socket = {
                 const header = {
                     Authorization : `Bearer ${accessToken}`
                 };
-                if (stompClient!=null) stompClient.send(url, msg, header);
+
+                if (step === SOCKET_STEP.LOADING) {
+                    setTimeout(() => {
+                        app.config.globalProperties.$socket.send(url, msg);
+                    }, 500);
+                } else if (step === SOCKET_STEP.SUCCESS) {
+                    stompClient.send(url, msg, header);
+                } else if (step === SOCKET_STEP.FAIL) {
+                    alert('연결에 실패');
+                }
             },
             unsubscribe: (id : string) => {
-                if (stompClient!=null) {
+                if (step === SOCKET_STEP.LOADING) {
+                    setTimeout(() => {
+                        app.config.globalProperties.$socket.unsubscribe(id);
+                    }, 500);
+                } else if (step === SOCKET_STEP.SUCCESS) {
                     stompClient.unsubscribe(id);
+                } else if (step === SOCKET_STEP.FAIL) {
+                    alert('연결에 실패');
                 }
             }
         }

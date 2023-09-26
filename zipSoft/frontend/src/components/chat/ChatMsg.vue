@@ -2,14 +2,23 @@
     <div :class="isUser ? 'outgoing_msg' : 'incoming_msg'">
         <div v-if="!isUser" class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
         <div v-if="isUser" class="sent_msg">
-            <p>{{message.message}}</p>
-            <span class="time_date"> {{convert12H(message.sendDate)}}</span> 
+            <div class="time_date">
+                <span v-if="message.noReadCnt >= 0">{{message.noReadCnt}}</span>
+                <span>{{convert12H(message.sendDate)}}</span>
+            </div> 
+            <p class="msg_box">{{message.message}}</p>
         </div>
         <div v-else class="received_msg">
-        <div class="received_withd_msg">
-            <span>{{userName}}</span>
-            <p>{{message.message}}</p>
-            <span class="time_date"> {{convert12H(message.sendDate)}}</span></div>
+            <div class="received_withd_msg">
+                <div>
+                <span style="font-size : 11px">{{userName}}</span>
+                <p class="msg_box">{{message.message}}</p>
+                </div>
+                <div class="time_date"> 
+                    <span v-if="message.noReadCnt >= 0">{{message.noReadCnt}}</span>
+                    <span>{{convert12H(message.sendDate)}}</span>
+                </div>
+            </div>
         </div>
     </div>
 </template>

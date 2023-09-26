@@ -47,6 +47,7 @@ export default defineComponent({
 
         const callApiChatRoomDetail = async () => {
           const res = await callGetApi(`/chat/${route.params.id}`);
+          console.log(res);
           if (res.result == HTTP_STATUS.OK) {
             const data : CHAT_ROOM_DETAIL = res.data;
             const {room, list} = data;
@@ -55,7 +56,7 @@ export default defineComponent({
               isShow : false,
               title
             });
-
+            console.log(list);
             msgList.value = list;
             joinList.value = memberList;
             updateScroll();
@@ -68,12 +69,13 @@ export default defineComponent({
         }
 
         onMounted(async () => {
-          await callApiChatRoomDetail();
-            proxy.$socket.subscribe(`/topic/chat/${route.params.id}`, (res : any) => {
+          proxy.$socket.subscribe(`/topic/chat/${route.params.id}`, (res : any) => {
                 const body : CHAT_MESSAGE = JSON.parse(res.body);
                 msgList.value.unshift(body);
                 updateScroll();
             });
+          await callApiChatRoomDetail();
+            
             const data = {
                 id : `${route.params.id}`,
                 message : '',
