@@ -49,8 +49,9 @@ public class ChatServiceImpl implements ChatService {
 	@Override
 	public ChatRoomDetailDto detail(String chatId, long userId) {
 		
-		ChatRoomDto dto = chatRepository.getChatRoom(chatId);
+		ChatRoomDto dto = chatRepository.getChatRoom(chatId);		
 		if (dto != null) dto.setMemberList(chatRepository.getChatRoomMemberList(chatId, null));
+		dto.setTitle(userId);
 		
 		return ChatRoomDetailDto.builder().room(dto).list(this.getchatMessageList(chatId, userId, 0)).build();
 	}
@@ -64,19 +65,18 @@ public class ChatServiceImpl implements ChatService {
 		List<ChatMessage> messageList = chatMsgRepository.findByChatIdOrderBySendDateDesc(chatId, pagenation.of());
 		List<ChatMessageDto> msgDtoList = new ArrayList<ChatMessageDto>();
 		List<ChatRoomMemberDto> memberList = chatRoomService.getChatRoomMember(chatId);
+		if (memberList == null) {
+			memberList = chatRepository.getChatRoomMemberList(chatId, null);
+		}
 		
 		for (int i = 0; i < messageList.size(); i++) {
 			int cnt = i + (page * size);
 			String userName = "";
-			int readCnt = 0;
 			ChatMessage msg = messageList.get(i);
 			
-			for (ChatRoomMemberDto dto : memberList) {
-				readCnt += dto.getNoReadCnt() - cnt > 0 ? 1 : 0;
-				if (dto.getUserId() == msg.getUserId()) userName = dto.getUserName();
-			}
+			Long readCnt = memberList.stream().filter(m -> m.getUserId() != userId && m.getNoReadCnt() - cnt > 0).count();
 			
-			ChatMessageDto dto = new ChatMessageDto(msg, userName, readCnt);
+			ChatMessageDto dto = new ChatMessageDto(msg, userName, readCnt.intValue());
 			msgDtoList.add(dto);
 			
 		}

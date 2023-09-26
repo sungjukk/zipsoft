@@ -575,6 +575,18 @@ a {
     font-weight: 400;
 }
 
+.msg_enter_div {
+    width: 70%;
+    margin: 0 auto;
+}
+
+.msg_enter {
+    background: #ebebeb none repeat scroll 0 0;
+    padding: 5px;
+    font-size: 12px;
+    text-align: center;
+}
+
 .msg_history p {
     white-space: break-spaces;
 }

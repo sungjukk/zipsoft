@@ -28,11 +28,13 @@ interface CHAT_ROOM_MEMBER {
 }
 
 interface CHAT_MESSAGE {
+    type : String;
     id : String;
     chatId : String;
     message : String;
     userId : number;
     sendDate : String;
+    noReadCnt: number;
 }
 
 export {CHAT_ROOM_DETAIL, CHAT_ROOM, CHAT_ROOM_MEMBER, CHAT_MESSAGE}

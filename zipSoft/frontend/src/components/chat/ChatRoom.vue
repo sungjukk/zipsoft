@@ -60,21 +60,35 @@ export default defineComponent({
             msgList.value = list;
             joinList.value = memberList;
             updateScroll();
+            window.addEventListener('scroll', handleScroll);
           } else {
             proxy.$alert("서버와 연결이 실패하였습니다. 잠시후 다시 이용바랍니다.", () => {
               router.push(RouteUrl.CHAT_LIST);
             });
             return false;
           }
+        };
+
+        const handleScroll = () => {
+          const {scrollY} = window;
+          if (scrollY <= 50) console.log("tst"); 
         }
 
         onMounted(async () => {
+          document.body.style.scrollBehavior = 'instant';
+          await callApiChatRoomDetail();
           proxy.$socket.subscribe(`/topic/chat/${route.params.id}`, (res : any) => {
                 const body : CHAT_MESSAGE = JSON.parse(res.body);
-                msgList.value.unshift(body);
-                updateScroll();
+
+                if (body.type == 'ENTER') {
+                  for (var i = 0; i < body.noReadCnt; i++) {
+                    msgList.value[i].noReadCnt = msgList.value[i].noReadCnt - 1 <= 0 ? 0 : msgList.value[i].noReadCnt - 1;
+                  }
+                } else {
+                  msgList.value.unshift(body);
+                  updateScroll();
+                }
             });
-          await callApiChatRoomDetail();
             
             const data = {
                 id : `${route.params.id}`,
@@ -112,7 +126,7 @@ export default defineComponent({
         };
 
         const updateScroll = () => {
-          setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 10);
+          setTimeout(() => window.scrollTo({top: document.body.scrollHeight, left : 0}), 10);
         }
 
         return {sendMsg, onSendBtnClick, chatInput, handleChange, joinList, msgList}

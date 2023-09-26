@@ -44,7 +44,8 @@ public class ChatRoomService {
 	
 	public List<ChatRoomMemberDto> getChatRoomMember(String chatId) {
 		ChatRoomDto room = opsHashChatRoom.get(CHAT_ROOM, chatId);
-		return room.getMemberList();
+		if (room != null) return room.getMemberList();
+		else return null;
 	}
 	
 	public void setChatRoomMember(String chatId, List<ChatRoomMemberDto> list) {
@@ -62,7 +63,6 @@ public class ChatRoomService {
 		
 		for (ChatRoomMemberDto d : room.getMemberList()) {
 			if (d.getUserId() == userId) {
-				d.setNoReadCnt(0);
 				d.setIsActive("Y");
 				break;
 			}

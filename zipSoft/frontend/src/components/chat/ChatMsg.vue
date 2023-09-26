@@ -1,5 +1,10 @@
 <template>
-    <div :class="isUser ? 'outgoing_msg' : 'incoming_msg'">
+    <div v-if="message.userId == 0">
+        <div class="msg_enter_div">
+            <p class="msg_box msg_enter">{{message.message}}</p>
+        </div>
+    </div>
+    <div v-else :class="isUser ? 'outgoing_msg' : 'incoming_msg'">
         <div v-if="!isUser" class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
         <div v-if="isUser" class="sent_msg">
             <div class="time_date">

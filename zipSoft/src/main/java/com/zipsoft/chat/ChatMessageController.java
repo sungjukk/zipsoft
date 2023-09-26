@@ -60,7 +60,16 @@ public class ChatMessageController {
 				ChatMessageDto msgDto = ChatMessageDto.builder().id(dto.getId()).message(mber.getUserName() + "님이 입장하였습니다.").build();
 				chatService.insertChatMessage(msgDto);
 				template.convertAndSend("/topic/chat/" + dto.getId(), msgDto);
-			}			
+			} else {
+				Optional<ChatRoomMemberDto> sendUser = mberList.stream().filter(m -> m.getUserId() == prin.getUserId()).findFirst();
+				if (sendUser.isPresent()) {
+					ChatRoomMemberDto memberDto = sendUser.get();
+					ChatMessageDto msgDto = ChatMessageDto.builder().type(dto.getType()).id(dto.getId()).message("").noReadCnt(memberDto.getNoReadCnt()).build();
+					memberDto.setNoReadCnt(0);
+					chatRoomService.setChatRoomMember(dto.getId(), mberList);
+					template.convertAndSend("/topic/chat/" + dto.getId(), msgDto);
+				}
+			}
 			
 			return;
 		}
