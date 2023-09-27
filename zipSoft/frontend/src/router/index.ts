@@ -8,6 +8,8 @@ import BoardEditSection from '@/views/board/BoardEditSection.vue';
 import ChatListSection from '@/views/chat/ChatListSection.vue';
 import ChatRoomSection from '@/views/chat/ChatRoomSerction.vue';
 
+import FriendListSection from '@/views/friend/FriendListSection.vue';
+
 import Login from '@/views/login/Login.vue'
 import store from '@/store/index';
 
@@ -30,7 +32,8 @@ export enum RouteUrl  {
   BOARD_WRITE = '/board/new',
   BOARD_EDIT = '/board/:id/edit',
   CHAT_LIST = '/chat',
-  CHAT_ROOM = '/chat/:id'
+  CHAT_ROOM = '/chat/:id',
+  FRIEND_LIST = '/friend'
 }
 
 export const routes = [
@@ -48,9 +51,9 @@ export const routes = [
     }
   },
   {
-    path: RouteUrl.MAIN,
+    path: RouteUrl.FRIEND_LIST,
     name: '친구',
-    component: PageHome,
+    component: FriendListSection,
     meta : {
       unauthorized: true,
       isShow: true,

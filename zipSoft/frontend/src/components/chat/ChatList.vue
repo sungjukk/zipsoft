@@ -4,7 +4,6 @@
         <div v-if="list.length <= 0" style="text-align:center">
             <p>채팅방이 없습니다.</p>
         </div>
-        <button @click="onClickHandler">test</button>
     </div>
 </template>
 <script lang="ts">
@@ -86,18 +85,7 @@ export default defineComponent({
             proxy.$socket.unsubscribe(`/topic/${store.state.UserStore.id}`);
         });
 
-        const onClickHandler = () => {
-
-            const data = {
-                id : 'asd',
-                message : '테스트',
-                type: "TALK"
-            }
-
-            proxy.$socket.send('/app/chat/send', JSON.stringify(data));
-        }
-
-        return {list, onClickHandler}
+        return {list}
 
     }
 })

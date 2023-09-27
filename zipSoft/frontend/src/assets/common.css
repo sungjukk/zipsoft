@@ -680,6 +680,81 @@ a {
     color:#ededed;
 }
 
+.my-profile {
+    padding: 0 0 1rem 0 !important;
+    border-bottom: 1px solid #ededed;
+    margin-bottom: 0;
+}
+
+.friend-list-div {
+    max-height: max-content;
+    transition: all 0.3s linear 0s;
+    overflow: hidden;
+}
+
+.friend-list {
+    padding: 0 !important;
+    border-bottom: 1px solid #ededed;
+    margin-bottom: 0;
+}
+
+.friend-list li {
+    padding: 5px 0;
+}
+
+.my-profile li, .friend-list li {
+    list-style: none;
+}
+
+.friend-row {
+    display: flex;
+    gap: 13px;
+    align-items: baseline;
+}
+
+.my-profile-img img {
+    width: 65px;
+ }
+
+.friend-img img {
+    width: 50px;
+    height: 50px;
+}
+
+.profile-txt {
+    font-weight: bold;
+}
+
+.friend-txt {
+    font-size: 15px;
+}
+
+.friend-cnt {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 1rem 10px;
+    border-bottom: 1px solid #ededed;
+}
+
+.friend-cnt i {
+    cursor: pointer;
+}
+
+.friend-cnt p {
+    margin: 0;
+    padding: 0;
+    font-size: 13px;
+}
+
+.friend-list li {
+    cursor: pointer;
+}
+
+.friend-list li:hover {
+    background-color: #ededed4a;
+}
+
 @media (max-width: 820px) {
     .container {
         padding-top: 60px;

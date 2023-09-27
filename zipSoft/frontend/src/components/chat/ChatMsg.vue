@@ -8,7 +8,7 @@
         <div v-if="!isUser" class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
         <div v-if="isUser" class="sent_msg">
             <div class="time_date">
-                <span v-if="message.noReadCnt >= 0">{{message.noReadCnt}}</span>
+                <span v-if="message.noReadCnt > 0">{{message.noReadCnt}}</span>
                 <span>{{convert12H(message.sendDate)}}</span>
             </div> 
             <p class="msg_box">{{message.message}}</p>
@@ -20,7 +20,7 @@
                 <p class="msg_box">{{message.message}}</p>
                 </div>
                 <div class="time_date"> 
-                    <span v-if="message.noReadCnt >= 0">{{message.noReadCnt}}</span>
+                    <span v-if="message.noReadCnt > 0">{{message.noReadCnt}}</span>
                     <span>{{convert12H(message.sendDate)}}</span>
                 </div>
             </div>
