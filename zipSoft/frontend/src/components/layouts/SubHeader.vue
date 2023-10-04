@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, computed, ref, watch} from 'vue';
+import {defineComponent, ref, watch, onMounted} from 'vue';
 import {routes} from '@/router/index';
 import {useRouter} from 'vue-router';
 
@@ -34,9 +34,16 @@ export default defineComponent({
 		const route = useRouter();
 		const menuList = ref<Array<any>>([]);
 
+		onMounted(() => {
+			init();
+		})
 
-		watch(props, (value : any) => {
-			const {currentPage} = value;
+		watch(props, () => {
+			init();
+		});
+
+		const init = () => {
+			const {currentPage} = props;
 			menuList.value = [];
 			if (props.title != '') {
 				menuList.value.unshift({
@@ -49,7 +56,7 @@ export default defineComponent({
 			if (currentPage.meta.parentId != 0) {
 				getMenuList(currentPage);
 			}
-		})
+		}
 
 		const getMenuList = (menu : any) => {
 			const parentM = routes.find((m) => m.meta.id == menu.meta.parentId && m.meta.id !== menu.meta.id);

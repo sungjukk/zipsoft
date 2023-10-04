@@ -52,7 +52,7 @@ export default defineComponent({
 		const title = ref(process.env.VUE_APP_TITLE);
 		const store = useStore();
 		const {currentRoute} = useRouter(); 
-		const currentPage = computed(() => currentRoute.value);
+		const currentPage = computed(() => {console.log(currentRoute.value); return currentRoute.value});
 
 		const openSidebar = () => {
 			sideBar.value.openSidebar();

@@ -7,7 +7,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { PropType, watch, ref } from 'vue'
+import { PropType, watch, ref, onMounted } from 'vue'
 import { MenuDef } from '@/router/index';
 import { useRouter } from 'vue-router';
 import {routes} from '@/router/index';
@@ -20,16 +20,27 @@ const props = defineProps({
 
 const isActive = ref(false);
 
+onMounted(() => {
+    init();
+})
+
 watch(props, (value : any) => {
-    const {currentPage} = value;
-    if (currentPage.path === props.menu.path) {
+    init();
+})
+
+const init = () => {
+    const {currentPage, menu} = props;
+    if (!currentPage) return false;
+    if (!menu) return false;
+
+    if (currentPage.path === menu.path) {
         isActive.value = true;
     } else if (currentPage.meta.parentId != 0) {
         isActive.value = isActiveCheck(currentPage);
     } else {
         isActive.value = false;
     }
-})
+}
 
 const isActiveCheck = (current : any) => {
     const {menu} = props;

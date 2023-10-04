@@ -2,29 +2,36 @@
     <div>
     <ul class="my-profile">
       <li>
-        <div class="friend-row">
-          <div class="my-profile-img">
-            <img src="@/assets/img/empty-user.png" />
+        <div class="my-profile-row">
+          <div class="friend-row">
+            <div class="my-profile-img">
+              <img src="@/assets/img/empty-user.png" />
+            </div>
+            <div class="profile-txt">
+              <span>테스트</span>
+              <p>집에 가고 싶다...</p>
+            </div>
           </div>
-          <div class="profile-txt">
-            <span>테스트</span>
+          <div class="add-friend">
+            <i class="bi bi-person-plus-fill"></i>
           </div>
         </div>
       </li>
     </ul>
-    <div class="friend-cnt">
+    <div class="friend-cnt" @click="handleShowBtnOnclick">
       <p>친구 30</p>
-      <i class="bi" :class="isShow ? 'bi-chevron-up' : 'bi-chevron-down'" @click="handleShowBtnOnclick"></i>
+      <i class="bi" :class="isShow ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
     </div>
     <div ref="listEle" class="friend-list-div">
       <ul class="friend-list">
-        <li>
+        <li @click="friendOnClick">
           <div class="friend-row">
             <div class="friend-img">
               <img src="@/assets/img/empty-user.png" />
             </div>
             <div class="friend-txt">
               <span>테스트</span>
+              <p>집에 가고 싶다...</p>
             </div>
           </div>
         </li>
@@ -61,24 +68,26 @@
       </ul>
     </div>
   </div>
-  <div class="popup-content">
-    <div class="popup-close-btn">
-      <i class="bi bi-x-lg"></i>
-    </div>
-    <div>
-    </div>
-  </div>
-  <div class="popup-background"></div>
+  <Popup v-model:isShow="isModalShow">
+    <Profile />
+  </Popup>
 </template>
 <script lang="ts">
 import {defineComponent, ref, onMounted} from 'vue';
+import Popup from '@/components/modal/Popup.vue';
+import Profile from './popup/Profile.vue';
 
 export default defineComponent({
     name: 'FriendList',
+    components: {Popup, Profile},
     setup() {
         const isShow = ref(true);
         const listEle = ref<HTMLDivElement>();
         const listHeight = ref(0);
+
+        const modalEle = ref<HTMLDivElement>();
+
+        const isModalShow = ref(false);
 
 
         onMounted(() => {
@@ -92,18 +101,23 @@ export default defineComponent({
 
         const handleShowBtnOnclick = () => {
 
-        if (!listEle.value) return false;
+          if (!listEle.value) return false;
 
-        if (isShow.value) {
-            listHeight.value = Number(listEle.value.clientHeight);
-        }
+          if (isShow.value) {
+              listHeight.value = Number(listEle.value.clientHeight);
+          }
 
-        isShow.value = !isShow.value;
-        listEle.value.style.height = isShow.value ? `${listHeight.value}px` : '0px';
+          isShow.value = !isShow.value;
+          listEle.value.style.height = isShow.value ? `${listHeight.value}px` : '0px';
         
         }
 
-        return {isShow, listEle, handleShowBtnOnclick};
+        const friendOnClick = () => {
+          isModalShow.value = true;
+        }
+
+
+        return {isShow, listEle, handleShowBtnOnclick,  modalEle, isModalShow, friendOnClick};
     }
 })
 </script>
