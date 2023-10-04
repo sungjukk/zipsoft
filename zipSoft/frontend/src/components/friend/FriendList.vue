@@ -61,6 +61,14 @@
       </ul>
     </div>
   </div>
+  <div class="popup-content">
+    <div class="popup-close-btn">
+      <i class="bi bi-x-lg"></i>
+    </div>
+    <div>
+    </div>
+  </div>
+  <div class="popup-background"></div>
 </template>
 <script lang="ts">
 import {defineComponent, ref, onMounted} from 'vue';
