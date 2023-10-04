@@ -12,7 +12,7 @@
               <p>집에 가고 싶다...</p>
             </div>
           </div>
-          <div class="add-friend">
+          <div class="add-friend" @click="searchFriendOnClick">
             <i class="bi bi-person-plus-fill"></i>
           </div>
         </div>
@@ -71,15 +71,19 @@
   <Popup v-model:isShow="isModalShow">
     <Profile />
   </Popup>
+  <Popup v-model:isShow="isSeachFriend">
+    <SearchFriend @friendBtnOnclick="friendOnClick" />
+  </Popup>
 </template>
 <script lang="ts">
 import {defineComponent, ref, onMounted} from 'vue';
 import Popup from '@/components/modal/Popup.vue';
 import Profile from './popup/Profile.vue';
+import SearchFriend from './popup/SearchFriend.vue';
 
 export default defineComponent({
     name: 'FriendList',
-    components: {Popup, Profile},
+    components: {Popup, Profile, SearchFriend},
     setup() {
         const isShow = ref(true);
         const listEle = ref<HTMLDivElement>();
@@ -88,6 +92,7 @@ export default defineComponent({
         const modalEle = ref<HTMLDivElement>();
 
         const isModalShow = ref(false);
+        const isSeachFriend = ref(false);
 
 
         onMounted(() => {
@@ -116,8 +121,12 @@ export default defineComponent({
           isModalShow.value = true;
         }
 
+        const searchFriendOnClick = () => {
+          isSeachFriend.value = true;
+        }
 
-        return {isShow, listEle, handleShowBtnOnclick,  modalEle, isModalShow, friendOnClick};
+
+        return {isShow, listEle, handleShowBtnOnclick,  modalEle, isModalShow, friendOnClick, searchFriendOnClick, isSeachFriend};
     }
 })
 </script>
