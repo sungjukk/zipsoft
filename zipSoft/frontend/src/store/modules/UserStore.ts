@@ -8,6 +8,8 @@ import jwt_decode from "jwt-decode";
 export interface User {
 	id : number;
 	name : string;
+	comment : string;
+	thumbnail : string;
 	token : string;
 }
 
@@ -16,7 +18,9 @@ export const UserStore : Module<User, Rootstate> = {
 	state: () => ({
 		id : 0,
 		name : '',
-		token : ''
+		token : '',
+		comment : '',
+		thumbnail : ''
 	} as User),
 	getters: {
         getUserName: (state:User) => state.name,

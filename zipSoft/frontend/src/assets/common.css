@@ -688,7 +688,6 @@ a {
 
 .friend-list-div {
     max-height: max-content;
-    transition: all 0.3s linear 0s;
     overflow: hidden;
 }
 
@@ -952,6 +951,25 @@ a {
     display: block;
 }
 
+.friend-enter-active {
+    animation: friendSliderUp 0.3s forwards;
+}
+
+.friend-leave-active {
+    animation: friendSliderDown 0.3s forwards;
+}
+
+.friend-list-not-found {
+    padding: 100px;
+}
+
+.friend-list-not-found p {
+    text-align: center;
+    font-size: 15px;
+    color: #5d5d5d;
+    font-weight: bold;
+}
+
 @media (max-width: 820px) {
     .container {
         padding-top: 60px;
@@ -1089,5 +1107,23 @@ a {
     }
     100% {
         transform: translateY(100%);
+    }
+}
+
+@keyframes friendSliderUp {
+    0% {
+        transform: translateY(-100%);
+    }
+    100% {
+        transform: translateY(0%);
+    }
+}
+
+@keyframes friendSliderDown {
+    0% {
+        transform: translateY(0%);
+    }
+    100% {
+        transform: translateY(-100%);
     }
 }
