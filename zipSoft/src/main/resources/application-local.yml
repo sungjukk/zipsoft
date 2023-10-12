@@ -35,6 +35,13 @@ spring:
         format_sql: true
         highlight_sql: true
 
+elasticsearch:
+  schema: http
+  host: localhost
+  port: 9200
+  username: elastic
+  password: 123456
+
 file:
   location: C:/zipsoft/upload
         
