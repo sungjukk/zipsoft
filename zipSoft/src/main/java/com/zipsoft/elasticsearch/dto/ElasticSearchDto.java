@@ -40,6 +40,11 @@ public class ElasticSearchDto {
 			return this;
 		}
 		
+		public Condition range(int min, int max) {
+			this.txt += this.field + ":" + "(>" + min + " AND " + "<" + max + ")";
+			return this;
+		}
+		
 		public Condition and() {
 			this.txt += " AND ";
 			return this;
