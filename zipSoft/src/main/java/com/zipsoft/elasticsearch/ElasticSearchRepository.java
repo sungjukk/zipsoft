@@ -2,6 +2,7 @@ package com.zipsoft.elasticsearch;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
 import java.util.Map;
 
 import org.apache.http.HttpEntity;
@@ -11,42 +12,36 @@ import org.apache.http.util.EntityUtils;
 import org.elasticsearch.client.Request;
 import org.elasticsearch.client.Response;
 import org.elasticsearch.client.RestClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.zipsoft.auth.dto.UserDto;
 import com.zipsoft.commons.utils.CommonUtil;
 import com.zipsoft.elasticsearch.dto.Document;
+import com.zipsoft.elasticsearch.dto.ElasticSearchDto;
 import com.zipsoft.elasticsearch.dto.ElasticSearchResultDto;
 
-import lombok.RequiredArgsConstructor;
-
 @Repository
-@RequiredArgsConstructor
 public abstract class ElasticSearchRepository<PK extends Serializable, T> {
 	
-	private final RestClient restClient;
+	@Autowired
+	private RestClient restClient;
 	
 	private final Class<T> preClass;
 	
-	public ElasticSearchResultDto search(String keyword) {
+	public ElasticSearchRepository(){
+		this.preClass =(Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[1];
+	}
+	
+	public ElasticSearchResultDto search(ElasticSearchDto search) {
 		
 		String index = this.getIndexName();
 		if ("".equals(index) || index == null) return null;
 		
-		String url = "/" + index + "_search";
-		String json = "";
+		String url = "/" + index + "/" + "_search";
 		
-		if (!"".equals(keyword) && keyword != null) {
-			json = """
-					{
-					    "query" :{
-					        "query_string" : {
-					            "query" : "user_name:""" + keyword + "\"";
-			
-			json +=	"} } }";
-		}
 		
-		String result = this.connectElasticSearch("GET", url, json);
+		
+		String result = this.connectElasticSearch("GET", url, search.toQueryString());
 		
 		if (result != null) {
 			ElasticSearchResultDto dto = CommonUtil.jsonToDtoGeneric(result, ElasticSearchResultDto.class, preClass);
@@ -57,7 +52,7 @@ public abstract class ElasticSearchRepository<PK extends Serializable, T> {
 		return null;
 	}
 	
-	public T getId(PK id) {
+	public T get(PK id) {
 		String index = this.getIndexName();
 		String type = this.getTypeName();
 		String url = "/" + index + "/" + type + "/" + id;
@@ -90,8 +85,6 @@ public abstract class ElasticSearchRepository<PK extends Serializable, T> {
 			
 			return result;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 		return null;
