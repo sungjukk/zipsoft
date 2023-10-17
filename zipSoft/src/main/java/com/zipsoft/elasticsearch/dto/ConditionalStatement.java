@@ -1,5 +1,7 @@
 package com.zipsoft.elasticsearch.dto;
 
+import com.zipsoft.elasticsearch.dto.ConditionalStatement.Builder;
+
 import lombok.Data;
 
 @Data
@@ -9,6 +11,10 @@ public class ConditionalStatement {
 	
 	public ConditionalStatement(String txt) {
 		this.txt = txt;
+	}
+
+	public static Builder builder() {
+		return new Builder();
 	}
 	
 	public static class Builder {
@@ -52,6 +58,6 @@ public class ConditionalStatement {
 		public ConditionalStatement Build() {
 			return new ConditionalStatement(this.txt);
 		}
-	};
-	
+	}
+
 }

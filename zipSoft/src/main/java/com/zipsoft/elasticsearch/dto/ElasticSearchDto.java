@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@Builder
 public class ElasticSearchDto {
 	
 	public enum SORT_TYPE {

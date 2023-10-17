@@ -37,7 +37,7 @@ public abstract class ElasticSearchRepository<PK extends Serializable, T> {
 		String index = this.getIndexName();
 		if ("".equals(index) || index == null) return null;
 		
-		String url = "/" + index + "/" + "_search";
+		String url = "/" + index + "/_search";
 		
 		
 		
