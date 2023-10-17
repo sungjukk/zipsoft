@@ -21,7 +21,7 @@
         <FriendList :friendList="friendList" @friendOnClick="friendOnClick" />
   </div>
   <Popup v-model:isShow="isModalShow">
-    <Profile />
+    <Profile :profileId="profileId" />
   </Popup>
   <Popup v-model:isShow="isSeachFriend">
     <SearchFriend @friendBtnOnclick="friendOnClick" />
@@ -50,6 +50,7 @@ export default defineComponent({
         const isSeachFriend = ref(false);
         const {proxy} = getCurrentInstance() as any;
         const friendList = ref<Array<FRIEND>>([]);
+        const profileId = ref(0);
 
 
         onMounted(async () => {
@@ -87,7 +88,8 @@ export default defineComponent({
         }
 
         const friendOnClick = (userId : number) => {
-          console.log(userId);
+          console.log('userId' + userId);
+          profileId.value = userId;
           isModalShow.value = true;
         }
 
@@ -96,7 +98,7 @@ export default defineComponent({
         }
 
 
-        return {modalEle, isModalShow, friendOnClick, searchFriendOnClick, isSeachFriend, friendList, errorImg};
+        return {modalEle, isModalShow, friendOnClick, searchFriendOnClick, isSeachFriend, friendList, errorImg, profileId};
     }
 })
 </script>

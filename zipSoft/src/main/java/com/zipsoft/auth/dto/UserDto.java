@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(indexName = "chosung_test")
+@Document(indexName = "test_chosung_data")
 public class UserDto implements Serializable {
 	private long id;
 	private String userId;

@@ -1,6 +1,8 @@
 package com.zipsoft.elasticsearch.dto;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
@@ -21,6 +23,16 @@ public class ElasticSearchResultDto<T> {
     @JsonProperty("_shards")
     private ShardsDto shards;
     private HitsDto<T> hits;
+    private List<T> items;
+    
+    public List<T> getItems() {
+    	if (this.hits != null) {
+    		if (this.hits.hits != null && !this.hits.hits.isEmpty()) {
+    			return this.hits.hits.stream().map(s -> s.getSource()).collect(Collectors.toList());    			
+    		}
+    	}
+    	return new ArrayList<>();
+    }
 
     @Data
     @NoArgsConstructor

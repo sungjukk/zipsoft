@@ -42,4 +42,6 @@ public class FriendRepository {
 		
 		return list;
 	}
+	
+	
 }

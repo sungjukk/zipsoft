@@ -23,14 +23,8 @@ public class ElasticSearchDto {
 	private int page;
 	private int from;
 	private int size;
-	private List<Sort> sorts;
+	private List<Sort> sorts = new ArrayList<Sort>();
 	private ConditionalStatement asd;
-	
-	public ElasticSearchDto() {
-		this.page = 0;
-		this.size = 0;
-		this.sorts = new ArrayList<>();
-	}
 	
 	public void sort(String field) {
 		sorts.add(new Sort(field, SORT_TYPE.ASC));
@@ -50,7 +44,7 @@ public class ElasticSearchDto {
 			json += (!json.equals("{") ? "," : "") + "\"size\" : " + this.size;
 		}
 		
-		if (!this.sorts.isEmpty()) {
+		if (this.sorts != null && !this.sorts.isEmpty()) {
 			JSONArray arr = new JSONArray();
 			for (Sort s : sorts) {
 				JSONObject sObj = new JSONObject();

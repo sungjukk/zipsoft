@@ -20,12 +20,17 @@
     </div>
 </template>
 <script lang="ts">
-import {defineComponent} from 'vue';
+import {defineComponent, onMounted} from 'vue';
 
 export default defineComponent({
     name : 'Profile',
-    setup() {
-
+    props: {
+      profileId : {type: Number}
+    },
+    setup(props) {
+        onMounted(() => {
+            
+        })
     }
 })
 </script>
