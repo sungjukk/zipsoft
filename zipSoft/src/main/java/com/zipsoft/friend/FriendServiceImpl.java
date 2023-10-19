@@ -10,6 +10,9 @@ import com.zipsoft.elasticsearch.dto.ConditionalStatement;
 import com.zipsoft.elasticsearch.dto.ElasticSearchDto;
 import com.zipsoft.elasticsearch.dto.ElasticSearchResultDto;
 import com.zipsoft.friend.dto.FriendDto;
+import com.zipsoft.friend.dto.ProfileDto;
+import com.zipsoft.model.entity.Friends;
+import com.zipsoft.model.entity.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,7 +36,7 @@ public class FriendServiceImpl implements FriendService {
 		
 		ConditionalStatement con = ConditionalStatement.builder().field("user_name").eq(userName)
 																 .and()
-																 .field("userId").ne(String.valueOf(99))
+																 .field("id").ne(String.valueOf(userId))
 																 .Build();
 		
 		ElasticSearchDto search = ElasticSearchDto.builder().asd(con).build();
@@ -43,9 +46,13 @@ public class FriendServiceImpl implements FriendService {
 	}
 
 	@Override
-	public FriendDto detail(long userId) {
-		// TODO Auto-generated method stub
-		return null;
+	public ProfileDto userProfile(long userId, long searchId) {
+		return friendRepository.searchFriend(userId, searchId);
+	}
+
+	@Override
+	public void addFriend(long userId, long friendId) {
+		friendRepository.addFriend(userId, friendId);
 	}
 
 }

@@ -7,9 +7,13 @@ import org.springframework.stereotype.Repository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.zipsoft.chat.dto.ChatRoomDto;
 import com.zipsoft.chat.dto.ChatRoomMemberDto;
+import com.zipsoft.model.entity.ChatRoom;
+import com.zipsoft.model.entity.ChatRoomMember;
 import com.zipsoft.model.entity.QChatRoom;
 import com.zipsoft.model.entity.QChatRoomMember;
 import com.zipsoft.model.entity.QUser;
@@ -99,5 +103,37 @@ public class ChatRepository {
 		}
 		
 		entityManager.flush();
+	}
+	
+	public ChatRoom insertChatRoom(ChatRoom room) {
+		entityManager.persist(room);
+		entityManager.flush();
+		return room;
+	}
+	
+	public void insertChatRoomMember(ChatRoomMember member) {
+		entityManager.persist(member);
+		entityManager.flush();
+	}
+	
+	public String chatRoomDupCheck(List<Long> ids) {
+		
+		List<String> chatIds =jpaQueryFactory.select(chatRoomMember.chatRoom.id)
+											 .from(chatRoomMember)
+											 .where(chatRoomMember.userId.in(ids))
+											 .groupBy(chatRoomMember.chatRoom.id)
+											 .having(chatRoomMember.chatRoom.id.count().eq((long) ids.size())).fetch();
+		
+		if (chatIds == null || chatIds.isEmpty()) return null;
+		
+		String chatId = jpaQueryFactory.select(chatRoomMember.chatRoom.id)
+									   .from(chatRoomMember)
+									   .where(chatRoomMember.chatRoom.id.in(chatIds))
+									   .groupBy(chatRoomMember.chatRoom.id)
+									   .having(chatRoomMember.chatRoom.id.count().eq((long) ids.size())).fetchOne();
+		
+		
+		return chatId;
+		
 	}
 }

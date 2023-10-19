@@ -2,16 +2,21 @@ package com.zipsoft.chat;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.zipsoft.auth.dto.UserDto;
 import com.zipsoft.chat.dto.ChatMessageDto;
 import com.zipsoft.chat.dto.ChatRoomDetailDto;
 import com.zipsoft.chat.dto.ChatRoomDto;
 import com.zipsoft.chat.dto.ChatRoomMemberDto;
 import com.zipsoft.commons.utils.CustomPageRequest;
+import com.zipsoft.model.entity.ChatRoom;
+import com.zipsoft.model.entity.ChatRoomMember;
 import com.zipsoft.model.mongo.ChatMessage;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -83,6 +88,37 @@ public class ChatServiceImpl implements ChatService {
 		
 		
 		return msgDtoList;
+	}
+
+	@Override
+	@Transactional
+	public String ChatRoomInsert(ChatRoomDto chatRoom, long userId) {
+		
+		if (chatRoom.getMemberList() != null && chatRoom.getMemberList().size() > 0) {
+			List<Long> ids = chatRoom.getMemberList().stream().map(m -> m.getUserId()).collect(Collectors.toList());
+			
+			String chatId = chatRepository.chatRoomDupCheck(ids);
+			if (!"".equals(chatId) && chatId != null) return chatId;
+			
+			ChatRoom room = ChatRoom.builder().regId(userId).updateId(userId).title(chatRoom.getTitle()).build();
+			room = chatRepository.insertChatRoom(room);
+			
+			for (ChatRoomMemberDto dto : chatRoom.getMemberList()) {
+				this.initChatMember(dto, room);
+			}
+			
+			return room.getId();
+			
+		} else {
+			return null;
+		}
+		
+		
+	}
+	
+	private void initChatMember(ChatRoomMemberDto dto, ChatRoom room) {
+		dto.setChatId(room.getId());
+		chatRepository.insertChatRoomMember(dto.convertEntity());
 	}
 
 

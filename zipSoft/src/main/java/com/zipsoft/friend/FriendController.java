@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,8 +35,14 @@ public class FriendController {
 		return ApiResponse.OK(userList);
 	}
 	
-	@GetMapping("{userId}")
-	public ApiResponse detail(@AuthenticationPrincipal UserPrincipal user, @PathVariable long userId) {
+	@GetMapping("{searchId}")
+	public ApiResponse userProfile(@AuthenticationPrincipal UserPrincipal user, @PathVariable long searchId) {
+		return ApiResponse.OK(friendService.userProfile(user.getUserId(), searchId));
+	}
+	
+	@PostMapping("/add/{friendId}")
+	public ApiResponse addFriend(@AuthenticationPrincipal UserPrincipal user, @PathVariable long friendId) {
+		friendService.addFriend(user.getUserId(), friendId);
 		return ApiResponse.OK(null);
 	}
 	

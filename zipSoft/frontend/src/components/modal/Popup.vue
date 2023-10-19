@@ -22,7 +22,7 @@ export default defineComponent({
     emits: ['update:isShow'],
     setup(props, ctx) {
         const modalEle = ref<HTMLDivElement>();
-        const zIndex = ref('10000');
+        const zIndex = ref('9000');
 
         watch(props, (value : any) => {
             const {isShow} = value;

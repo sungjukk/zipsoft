@@ -65,15 +65,6 @@ export default defineComponent({
             const {data} = res;
             if (data) friendList.value = data;
 
-            friendList.value = [{
-              id : 1,
-              userId : 1,
-              userName : '',
-              friendId : 2,
-              friendName : '테스터2',
-              comment : '리니지m',
-              acceptYn : 'Y'
-            }];
 
           } else {
             proxy.$alert('친구 목록을 가져오는 중 오류가 발생하였습니다.');

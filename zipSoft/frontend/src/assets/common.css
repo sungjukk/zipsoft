@@ -796,7 +796,7 @@ a {
     width: 100%;
     height: 100%;
     background-color: #373737;
-    z-index: 9999;
+    z-index: 8000;
     opacity: 0.5;
 }
 
@@ -863,6 +863,7 @@ a {
     padding: 0;
     margin: 0;
     list-style: none;
+    gap : 20px;
 }
 
 .popup-profile-menu a {

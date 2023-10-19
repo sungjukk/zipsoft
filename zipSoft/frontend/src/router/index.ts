@@ -55,7 +55,7 @@ export const routes = [
     name: '친구',
     component: FriendListSection,
     meta : {
-      unauthorized: true,
+      unauthorized: false,
       isShow: true,
       mobileIcon: 'bi-people-fill',
       id: 1,
