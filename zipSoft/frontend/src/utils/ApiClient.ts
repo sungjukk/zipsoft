@@ -30,7 +30,6 @@ const instance = axios.create({
 
 
 instance.interceptors.request.use(config => {
-	console.log(process.env.VUE_APP_API_URL);
 	const accessToken = sessionStorage.getItem('authorization');
 	//config.headers['Content-Type'] = 'application/json';
 	if (accessToken) config.headers['Authorization'] = `Bearer ${accessToken}`;
@@ -207,7 +206,6 @@ const republicToken =  async () => {
 		const data : ApiResponse = res.data;
 		console.log('republicToken',data.result);
 		if (data.result == HTTP_STATUS.OK) {
-			console.log('republicToken','성공');
 			store.commit('UserStore/currentUser', data.data);
 			return true;
 		} else {

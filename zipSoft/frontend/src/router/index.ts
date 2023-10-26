@@ -10,6 +10,8 @@ import ChatRoomSection from '@/views/chat/ChatRoomSerction.vue';
 
 import FriendListSection from '@/views/friend/FriendListSection.vue';
 
+import MemberEditSection from '@/views/member/MemberEditSection.vue';
+
 import Login from '@/views/login/Login.vue'
 import store from '@/store/index';
 
@@ -33,7 +35,8 @@ export enum RouteUrl  {
   BOARD_EDIT = '/board/:id/edit',
   CHAT_LIST = '/chat',
   CHAT_ROOM = '/chat/:id',
-  FRIEND_LIST = '/friend'
+  FRIEND_LIST = '/friend',
+  MEMBER_EDIT = '/member/:id'
 }
 
 export const routes = [
@@ -161,7 +164,19 @@ export const routes = [
       parentId: 8,
       order: 0
     }
-  }
+  },
+  {
+    path: RouteUrl.MEMBER_EDIT,
+    name: '회원정보수정',
+    component: MemberEditSection,
+    meta : {
+      unauthorized: false,
+      isShow: false,
+      id: 10,
+      parentId: -2,
+      order: 0
+    }
+  },
 ] as Array<MenuDef>;
 
 const router = createRouter({
@@ -171,12 +186,14 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   const {meta : {unauthorized}} = to;
-  if (!unauthorized) {
-    const isSucc = await store.dispatch('UserStore/loginCheck');
-    if (!isSucc) {
-      return next({path : RouteUrl.LOGIN});
-    }
+  const isSucc = await store.dispatch('UserStore/loginCheck');
+
+  if (!isSucc && !unauthorized) {
+    return next({path : RouteUrl.LOGIN});
+  } else if (!isSucc) {
+    
   }
+
   next();
 
   //return next({ path: "/login" });

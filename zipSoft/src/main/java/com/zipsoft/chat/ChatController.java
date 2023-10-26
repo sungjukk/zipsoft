@@ -28,6 +28,11 @@ public class ChatController {
 	
 	private final ChatService chatService;
 	
+	@GetMapping
+	public ApiResponse list(@AuthenticationPrincipal UserPrincipal user) {
+		return ApiResponse.OK(chatService.list(user.getUserId()));
+	}
+	
 	@PostMapping("/add")
 	public ApiResponse insert(@AuthenticationPrincipal UserPrincipal user, @RequestBody ChatRoomDto dto) {
 		

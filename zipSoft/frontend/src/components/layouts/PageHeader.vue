@@ -16,8 +16,7 @@
 						<span >{{$store.state.UserStore.name}}님 </span>
 						</a>
 						<ul class="dropdown-menu">
-							<li><a class="dropdown-item" href="#">Action</a></li>
-							<li><a class="dropdown-item" href="#">Another action</a></li>
+							<li><router-link class="dropdown-item" :to="`${RouteUrl.MEMBER_EDIT.replace(':id',$store.state.UserStore.id)}`">회원정보수정</router-link></li>
 							<li><hr class="dropdown-divider"></li>
 							<li><a class="dropdown-item" href="#" @click="logout">로그아웃</a></li>
 						</ul>

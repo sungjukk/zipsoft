@@ -17,6 +17,7 @@ public class ChatRoomDto implements Serializable {
 	private String id;
 	private String title;
 	private String lastMessage;
+	private String sendDate;  //보낸날짜
 	private int noReadCnt;
 	private List<ChatRoomMemberDto> memberList;
 	

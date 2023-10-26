@@ -9,7 +9,7 @@ import {defineComponent} from 'vue';
 export interface ChatRoom {
   id : String;
   title : String;
-  message : String;
+  lastMessage : String;
   sendDate : String;
   noReadCnt : number;
 }

@@ -14,4 +14,8 @@ public interface AuthService  {
 	void removeUserCache(long id);
 	
 	void insertUser(LoginDto dto);
+	
+	void updateDeviceToken(long id, String deviceToken);
+	
+	void removeDeviceToken(long id);
 }

@@ -2,14 +2,6 @@ import {createApp} from 'vue';
 import AlertComponent from '@/components/modal/AlertComponent.vue';
 import LoadingBar from '@/components/modal/LoadingBar.vue';
 
-declare module '@vue/runtime-core' {
-  interface ComponentCustomProperties {
-    $alert:any,
-    $confirm:any,
-    $loadingBar:any
-  }
-}
-
 const Alert = {
     install : (app:any) => {
         const instance:any = createApp({extends: AlertComponent}).mount(document.createElement('div'));

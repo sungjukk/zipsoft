@@ -61,7 +61,6 @@ const detail = ref<BoardDetail>({
 });
 
 onMounted(async () => {
-    console.log('onMounted');
     await callApiBoardDetail();
 })
 

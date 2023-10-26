@@ -4,7 +4,9 @@
 
         </div>
         <div class="popup-profile-info">
-            <img src="@/assets/img/empty-user.png" />
+            <div class="popup-img profile-div">
+                <img :src="user.thumbnail" @error="errorImg" />
+            </div>
             <p>{{user.userName}}</p>
         </div>
         <div class="popup-profile-footer">
@@ -32,11 +34,13 @@ export interface PROFILE {
     userName : string,
     email: string,
     comment : string,
+    thumbnail : string,
     friendReq : boolean
 }
 
 import {defineComponent, onMounted, ref, getCurrentInstance} from 'vue';
 import {callGetApi, callPostApi, HTTP_STATUS} from '@/utils/ApiClient';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
     name : 'Profile',
@@ -45,13 +49,15 @@ export default defineComponent({
     },
     setup(props) {
         const {proxy} = getCurrentInstance() as any;
+        const router = useRouter();
         const user = ref<PROFILE>({
             id: 0,
             userId : '',
             userName : '',
             email: '',
             comment : '',
-            friendReq : false
+            friendReq : false,
+            thumbnail : ''
         });
         const callApiUserProfile = async () => {
             const res = await callGetApi(`/friend/${props.profileId}`);
@@ -77,7 +83,12 @@ export default defineComponent({
                 }]
             };
             const res = await callPostApi(`/chat/add`, data);
-            console.log(res);
+            if (res.result === HTTP_STATUS.OK) {
+                router.push(`/chat/${res.data}`);
+            } else {
+                proxy.$alert("채팅방 이동 중 오류가 발생하였습니다.");
+                return false;
+            }
         }
 
         const friendAddBtnOnClick = async () => {
@@ -97,11 +108,16 @@ export default defineComponent({
 
         }
 
+        const errorImg = (e : any) => {
+          e.target.src = require('@/assets/img/user.png');
+          e.target.style.width = '40px';
+        }
+
         onMounted(async () => {
             await callApiUserProfile();
         })
 
-        return {user, friendAddBtnOnClick, chatBtnOnClick}
+        return {user, friendAddBtnOnClick, chatBtnOnClick, errorImg}
     }
 })
 </script>

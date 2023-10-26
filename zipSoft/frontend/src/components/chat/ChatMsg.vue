@@ -5,7 +5,11 @@
         </div>
     </div>
     <div v-else :class="isUser ? 'outgoing_msg' : 'incoming_msg'">
-        <div v-if="!isUser" class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+        <div v-if="!isUser" class="incoming_msg_img"> 
+            <div class="profile-div">
+                <img :src="message.message" alt="sunil" @error="errorImg"> 
+            </div>
+        </div>
         <div v-if="isUser" class="sent_msg">
             <div class="time_date">
                 <span v-if="message.noReadCnt > 0">{{message.noReadCnt}}</span>
@@ -51,5 +55,10 @@ const userName = computed(() => {
     if (member) return member?.userName;
     else "알수없음";
 });
+
+const errorImg = (e : any) => {
+    e.target.src = require('@/assets/img/user.png');
+    e.target.style.width = '15px';
+}
 
 </script>

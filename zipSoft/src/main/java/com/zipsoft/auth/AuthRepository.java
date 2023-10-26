@@ -51,4 +51,14 @@ public class AuthRepository {
 		return user.getId();
 	}
 	
+	@Transactional
+	public void updateDeviceToken(long id, String deviceToken) {
+		jpaQueryFactory.update(user).set(user.deviceToken, "").where(user.deviceToken.eq(deviceToken)).execute();
+		jpaQueryFactory.update(user).set(user.deviceToken, deviceToken).where(user.id.eq(id)).execute();
+	}
+	
+	public void removeDeviceToken(long id) {
+		jpaQueryFactory.update(user).set(user.deviceToken, "").where(user.id.eq(id)).execute();
+	}
+	
 }

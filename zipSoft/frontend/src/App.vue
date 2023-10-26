@@ -12,6 +12,12 @@ export default defineComponent({
   name: 'App',
   components: {
     IndexLayout
+  },
+  created() {
+    this.$push.init();
+    this.$push.getToken((token : string) => {
+      this.$store.state.UserStore.deviceToken = token;
+    });
   }
 })
 

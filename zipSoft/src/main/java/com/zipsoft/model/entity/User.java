@@ -53,6 +53,9 @@ public class User extends Base {
 	@Column 
     private long updateId; // reg_id 등록자 아이디 VARCHAR(24) NOT NULL
 	
+	@Column
+	private String deviceToken;	// fcm 토큰
+	
 	
 	@PrePersist
     public void prePersist() {

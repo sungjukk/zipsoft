@@ -33,6 +33,8 @@ public class ChatRoomMemberDto implements Serializable {
 	
 	private String isActive = "N";
 	
+	private String deviceToken;
+	
 	public ChatRoomMember convertEntity() {
 		
 		if (this.chatId == null || "".equals(this.chatId)) return null;

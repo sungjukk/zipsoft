@@ -11,6 +11,8 @@ import com.zipsoft.model.mongo.ChatMessage;
 
 public interface ChatService {
 	
+	public List<ChatRoomDto> list(long userId);
+	
 	public List<ChatRoomMemberDto> getChatRoomMemberList(String chatId, String isActive);
 	
 	public void updateChatRoomActive(ChatRoomMemberDto dto);

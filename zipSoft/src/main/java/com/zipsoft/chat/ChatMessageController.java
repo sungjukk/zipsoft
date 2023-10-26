@@ -7,9 +7,11 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -25,6 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.zipsoft.chat.dto.ChatMessageDto;
 import com.zipsoft.chat.dto.ChatRoomMemberDto;
 import com.zipsoft.commons.security.UserPrincipal;
+import com.zipsoft.push.PushService;
+import com.zipsoft.push.dto.PushDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +45,8 @@ public class ChatMessageController {
 	private final ChatRoomService chatRoomService;
 	
 	private final ChatRepository chatRepository;
+	
+	private final PushService pushService;
 	
 	@MessageMapping("/chat/send")
 	public void enterUser(@Payload ChatMessageDto dto, Message<?> message) {
@@ -80,13 +86,32 @@ public class ChatMessageController {
 		
 		if (mberList != null && mberList.size() > 0) {
 			
+			List<String> tokenList = new ArrayList<String>();
+			int noReadCnt = 0;
+			
 			for (ChatRoomMemberDto mber : mberList) {
 				if ("N".equals(mber.getIsActive())) {
 					mber.setNoReadCnt(mber.getNoReadCnt() + 1);
-					dto.setNoReadCnt(dto.getNoReadCnt() + 1);
-					template.convertAndSend("/topic/" + mber.getUserId(), dto);					
+					noReadCnt++;
+					
+					if (mber.getDeviceToken() != null && !"".equals(mber.getDeviceToken())) tokenList.add(mber.getDeviceToken());
+					
+					//template.convertAndSend("/topic/" + mber.getUserId(), dto);
 				}
 			}
+			
+			dto.setNoReadCnt(noReadCnt);
+			
+			// 없는 사용자들에게 push 전송
+			if (!tokenList.isEmpty()) {
+				PushDto<ChatMessageDto> pushDto = new PushDto<ChatMessageDto>();
+				pushDto.setPushDto(dto);
+				pushDto.setTokenList(tokenList);
+				
+				pushService.sendPush(pushDto);
+			}
+			
+			
 			
 			chatRoomService.setChatRoomMember(dto.getId(), mberList);
 		}

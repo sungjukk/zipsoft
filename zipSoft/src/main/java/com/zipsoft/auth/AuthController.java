@@ -52,6 +52,8 @@ public class AuthController {
 			auth = authService.authenticate(dto.getUserId(), dto.getPassword());
 			UserPrincipal user = (UserPrincipal) auth.getPrincipal();
 			
+			authService.updateDeviceToken(user.getUserId(), dto.getDeviceToken());
+			
 			TokenVo tokenVo = TokenVo.builder()
 									 .accessToken(tokenProvider.generateToken(user))
 									 .refreshToken(tokenProvider.generateRefreshToken(user, res))
@@ -91,6 +93,7 @@ public class AuthController {
 			Object auth = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			if (auth != null) {
 				UserPrincipal user = (UserPrincipal) auth;
+				authService.removeDeviceToken(user.getUserId());
 				authService.removeUserCache(user.getUserId());
 			}
 		} catch (Exception e) {

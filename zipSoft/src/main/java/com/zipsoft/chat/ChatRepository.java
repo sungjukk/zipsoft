@@ -67,7 +67,8 @@ public class ChatRepository {
 														  ,chatRoomMember.noReadCnt
 														  ,user.userName
 														  ,chatRoomMember.isFirst
-														  ,chatRoomMember.userId))
+														  ,chatRoomMember.userId
+														  ,user.deviceToken))
 				              .from(chatRoomMember)
 				              .join(user).on(chatRoomMember.userId.eq(user.id))
 				              .where(builder)
@@ -135,5 +136,18 @@ public class ChatRepository {
 		
 		return chatId;
 		
+	}
+	
+	public List<ChatRoomDto> list(long userId) {
+		List<ChatRoomDto> list = jpaQueryFactory.select(Projections.fields(ChatRoomDto.class
+																			,chatRoom.id
+																			,chatRoomMember.noReadCnt))
+												.from(chatRoom)
+												.innerJoin(chatRoomMember)
+												.on(chatRoom.id.eq(chatRoomMember.chatRoom.id), chatRoomMember.userId.eq(userId))
+												.fetch();
+		
+		
+		return list;
 	}
 }

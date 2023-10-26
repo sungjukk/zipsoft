@@ -32,6 +32,31 @@ public class ChatServiceImpl implements ChatService {
 	private final ChatRoomService chatRoomService;
 	
 	@Override
+	public List<ChatRoomDto> list(long userId) {
+		List<ChatRoomDto> list = chatRepository.list(userId);
+		
+		for (ChatRoomDto dto : list) {
+			ChatMessage msg = chatMsgRepository.findFirstByChatId(dto.getId());
+			dto.setLastMessage(msg.getMessage());
+			dto.setSendDate(msg.getSendDate());
+			
+			List<ChatRoomMemberDto> memberList = chatRoomService.getChatRoomMember(dto.getId());
+			
+			if (memberList == null) {
+				memberList = chatRepository.getChatRoomMemberList(dto.getId(), null);				
+			} else { 
+				int cnt = memberList.stream().filter(m -> m.getUserId() == userId).map(m -> m.getNoReadCnt()).findFirst().orElse(0);
+				dto.setNoReadCnt(cnt);				
+			}
+			
+			dto.setMemberList(memberList);
+			dto.setTitle(userId);
+		}
+		
+		return list;
+	}
+	
+	@Override
 	public List<ChatRoomMemberDto> getChatRoomMemberList(String chatId, String isActive) {
 		return chatRepository.getChatRoomMemberList(chatId, isActive);
 	}
@@ -120,6 +145,5 @@ public class ChatServiceImpl implements ChatService {
 		dto.setChatId(room.getId());
 		chatRepository.insertChatRoomMember(dto.convertEntity());
 	}
-
 
 }

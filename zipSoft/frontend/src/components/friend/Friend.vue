@@ -4,7 +4,7 @@
             <li>
                 <div class="my-profile-row">
                     <div class="friend-row">
-                        <div class="my-profile-img">
+                        <div class="my-profile-img profile-div">
                           <img :src="$store.state.UserStore.thumbnail" @error="errorImg" />
                         </div>
                         <div class="profile-txt">
@@ -75,7 +75,8 @@ export default defineComponent({
         }
 
         const errorImg = (e : any) => {
-          e.target.src = require('@/assets/img/empty-user.png');
+          e.target.src = require('@/assets/img/user.png');
+          e.target.style.width = '30px';
         }
 
         const friendOnClick = (userId : number) => {

@@ -63,6 +63,16 @@ public class AuthServiceImpl implements AuthService {
 						.build();
 		authRepository.insert(user);
 	}
+
+	@Override
+	public void updateDeviceToken(long id, String deviceToken) {
+		authRepository.updateDeviceToken(id, deviceToken);
+	}
+
+	@Override
+	public void removeDeviceToken(long id) {
+		authRepository.removeDeviceToken(id);
+	}
 	
 	
 

@@ -11,6 +11,7 @@ export interface User {
 	comment : string;
 	thumbnail : string;
 	token : string;
+	deviceToken : string;
 }
 
 export const UserStore : Module<User, Rootstate> = {
@@ -20,7 +21,8 @@ export const UserStore : Module<User, Rootstate> = {
 		name : '',
 		token : '',
 		comment : '',
-		thumbnail : ''
+		thumbnail : '',
+		deviceToken: ''
 	} as User),
 	getters: {
         getUserName: (state:User) => state.name,
@@ -49,8 +51,12 @@ export const UserStore : Module<User, Rootstate> = {
 		}
     },
     actions: {
-        login: async ({commit}, payload:any) => {
-			const res = await callPostApi('/auth/login',payload);
+        login: async ({commit, state}, payload:any) => {
+			const params = {
+				...payload,
+				deviceToken : state.deviceToken
+			};
+			const res = await callPostApi('/auth/login',params);
 			if (res.result == HTTP_STATUS.OK) {
 				commit('currentUser', res.data);
 				globals.$socket.connect(0).then(() => {}).catch(() => {});
