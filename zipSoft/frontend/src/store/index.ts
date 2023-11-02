@@ -1,10 +1,10 @@
 import { createStore } from 'vuex';
 import { Store } from 'vuex'
-import {UserStore, User} from './modules/UserStore';
+import {UserStore, USER} from './modules/UserStore';
 import { MenuStore, Menu } from './modules/MenuStore';
 
 export interface Rootstate {
-	UserStore: User;
+	UserStore: USER;
   MenuStore: Menu;
 }
 

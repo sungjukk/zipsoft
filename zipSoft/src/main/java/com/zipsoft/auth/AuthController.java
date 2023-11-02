@@ -79,6 +79,18 @@ public class AuthController {
 		return ApiResponse.OK(tokenVo);
 	}
 	
+	@GetMapping("updateToken")
+	public ApiResponse updateTokenInfo(@AuthenticationPrincipal UserPrincipal user) {
+		
+		UserDto dto = authService.findById(user.getUserId());
+		
+		TokenVo tokenVo = TokenVo.builder()
+				 .accessToken(tokenProvider.generateToken(new UserPrincipal(dto)))
+				 .grantType(Constants.TOKEN_GRANT)
+				 .build();
+		return ApiResponse.OK(tokenVo);
+	}
+	
 	@GetMapping("ping")
 	public ApiResponse ping(@AuthenticationPrincipal UserPrincipal user) {
 		return ApiResponse.OK(null);

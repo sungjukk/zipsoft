@@ -1,5 +1,9 @@
 package com.zipsoft.commons.utils;
 
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -9,6 +13,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
+
+import javax.imageio.ImageIO;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
@@ -127,6 +133,39 @@ public class FileUtil {
 			return true;
 		} catch (IOException e) {
 			return false;
+		}
+	}
+	
+	public static FileDto resizeImage(MultipartFile m, FilePath filePath, int width) {
+		if (m == null || m.isEmpty()) return null;
+		
+		try {
+			
+			BufferedImage bufferedImage = ImageIO.read(m.getInputStream());
+			
+			if (width >= bufferedImage.getWidth()) return null;
+			
+			double ratio = (double) width / bufferedImage.getWidth();
+			int height = (int) (bufferedImage.getHeight() * ratio);
+			
+			BufferedImage canvas = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+			Graphics graphics = canvas.getGraphics();
+			graphics.drawImage(bufferedImage.getScaledInstance(width, height, Image.SCALE_SMOOTH),0,0,null);
+			graphics.dispose();
+			
+			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+			
+			String orgFileName = m.getOriginalFilename();
+			String extension = orgFileName.substring(orgFileName.lastIndexOf(".") + 1);
+	        ImageIO.write(canvas, extension, byteArrayOutputStream);  
+	        
+	        return FileUtil.upload(ResizeImage.of(byteArrayOutputStream.toByteArray(), orgFileName), filePath);
+			
+			
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 	

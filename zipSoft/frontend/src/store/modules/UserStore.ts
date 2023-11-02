@@ -5,7 +5,7 @@ import {callPostApi, callGetApi, HTTP_STATUS} from '@/utils/ApiClient';
 import router, {RouteUrl} from '@/router/index';
 import jwt_decode from "jwt-decode";
 
-export interface User {
+export interface USER {
 	id : number;
 	name : string;
 	comment : string;
@@ -14,7 +14,7 @@ export interface User {
 	deviceToken : string;
 }
 
-export const UserStore : Module<User, Rootstate> = {
+export const UserStore : Module<USER, Rootstate> = {
 	namespaced: true,
 	state: () => ({
 		id : 0,
@@ -23,14 +23,14 @@ export const UserStore : Module<User, Rootstate> = {
 		comment : '',
 		thumbnail : '',
 		deviceToken: ''
-	} as User),
+	} as USER),
 	getters: {
-        getUserName: (state:User) => state.name,
-        getUserId: (state:User) => state.id,
-        isLogin: (state:User) => {return state.id != 0}
+        getUserName: (state:USER) => state.name,
+        getUserId: (state:USER) => state.id,
+        isLogin: (state:USER) => {return state.id != 0}
     },
     mutations: {
-        currentUser: (state:User, payload:any) => {
+        currentUser: (state:USER, payload:any) => {
             
            if (!payload) return false;
            /*
@@ -43,7 +43,7 @@ export const UserStore : Module<User, Rootstate> = {
            state.name = decode.name;
            sessionStorage.setItem('authorization', payload.accessToken);
         },
-        removeUser: (state:User) => {
+        removeUser: (state:USER) => {
 			state.token = '';
 			state.id = 0;
 			state.name = '';
@@ -59,7 +59,6 @@ export const UserStore : Module<User, Rootstate> = {
 			const res = await callPostApi('/auth/login',params);
 			if (res.result == HTTP_STATUS.OK) {
 				commit('currentUser', res.data);
-				globals.$socket.connect(0).then(() => {}).catch(() => {});
 				router.push(RouteUrl.ABOUT);
 			} else {
 				globals.$alert(res.msg);
@@ -76,21 +75,19 @@ export const UserStore : Module<User, Rootstate> = {
 					commit('currentUser', {accessToken});				
 				}
 
-				if (!globals.$socket.isConnected()) globals.$socket.connect(0).then(() => {}).catch(() => {});
-
 				return true;
 			} else {
 				return false;
 				//commit('removeUser');
 			}
 		},
-		republishToken: async({commit}, payload:any) =>{
+		updateTokenInfo: async({commit}, payload:any) =>{
 			
 			const token = sessionStorage.getItem('authorization');
 			
 			if (!token) return false;
 			
-			const res = await callGetApi('/auth/republishToken',payload);
+			const res = await callGetApi('/auth/updateToken',payload);
 			if (res.result == HTTP_STATUS.OK) {
 				commit('currentUser', res.data);
 				console.log('commit');

@@ -2,11 +2,9 @@
     <div>
         <ul class="my-profile">
             <li>
-                <div class="my-profile-row">
+                <div class="my-profile-row" @click="myProfileOnClick">
                     <div class="friend-row">
-                        <div class="my-profile-img profile-div">
-                          <img :src="$store.state.UserStore.thumbnail" @error="errorImg" />
-                        </div>
+                        <Thumbnail :size="65" :id="$store.state.UserStore.id" />
                         <div class="profile-txt">
                         <span>{{$store.state.UserStore.name}}</span>
                         <p v-if="$store.state.UserStore.comment">집에 가고 싶다...</p>
@@ -35,14 +33,14 @@ import Popup from '@/components/modal/Popup.vue';
 import Profile from './popup/Profile.vue';
 import SearchFriend from './popup/SearchFriend.vue';
 import FriendList from './FriendList.vue';
+import Thumbnail from '@/components/layouts/Thumbnail.vue';
 import {callGetApi, HTTP_STATUS} from '@/utils/ApiClient';
 import {FRIEND} from '@/views/friend/FriendListSection.vue';
 
 export default defineComponent({
     name: 'Friend',
-    components: {Popup, Profile, SearchFriend, FriendList},
+    components: {Popup, Profile, SearchFriend, FriendList, Thumbnail},
     setup() {
-
         const store = useStore();
         const modalEle = ref<HTMLDivElement>();
 
@@ -74,23 +72,24 @@ export default defineComponent({
           console.log(res);
         }
 
-        const errorImg = (e : any) => {
-          e.target.src = require('@/assets/img/user.png');
-          e.target.style.width = '30px';
-        }
-
         const friendOnClick = (userId : number) => {
-          console.log('userId' + userId);
           profileId.value = userId;
           isModalShow.value = true;
         }
 
-        const searchFriendOnClick = () => {
+        const searchFriendOnClick = (e : any) => {
+          e.stopPropagation();
+          console.log('searchFriendOnClick');
           isSeachFriend.value = true;
         }
 
+        const myProfileOnClick = () => {
+          profileId.value = store.state.UserStore.id;
+          isModalShow.value = true;
+        }
 
-        return {modalEle, isModalShow, friendOnClick, searchFriendOnClick, isSeachFriend, friendList, errorImg, profileId};
+
+        return {modalEle, isModalShow, friendOnClick, searchFriendOnClick, isSeachFriend, friendList, profileId, myProfileOnClick};
     }
 })
 </script>

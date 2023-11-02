@@ -40,6 +40,7 @@ public class SecurityConfig {
             "/auth/insert",
             "/common/editor/imageView",
             "/error",
+            "/member/thumbnail/*",
             "/ws/**"
     };
 	

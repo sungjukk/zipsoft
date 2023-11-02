@@ -3,10 +3,9 @@ import {initializeApp, FirebaseApp} from 'firebase/app';
 import { getMessaging, getToken, onMessage, Messaging } from 'firebase/messaging';
 
 const FIRE_BASE_CONFIG = {
-    
 };
 
-const FIRE_BASE_SERVER_KEY = '서버키';
+const FIRE_BASE_SERVER_KEY = '';
 
 const Push = {
     install : (app : any) => {

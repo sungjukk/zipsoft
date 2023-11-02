@@ -18,4 +18,6 @@ public interface AuthService  {
 	void updateDeviceToken(long id, String deviceToken);
 	
 	void removeDeviceToken(long id);
+	
+	UserDto findById(long id);
 }

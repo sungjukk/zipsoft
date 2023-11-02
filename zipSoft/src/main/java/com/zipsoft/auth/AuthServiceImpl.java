@@ -73,6 +73,11 @@ public class AuthServiceImpl implements AuthService {
 	public void removeDeviceToken(long id) {
 		authRepository.removeDeviceToken(id);
 	}
+
+	@Override
+	public UserDto findById(long id) {
+		return authRepository.findById(id).orElse(null);
+	}
 	
 	
 

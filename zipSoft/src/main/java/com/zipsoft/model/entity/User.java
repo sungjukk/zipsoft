@@ -1,6 +1,7 @@
 package com.zipsoft.model.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -10,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -55,6 +57,9 @@ public class User extends Base {
 	
 	@Column
 	private String deviceToken;	// fcm 토큰
+	
+	@OneToMany(mappedBy = "user")
+	private List<UserThumbnail> userThumbnail;
 	
 	
 	@PrePersist
